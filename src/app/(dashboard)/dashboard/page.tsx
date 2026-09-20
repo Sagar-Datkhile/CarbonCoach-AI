@@ -230,6 +230,8 @@ export default async function DashboardPage() {
           value={
             latestBill.estimated_emissions_kg
               ? `${latestBill.estimated_emissions_kg}`
+              : latestBill.energy_consumed_kwh
+              ? `${Number((Number(latestBill.energy_consumed_kwh) * 0.386).toFixed(1))}`
               : "—"
           }
           unit="kg CO₂e"
