@@ -4,35 +4,43 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { signOut } from "@/app/actions/auth";
 import {
   LayoutDashboard,
   Receipt,
   Sparkles,
   Sliders,
   TrendingUp,
-  User,
   ShieldAlert,
-  LogOut,
   Zap,
 } from "lucide-react";
+import { ProfileDropdown } from "./ProfileDropdown";
 
 interface AppSidebarProps {
   userRole?: string;
+  userName?: string;
+  userEmail?: string;
+  avatarUrl?: string | null;
   onNavigate?: () => void;
   className?: string;
 }
 
-export function AppSidebar({ userRole = "user", onNavigate, className }: AppSidebarProps) {
+export function AppSidebar({
+  userRole = "user",
+  userName = "User",
+  userEmail = "",
+  avatarUrl = null,
+  onNavigate,
+  className,
+}: AppSidebarProps) {
   const pathname = usePathname();
 
+  // Navigation order preserved strictly: Dashboard, Bills, My Plan, Simulator, Progress
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Bills", href: "/bills", icon: Receipt },
     { name: "My Plan", href: "/plan", icon: Sparkles },
     { name: "Simulator", href: "/simulator", icon: Sliders },
     { name: "Progress", href: "/progress", icon: TrendingUp },
-    { name: "Profile & Settings", href: "/profile", icon: User },
   ];
 
   if (userRole === "admin") {
@@ -46,8 +54,9 @@ export function AppSidebar({ userRole = "user", onNavigate, className }: AppSide
         className
       )}
     >
-      {/* Brand Header */}
-      <div>
+      {/* Brand Header & Navigation Links */}
+      <div className="flex-1 overflow-y-auto">
+        {/* Brand Header */}
         <div className="p-6 pb-4 flex items-center gap-3 border-b border-[#F3F8F3]">
           <div className="w-10 h-10 rounded-xl bg-[#075E45] text-white flex items-center justify-center shadow-sm shrink-0">
             <Zap className="w-5 h-5 fill-current text-[#EAF5EE]" />
@@ -62,7 +71,7 @@ export function AppSidebar({ userRole = "user", onNavigate, className }: AppSide
           </div>
         </div>
 
-        {/* Navigation Links */}
+        {/* Main Navigation Links */}
         <nav className="p-4 space-y-1.5" aria-label="Main Navigation">
           {navigation.map((item) => {
             const isActive =
@@ -95,17 +104,15 @@ export function AppSidebar({ userRole = "user", onNavigate, className }: AppSide
         </nav>
       </div>
 
-      {/* Footer / Sign Out */}
-      <div className="p-4 border-t border-[#E3E7E3]">
-        <form action={signOut}>
-          <button
-            type="submit"
-            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#667085] hover:bg-[#FFF7E8] hover:text-[#B42318] transition-colors min-h-[44px]"
-          >
-            <LogOut className="w-5 h-5 shrink-0" />
-            <span>Sign Out</span>
-          </button>
-        </form>
+      {/* Modern Sticky Footer Profile & Account Navigation (Replaces old Sign Out and Profile links) */}
+      <div className="p-3 border-t border-[#E3E7E3] bg-white sticky bottom-0 z-20">
+        <ProfileDropdown
+          userName={userName}
+          userEmail={userEmail}
+          avatarUrl={avatarUrl}
+          userRole={userRole}
+          onNavigate={onNavigate}
+        />
       </div>
     </aside>
   );
