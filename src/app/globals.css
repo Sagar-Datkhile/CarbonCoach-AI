@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+:root {
+  --primary-dark-green: #075E45;
+  --primary-green: #0B7252;
+  --primary-hover: #085B43;
+  --light-green: #EAF5EE;
+  --pale-green: #F3F8F3;
+  --background: #FAFBF8;
+  --card: #FFFFFF;
+  --text-primary: #111827;
+  --text-secondary: #667085;
+  --border: #E3E7E3;
+  --warning-background: #FFF7E8;
+  --warning-text: #9A5B00;
+  --error: #B42318;
+}
+
+@theme inline {
+  --color-primary-dark: var(--primary-dark-green);
+  --color-primary: var(--primary-green);
+  --color-primary-hover: var(--primary-hover);
+  --color-light-green: var(--light-green);
+  --color-pale-green: var(--pale-green);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border);
+  --color-warning-bg: var(--warning-background);
+  --color-warning-text: var(--warning-text);
+  --color-error: var(--error);
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular numbers utility for financial & energy figures */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAFBF8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
