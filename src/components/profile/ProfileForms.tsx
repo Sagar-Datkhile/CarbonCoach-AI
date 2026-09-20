@@ -79,12 +79,12 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                 />
               </div>
 
-                <Input
-                  label="Avatar URL (Optional)"
-                  name="avatarUrl"
-                  defaultValue={profile.avatarUrl}
-                  placeholder="https://example.com/avatar.jpg"
-                />
+              <Input
+                label="Avatar URL (Optional)"
+                name="avatarUrl"
+                defaultValue={profile.avatarUrl}
+                placeholder="https://example.com/avatar.jpg"
+              />
 
                 <div className="pt-2">
                   <Button
