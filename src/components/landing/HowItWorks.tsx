@@ -1,5 +1,9 @@
+"use client";
+
 import React from "react";
+import { motion } from "framer-motion";
 import { UploadCloud, CheckCheck, Sparkles, ArrowRight } from "lucide-react";
+import { SectionReveal, staggerContainerVariants, staggerItemVariants } from "./SectionReveal";
 
 export function HowItWorks() {
   const steps = [
@@ -27,24 +31,37 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-white border-y border-[#E3E7E3]">
+    <section
+      id="how-it-works"
+      className="scroll-mt-20 py-20 bg-white border-y border-[#E3E7E3]"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full">
-            Transparent Workflow
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
-            How CarbonCoach AI Works
-          </h2>
-          <p className="text-base sm:text-lg text-[#667085] mt-3">
-            A secure, three-step human-in-the-loop pipeline designed to demystify household power consumption.
-          </p>
-        </div>
+        <SectionReveal>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full">
+              Transparent Workflow
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
+              How CarbonCoach AI Works
+            </h2>
+            <p className="text-base sm:text-lg text-[#667085] mt-3">
+              A secure, three-step human-in-the-loop pipeline designed to demystify household power consumption.
+            </p>
+          </div>
+        </SectionReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <motion.div
+          variants={staggerContainerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 relative"
+        >
           {steps.map((step, idx) => (
-            <div
+            <motion.div
               key={step.number}
+              variants={staggerItemVariants}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
               className="relative p-8 rounded-2xl bg-[#FAFBF8] border border-[#E3E7E3] hover:border-[#0B7252]/40 transition-all hover:shadow-md flex flex-col justify-between"
             >
               <div>
@@ -73,9 +90,9 @@ export function HowItWorks() {
                   </div>
                 </div>
               )}
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

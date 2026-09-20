@@ -1,25 +1,119 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { Zap, Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
+import { scrollToSection } from "./scrollUtils";
 
 export function LandingHeader() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
 
   const navLinks = [
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "Core Capabilities", href: "#capabilities" },
-    { label: "Bill-to-Action", href: "#workflow" },
-    { label: "Transparency", href: "#transparency" },
+    { label: "Home", scrollTo: "hero" },
+    { label: "Features", scrollTo: "features" },
+    { label: "How It Works", scrollTo: "how-it-works" },
+    { label: "Simulator", scrollTo: "simulator" },
+    { label: "FAQ", scrollTo: "faq" },
+    { label: "Contact", scrollTo: "contact" },
   ];
 
+  // Monitor scroll distance to toggle transparent vs solid background with shadow
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 20);
+
+      // Handle top of page boundary
+      if (scrollPosition < 80) {
+        setActiveSection("hero");
+        return;
+      }
+
+      // Handle bottom of page boundary
+      if (
+        window.innerHeight + Math.round(scrollPosition) >=
+        document.documentElement.scrollHeight - 80
+      ) {
+        setActiveSection("contact");
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // IntersectionObserver for ScrollSpy across all sections
+  useEffect(() => {
+    const sectionIds = [
+      "hero",
+      "features",
+      "how-it-works",
+      "simulator",
+      "benefits",
+      "faq",
+      "contact",
+    ];
+
+    const observerOptions: IntersectionObserverInit = {
+      root: null,
+      rootMargin: "-90px 0px -40% 0px",
+      threshold: [0.1, 0.3, 0.5],
+    };
+
+    const handleIntersect: IntersectionObserverCallback = (entries) => {
+      // Find the entry that has the highest intersection ratio
+      const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+      if (visibleEntries.length > 0) {
+        const primary = visibleEntries.reduce((prev, curr) =>
+          curr.intersectionRatio > prev.intersectionRatio ? curr : prev
+        );
+        const id = primary.target.id;
+        // If benefits is active, highlight simulator or closest nav item
+        if (id === "benefits") {
+          setActiveSection("simulator");
+        } else {
+          setActiveSection(id);
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleNavClick = (e: React.MouseEvent, scrollTo: string) => {
+    e.preventDefault();
+    setIsMobileOpen(false);
+    setActiveSection(scrollTo);
+    scrollToSection(scrollTo, 80);
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-[#FAFBF8]/90 backdrop-blur-md border-b border-[#E3E7E3]">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-[#FAFBF8]/95 backdrop-blur-md border-b border-[#E3E7E3] shadow-[0_4px_20px_rgba(7,94,69,0.06)]"
+          : "bg-transparent border-b border-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link
+          href="/"
+          onClick={(e) => handleNavClick(e, "hero")}
+          className="flex items-center gap-2.5 group cursor-pointer"
+        >
           <div className="w-10 h-10 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-1 group-hover:border-[#075E45]/40 transition-colors">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -38,28 +132,59 @@ export function LandingHeader() {
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Landing Navigation">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-semibold text-[#667085] hover:text-[#075E45] transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+        {/* Desktop Navigation Links with Active Green Underline */}
+        <nav
+          className="hidden md:flex items-center gap-7 lg:gap-8"
+          aria-label="Landing Navigation"
+        >
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.scrollTo;
+
+            return (
+              <a
+                key={link.label}
+                href={`#${link.scrollTo}`}
+                onClick={(e) => handleNavClick(e, link.scrollTo)}
+                className={`relative py-1 text-sm font-semibold transition-colors ${
+                  isActive
+                    ? "text-[#075E45] font-bold"
+                    : "text-[#667085] hover:text-[#075E45]"
+                }`}
+              >
+                {link.label}
+                {isActive && (
+                  <motion.span
+                    layoutId="activeNavUnderline"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#0B7252] rounded-full"
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Action Buttons */}
         <div className="hidden sm:flex items-center gap-3">
           <Link href="/login">
-            <Button variant="ghost" size="md" className="font-semibold">
+            <Button
+              variant="ghost"
+              size="md"
+              className="font-semibold text-[#111827] hover:text-[#075E45] hover:bg-[#EAF5EE]/60"
+            >
               Sign In
             </Button>
           </Link>
           <Link href="/signup">
-            <Button variant="primary" size="md" className="font-semibold shadow-sm">
+            <Button
+              variant="primary"
+              size="md"
+              className="font-bold shadow-xs bg-[#075E45] hover:bg-[#064E3B] text-white"
+            >
               Get Started
             </Button>
           </Link>
@@ -69,42 +194,77 @@ export function LandingHeader() {
         <button
           type="button"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          aria-label="Toggle mobile menu"
-          className="w-11 h-11 flex items-center justify-center rounded-xl border border-[#E3E7E3] text-[#111827] hover:bg-[#F3F8F3] md:hidden"
+          aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMobileOpen}
+          className="w-11 h-11 flex items-center justify-center rounded-xl border border-[#E3E7E3] bg-white/80 text-[#111827] hover:bg-[#F3F8F3] md:hidden transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
         >
           {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
       {/* Mobile Drawer */}
-      {isMobileOpen && (
-        <div className="md:hidden bg-white border-b border-[#E3E7E3] px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col space-y-2">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setIsMobileOpen(false)}
-                className="px-3 py-2.5 rounded-lg text-sm font-semibold text-[#111827] hover:bg-[#F3F8F3]"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-          <div className="pt-3 border-t border-[#E3E7E3] flex flex-col gap-2">
-            <Link href="/login" onClick={() => setIsMobileOpen(false)} className="w-full">
-              <Button variant="outline" size="md" className="w-full">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/signup" onClick={() => setIsMobileOpen(false)} className="w-full">
-              <Button variant="primary" size="md" className="w-full">
-                Get Started Free
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="md:hidden overflow-hidden bg-white/98 backdrop-blur-md border-b border-[#E3E7E3] shadow-lg"
+          >
+            <div className="px-4 pt-3 pb-6 space-y-4">
+              <nav className="flex flex-col space-y-1" aria-label="Mobile Navigation">
+                {navLinks.map((link) => {
+                  const isActive = activeSection === link.scrollTo;
+                  return (
+                    <a
+                      key={link.label}
+                      href={`#${link.scrollTo}`}
+                      onClick={(e) => handleNavClick(e, link.scrollTo)}
+                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                        isActive
+                          ? "bg-[#EAF5EE] text-[#075E45] font-bold border-l-3 border-[#0B7252]"
+                          : "text-[#111827] hover:bg-[#F3F8F3]"
+                      }`}
+                    >
+                      <span>{link.label}</span>
+                      {isActive && (
+                        <span className="w-2 h-2 rounded-full bg-[#0B7252]" />
+                      )}
+                    </a>
+                  );
+                })}
+              </nav>
+
+              <div className="pt-3 border-t border-[#E3E7E3] flex flex-col gap-2.5">
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="w-full"
+                >
+                  <Button variant="outline" size="md" className="w-full font-semibold">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="w-full"
+                >
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="w-full font-bold bg-[#075E45] hover:bg-[#064E3B] text-white flex items-center justify-center gap-2"
+                  >
+                    <span>Get Started Free</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
