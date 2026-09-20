@@ -76,9 +76,9 @@ export const teamMembers: TeamMember[] = [
 export const teamSectionData: TeamSectionData = {
   id: "contact",
   badge: "Meet the Team",
-  title: "Built by passionate developers.",
+  title: "Our Developers.",
   subtitle:
-    "CarbonCoach AI is built with a focus on sustainability, AI, and practical household energy intelligence. Feel free to connect with us.",
+    "Carbon Coach AI is built with a focus on sustainability, AI, and practical household energy intelligence. Feel free to connect with us.",
   members: teamMembers,
   collaborationBanner: {
     enabled: true,
@@ -87,8 +87,8 @@ export const teamSectionData: TeamSectionData = {
       "Open to feedback, collaboration, hackathons, research and innovative sustainability projects.",
     primaryButton: {
       label: "Contact Us",
-      action: "mailto:support@carboncoach.ai?subject=Collaboration%20Inquiry%20-%20CarbonCoach%20AI",
-      url: "mailto:support@carboncoach.ai?subject=Collaboration%20Inquiry%20-%20CarbonCoach%20AI",
+      action: "mailto:sagardatkhile.official@gmail.com?subject=Collaboration%20Inquiry%20-%20Carbon%20Coach%20AI",
+      url: "mailto:sagardatkhile.official@gmail.com?subject=Collaboration%20Inquiry%20-%20Carbon%20Coach%20AI",
     },
   },
 };

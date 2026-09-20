@@ -3,7 +3,6 @@
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { DeveloperCard } from "./team/DeveloperCard";
-import { CollaborationBanner } from "./team/CollaborationBanner";
 import { teamSectionData } from "./team/teamData";
 import { TeamMember, CollaborationBannerData } from "./team/types";
 import { SectionReveal } from "./SectionReveal";
@@ -153,13 +152,6 @@ export function TeamSection({
             />
           ))}
         </div>
-
-        {/* Collaboration Banner */}
-        {collaborationBanner && collaborationBanner.enabled && (
-          <div className="max-w-5xl mx-auto pt-4">
-            <CollaborationBanner data={collaborationBanner} />
-          </div>
-        )}
       </div>
     </section>
   );
