@@ -13,23 +13,45 @@ export default async function DashboardLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  let userRole = "user";
-  let userName = "Household User";
+  // Extract user's display name from user_metadata or email
+  const metaName =
+    (user?.user_metadata?.full_name as string) ||
+    (user?.user_metadata?.name as string) ||
+    (user?.user_metadata?.display_name as string);
+
+  let userRole =
+    (user?.app_metadata?.role as string) ||
+    (user?.user_metadata?.role as string) ||
+    "user";
   let userEmail = user?.email || "user@example.com";
-  let userAvatarUrl: string | null = (user?.user_metadata?.avatar_url as string) || null;
+  let userName = metaName || (user?.email ? user.email.split("@")[0] : "User");
+  let userAvatarUrl: string | null =
+    (user?.user_metadata?.avatar_url as string) ||
+    (user?.user_metadata?.picture as string) ||
+    null;
 
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role, full_name, email, avatar_url")
+      .select("*")
       .eq("id", user.id)
       .maybeSingle();
 
     if (profile) {
-      userRole = profile.role || "user";
-      userName = profile.full_name || userName;
-      userEmail = profile.email || userEmail;
-      userAvatarUrl = profile.avatar_url || userAvatarUrl;
+      if (profile.full_name && profile.full_name.trim()) {
+        userName = profile.full_name.trim();
+      }
+      if (profile.avatar_url) {
+        userAvatarUrl = profile.avatar_url;
+      }
+      const pRole = (profile as { role?: string }).role;
+      if (pRole) {
+        userRole = pRole;
+      }
+      const pEmail = (profile as { email?: string }).email;
+      if (pEmail) {
+        userEmail = pEmail;
+      }
     }
   }
 

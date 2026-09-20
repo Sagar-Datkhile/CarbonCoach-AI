@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
-import { Badge } from "@/components/ui/Badge";
 import { User, Home, Shield, LogOut, Save, Users, Globe, DollarSign } from "lucide-react";
 
 interface ProfileFormsProps {
@@ -36,20 +35,13 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
   return (
     <div className="space-y-8">
       {/* Top Banner / Heading */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#111827]">
-            Profile & Household Settings
-          </h1>
-          <p className="text-sm text-[#667085] mt-1">
-            Manage your personal credentials, home profile, and energy modeling preferences.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant={profile.role === "admin" ? "primary" : "neutral"}>
-            Role: {profile.role.toUpperCase()}
-          </Badge>
-        </div>
+      <div>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#111827]">
+          Profile & Household Settings
+        </h1>
+        <p className="text-sm text-[#667085] mt-1">
+          Manage your personal credentials, home profile, and energy modeling preferences.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

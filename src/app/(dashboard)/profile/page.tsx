@@ -14,7 +14,10 @@ export default async function ProfilePage() {
 
   let profile = {
     email: user?.email || "user@example.com",
-    fullName: (user?.user_metadata?.full_name as string) || "Household User",
+    fullName:
+      (user?.user_metadata?.full_name as string) ||
+      (user?.user_metadata?.name as string) ||
+      (user?.email ? user.email.split("@")[0] : "User"),
     avatarUrl: (user?.user_metadata?.avatar_url as string) || "",
     role: "user",
   };
