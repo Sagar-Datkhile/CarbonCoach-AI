@@ -11,7 +11,6 @@ import {
   Sliders,
   TrendingUp,
   ShieldAlert,
-  Zap,
 } from "lucide-react";
 import { ProfileDropdown } from "./ProfileDropdown";
 
@@ -57,19 +56,28 @@ export function AppSidebar({
       {/* Brand Header & Main Navigation */}
       <div className="flex-1 overflow-y-auto">
         {/* Brand Header */}
-        <div className="p-6 pb-4 flex items-center gap-3 border-b border-[#F3F8F3]">
-          <div className="w-10 h-10 rounded-xl bg-[#075E45] text-white flex items-center justify-center shadow-xs shrink-0">
-            <Zap className="w-5 h-5 fill-current text-[#EAF5EE]" />
+        <Link
+          href="/dashboard"
+          onClick={onNavigate}
+          className="p-6 pb-4 flex items-center gap-3 border-b border-[#F3F8F3] hover:opacity-95 transition-opacity group"
+        >
+          <div className="w-10 h-10 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-1 group-hover:border-[#075E45]/40 transition-colors">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="CarbonCoach AI Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-base text-[#075E45] tracking-tight">
+            <span className="font-bold text-base text-[#075E45] tracking-tight group-hover:text-[#0B7252] transition-colors">
               CarbonCoach<span className="text-[#0B7252]">.AI</span>
             </span>
             <span className="text-[11px] text-[#667085] font-medium uppercase tracking-wider">
               Household Energy
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Main Navigation Links */}
         <nav className="p-4 space-y-1.5" aria-label="Main Navigation">

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { AppSidebar } from "./AppSidebar";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 interface AppHeaderProps {
   userRole?: string;
@@ -30,8 +30,13 @@ export function AppHeader({ userRole, userEmail, userName, avatarUrl }: AppHeade
           </button>
 
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#075E45] text-white flex items-center justify-center shadow-xs">
-              <Zap className="w-4 h-4 fill-current text-[#EAF5EE]" />
+            <div className="w-8 h-8 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-0.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt="CarbonCoach AI Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="font-bold text-sm text-[#075E45]">
               CarbonCoach<span className="text-[#0B7252]">.AI</span>

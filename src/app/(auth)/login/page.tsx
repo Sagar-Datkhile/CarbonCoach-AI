@@ -18,9 +18,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-3 group">
-            <div className="w-10 h-10 rounded-xl bg-[#075E45] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-              <Zap className="w-6 h-6 fill-current text-[#EAF5EE]" />
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-3 group">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-md p-1 group-hover:scale-105 transition-transform">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt="CarbonCoach AI Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="text-2xl font-bold tracking-tight text-[#075E45]">
               CarbonCoach<span className="text-[#0B7252]">.AI</span>

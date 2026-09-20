@@ -2,12 +2,11 @@
 
 import React, { useActionState } from "react";
 import { updateProfileInfo, updateHouseholdInfo } from "@/app/actions/profile";
-import { signOut } from "@/app/actions/auth";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
-import { User, Home, Shield, LogOut, Save, Users, Globe, DollarSign } from "lucide-react";
+import { User, Home, Save, Users, Globe, DollarSign } from "lucide-react";
 
 interface ProfileFormsProps {
   profile: {
@@ -44,27 +43,26 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left 2 Columns: Personal & Household Forms */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Personal Information */}
-          <Card elevated>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#EAF5EE] text-[#075E45] flex items-center justify-center">
-                  <User className="w-4 h-4" />
-                </div>
-                <div>
-                  <CardTitle>Personal Information</CardTitle>
-                  <CardDescription>Your name and display credentials</CardDescription>
-                </div>
+      <div className="space-y-8 w-full">
+        {/* Personal Information */}
+        <Card elevated>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-[#EAF5EE] text-[#075E45] flex items-center justify-center">
+                <User className="w-4 h-4" />
               </div>
-            </CardHeader>
-            <CardContent>
-              {profileState?.error && <Alert variant="error" className="mb-4">{profileState.error}</Alert>}
-              {profileState?.message && <Alert variant="success" className="mb-4">{profileState.message}</Alert>}
+              <div>
+                <CardTitle>Personal Information</CardTitle>
+                <CardDescription>Your name and display credentials</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {profileState?.error && <Alert variant="error" className="mb-4">{profileState.error}</Alert>}
+            {profileState?.message && <Alert variant="success" className="mb-4">{profileState.message}</Alert>}
 
-              <form action={profileAction} className="space-y-4">
+            <form action={profileAction} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   label="Email Address"
                   value={profile.email}
@@ -79,6 +77,7 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                   required
                   placeholder="Your full name"
                 />
+              </div>
 
                 <Input
                   label="Avatar URL (Optional)"
@@ -235,53 +234,6 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
               </form>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Right 1 Column: Account Security & Session Overview */}
-        <div className="space-y-6">
-          <Card elevated>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#FFF7E8] text-[#9A5B00] flex items-center justify-center">
-                  <Shield className="w-4 h-4" />
-                </div>
-                <div>
-                  <CardTitle>Account Security</CardTitle>
-                  <CardDescription>Authentication & Sessions</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-xs text-[#667085] leading-relaxed">
-                Your account is protected by Supabase Row Level Security. All electricity bills and consumption records are isolated to your user ID.
-              </div>
-
-              <div className="pt-2 border-t border-[#E3E7E3]">
-                <form action={signOut}>
-                  <Button
-                    type="submit"
-                    variant="destructive"
-                    size="md"
-                    className="w-full"
-                    leftIcon={<LogOut className="w-4 h-4" />}
-                  >
-                    Sign Out
-                  </Button>
-                </form>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quick Summary Pill */}
-          <div className="rounded-2xl bg-[#EAF5EE] border border-[#0B7252]/20 p-5 space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#075E45]">
-              Modeling Status
-            </span>
-            <p className="text-xs text-[#075E45] leading-relaxed">
-              Recommendations are dynamically filtered for a <strong>{household.homeType}</strong> home with <strong>{household.budgetTier}</strong> budget tier.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

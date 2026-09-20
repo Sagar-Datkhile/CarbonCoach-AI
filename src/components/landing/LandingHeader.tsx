@@ -20,8 +20,13 @@ export function LandingHeader() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-[#075E45] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-            <Zap className="w-5 h-5 fill-current text-[#EAF5EE]" />
+          <div className="w-10 h-10 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-1 group-hover:border-[#075E45]/40 transition-colors">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="CarbonCoach AI Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-lg text-[#075E45] tracking-tight">
