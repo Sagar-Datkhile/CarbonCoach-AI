@@ -9,8 +9,6 @@ import {
   Shield,
   LogOut,
   ChevronsUpDown,
-  Check,
-  Sparkles,
 } from "lucide-react";
 import { LogoutConfirmDialog } from "./LogoutConfirmDialog";
 import { FeedbackModal } from "./FeedbackModal";
@@ -30,8 +28,8 @@ export function ProfileDropdown({
   userName,
   userEmail,
   avatarUrl,
-  userRole = "user",
-  plan,
+  userRole: _userRole = "user",
+  plan: _plan,
   onNavigate,
   className = "",
 }: ProfileDropdownProps) {
@@ -85,7 +83,6 @@ export function ProfileDropdown({
   };
 
   const initials = getInitials(userName, userEmail);
-  const planLabel = plan || (userRole === "admin" ? "Admin" : "Free Plan");
   const showLiveAvatar = Boolean(avatarUrl && !avatarFailed);
 
   const handleMenuItemClick = () => {
@@ -104,7 +101,7 @@ export function ProfileDropdown({
           className="absolute bottom-[calc(100%+8px)] left-0 w-full min-w-[270px] bg-white rounded-2xl shadow-2xl border border-[#E3E7E3] p-2 z-50 animate-in fade-in zoom-in-95 duration-200 origin-bottom-left"
         >
           {/* Header Section with User info */}
-          <div className="p-3 bg-[#F8FAF9] rounded-xl border border-[#EAF0EB] mb-1.5 space-y-2">
+          <div className="p-3 bg-[#F8FAF9] rounded-xl border border-[#EAF0EB] mb-1.5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#EAF5EE] text-[#075E45] flex items-center justify-center font-bold text-xs shrink-0 border border-[#0B7252]/20 overflow-hidden">
                 {showLiveAvatar && avatarUrl ? (
@@ -128,18 +125,6 @@ export function ProfileDropdown({
                   {userEmail || "user@carboncoach.ai"}
                 </p>
               </div>
-            </div>
-
-            {/* Plan Badge Pill */}
-            <div className="flex items-center justify-between pt-1 border-t border-[#E8EEE9] text-[11px]">
-              <span className="text-[#667085] font-medium flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-[#075E45]" />
-                Current Tier
-              </span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-bold text-[10px] bg-[#EAF5EE] text-[#075E45] border border-[#0B7252]/20">
-                <Check className="w-2.5 h-2.5" />
-                {planLabel}
-              </span>
             </div>
           </div>
 
