@@ -11,7 +11,7 @@ export default async function AdminHealthPage() {
   const hasSupabaseUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
   const hasSupabaseAnonKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const hasServiceRoleKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const hasGeminiKey = !!process.env.GEMINI_API_KEY;
+  const hasOpenRouterKey = !!process.env.OPENROUTER_API_KEY;
 
   const isConfigured = hasSupabaseUrl && hasSupabaseAnonKey;
 
@@ -72,19 +72,19 @@ export default async function AdminHealthPage() {
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-[#667085] uppercase">
-                Gemini 1.5 Flash
+                OpenRouter AI
               </span>
-              <Badge variant={hasGeminiKey ? "success" : "neutral"}>
-                {hasGeminiKey ? "Configured" : "Draft / Mock"}
+              <Badge variant={hasOpenRouterKey ? "success" : "neutral"}>
+                {hasOpenRouterKey ? "Configured" : "Draft / Mock"}
               </Badge>
             </div>
             <CardTitle className="text-xl mt-2 flex items-center gap-2">
               <Key className="w-5 h-5 text-[#0B7252]" />
-              Server-Side OCR
+              Gemini 2.5 Flash Lite
             </CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-[#667085]">
-            Isolated to server action execution
+            Server-side completions via OpenRouter
           </CardContent>
         </Card>
       </div>
@@ -115,9 +115,9 @@ export default async function AdminHealthPage() {
               desc: "Server-only privileged execution key",
             },
             {
-              name: "GEMINI_API_KEY",
-              present: hasGeminiKey,
-              desc: "Google GenAI server-side bill extraction key",
+              name: "OPENROUTER_API_KEY",
+              present: hasOpenRouterKey,
+              desc: "OpenRouter server-side AI key (google/gemini-2.5-flash-lite)",
             },
           ].map((item) => (
             <div

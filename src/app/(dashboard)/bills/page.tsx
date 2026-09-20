@@ -57,12 +57,13 @@ export default async function BillsPage() {
   }
 
   // Calculate totals from real confirmed bills
+  const getEmissions = (b: { estimated_emissions_kg?: number | null; energy_consumed_kwh?: number }) =>
+    Number(b.estimated_emissions_kg) ||
+    Number((Number(b.energy_consumed_kwh || 0) * 0.386).toFixed(2));
+
   const totalKwh = bills.reduce((acc, b) => acc + Number(b.energy_consumed_kwh), 0);
   const totalCost = bills.reduce((acc, b) => acc + Number(b.bill_amount), 0);
-  const totalEmissions = bills.reduce(
-    (acc, b) => acc + (Number(b.estimated_emissions_kg) || 0),
-    0
-  );
+  const totalEmissions = bills.reduce((acc, b) => acc + getEmissions(b), 0);
   const defaultCurrency = bills[0]?.currency || "USD";
 
   return (
@@ -180,8 +181,8 @@ export default async function BillsPage() {
                           {formatCurrency(bill.bill_amount, bill.currency)}
                         </td>
                         <td className="px-5 py-4 text-right text-xs text-[#667085] tabular-nums">
-                          {bill.estimated_emissions_kg
-                            ? `${bill.estimated_emissions_kg} kg`
+                          {getEmissions(bill)
+                            ? `${getEmissions(bill)} kg`
                             : "—"}
                         </td>
                         <td className="px-5 py-4 text-center">
