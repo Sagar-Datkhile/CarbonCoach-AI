@@ -158,7 +158,7 @@ export function LandingHero() {
 
                 {/* Bottom Micro-Badge */}
                 <div className="mt-4 pt-3 border-t border-[#F3F8F3] flex items-center justify-between text-[11px] text-[#667085]">
-                  <span>Gemini 1.5 Flash Server Extractor</span>
+                  <span>AI-Powered Bill Parser</span>
                   <span className="font-semibold text-[#0B7252]">100% Deterministic</span>
                 </div>
               </div>
