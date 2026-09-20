@@ -11,6 +11,7 @@ export const teamMembers: TeamMember[] = [
       shape: "Circle",
       size: "96px",
       fallback: "SD",
+      src: "/team/sagar.jpg"
     },
     socials: [
       {
@@ -46,6 +47,7 @@ export const teamMembers: TeamMember[] = [
       shape: "Circle",
       size: "96px",
       fallback: "PP",
+      src: "/team/pranav.jpg",
     },
     socials: [
       {

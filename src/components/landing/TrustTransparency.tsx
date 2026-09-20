@@ -2,15 +2,15 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Cpu, UserCheck, EyeOff } from "lucide-react";
+import { Cpu, UserCheck } from "lucide-react";
 import { SectionReveal, staggerContainerVariants, staggerItemVariants } from "./SectionReveal";
 
 export function TrustTransparency() {
   const pillars = [
     {
-      title: "Zero AI Math Hallucination",
+      title: "AI for Extraction. Mathematics for Accuracy.",
       description:
-        "Large language models never invent or estimate your savings. Google Gemini 1.5 Flash is strictly confined to OCR bill extraction. All kWh and monetary savings are calculated deterministically via transparent mathematical formulas.",
+        "CarbonCoach AI uses AI only to read your electricity bill. Every recommendation, savings estimate, and carbon calculation is generated using deterministic formulas for consistent and reliable results.",
       icon: <Cpu className="w-6 h-6 text-[#0B7252]" />,
     },
     {
@@ -18,18 +18,6 @@ export function TrustTransparency() {
       description:
         "AI output is treated as a draft suggestion. You review every extracted field—billing days, rates, amounts—and make corrections before the record becomes authoritative in your dashboard.",
       icon: <UserCheck className="w-6 h-6 text-[#0B7252]" />,
-    },
-    {
-      title: "Private Encrypted Storage",
-      description:
-        "Utility bills contain personal addresses and account numbers. Your uploads are stored in an encrypted, private Supabase Storage bucket accessible solely through authenticated sessions.",
-      icon: <EyeOff className="w-6 h-6 text-[#0B7252]" />,
-    },
-    {
-      title: "PostgreSQL Row Level Security",
-      description:
-        "Every single database record is enforced at the database engine level via PostgreSQL RLS. No other user or client can read, query, or mutate your energy history.",
-      icon: <ShieldCheck className="w-6 h-6 text-[#0B7252]" />,
     },
   ];
 

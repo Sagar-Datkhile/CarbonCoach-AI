@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { scrollToSection } from "./scrollUtils";
 
 export function LandingHeader() {
+  const pathname = usePathname();
+  const router = useRouter();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
@@ -21,80 +24,152 @@ export function LandingHeader() {
     { label: "Contact", scrollTo: "contact" },
   ];
 
-  // Monitor scroll distance to toggle transparent vs solid background with shadow
+  // If redirected to home page with a hash or stored target from another route (e.g. /privacy), smooth scroll to it
   useEffect(() => {
+    if (pathname !== "/" || typeof window === "undefined") return;
+
+    let targetId = "";
+    try {
+      const stored = sessionStorage.getItem("cc_scroll_target");
+      if (stored) {
+        targetId = stored;
+        sessionStorage.removeItem("cc_scroll_target");
+      }
+    } catch {
+      // Safely ignore storage errors
+    }
+
+    if (!targetId && window.location.hash) {
+      targetId = window.location.hash.replace("#", "");
+    }
+
+    if (!targetId) return;
+
+    if (targetId === "hero") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setActiveSection("hero");
+      return;
+    }
+
+    let attempts = 0;
+    const maxAttempts = 30; // Check up to 1.5s (30 * 50ms)
+    const interval = setInterval(() => {
+      attempts++;
+      const element = document.getElementById(targetId);
+      if (element) {
+        clearInterval(interval);
+        requestAnimationFrame(() => {
+          scrollToSection(targetId, 80);
+          setActiveSection(targetId);
+        });
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
+      }
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, [pathname]);
+
+  // Listen to browser hash changes (e.g. back/forward button navigation)
+  useEffect(() => {
+    if (pathname !== "/" || typeof window === "undefined") return;
+
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash) {
+        scrollToSection(hash, 80);
+        setActiveSection(hash);
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [pathname]);
+
+  // Monitor scroll distance and track active home page section smoothly without fast-scroll jitter
+  useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 20);
 
-      // Handle top of page boundary
-      if (scrollPosition < 80) {
-        setActiveSection("hero");
-        return;
-      }
+      // Only track home page scroll positions
+      if (pathname !== "/") return;
 
-      // Handle bottom of page boundary
-      if (
-        window.innerHeight + Math.round(scrollPosition) >=
-        document.documentElement.scrollHeight - 80
-      ) {
-        setActiveSection("contact");
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          ticking = false;
+          const currentScroll = window.scrollY;
+          const windowHeight = window.innerHeight;
+          const documentHeight = document.documentElement.scrollHeight;
+
+          // Handle top boundary
+          if (currentScroll < 80) {
+            setActiveSection("hero");
+            return;
+          }
+
+          // Handle bottom boundary
+          if (windowHeight + Math.round(currentScroll) >= documentHeight - 80) {
+            setActiveSection("contact");
+            return;
+          }
+
+          const sectionIds = [
+            "hero",
+            "features",
+            "how-it-works",
+            "simulator",
+            "benefits",
+            "faq",
+            "contact",
+          ];
+
+          const targetOffset = 180;
+          let currentActive = "hero";
+
+          for (let i = 0; i < sectionIds.length; i++) {
+            const id = sectionIds[i];
+            const el = document.getElementById(id);
+            if (el) {
+              const top = el.getBoundingClientRect().top;
+              if (top <= targetOffset) {
+                currentActive = id === "benefits" ? "simulator" : id;
+              } else {
+                break;
+              }
+            }
+          }
+
+          setActiveSection((prev) => (prev === currentActive ? prev : currentActive));
+        });
+        ticking = true;
       }
     };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // IntersectionObserver for ScrollSpy across all sections
-  useEffect(() => {
-    const sectionIds = [
-      "hero",
-      "features",
-      "how-it-works",
-      "simulator",
-      "benefits",
-      "faq",
-      "contact",
-    ];
-
-    const observerOptions: IntersectionObserverInit = {
-      root: null,
-      rootMargin: "-90px 0px -40% 0px",
-      threshold: [0.1, 0.3, 0.5],
-    };
-
-    const handleIntersect: IntersectionObserverCallback = (entries) => {
-      // Find the entry that has the highest intersection ratio
-      const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-      if (visibleEntries.length > 0) {
-        const primary = visibleEntries.reduce((prev, curr) =>
-          curr.intersectionRatio > prev.intersectionRatio ? curr : prev
-        );
-        const id = primary.target.id;
-        // If benefits is active, highlight simulator or closest nav item
-        if (id === "benefits") {
-          setActiveSection("simulator");
-        } else {
-          setActiveSection(id);
-        }
-      }
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, observerOptions);
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   const handleNavClick = (e: React.MouseEvent, scrollTo: string) => {
-    e.preventDefault();
     setIsMobileOpen(false);
+
+    // If on /privacy or any non-root page, redirect to home with the corresponding hash
+    if (pathname !== "/") {
+      e.preventDefault();
+      try {
+        sessionStorage.setItem("cc_scroll_target", scrollTo);
+      } catch {
+        // Safely ignore storage errors
+      }
+      const targetUrl = scrollTo === "hero" ? "/" : `/#${scrollTo}`;
+      router.push(targetUrl, { scroll: false });
+      return;
+    }
+
+    e.preventDefault();
     setActiveSection(scrollTo);
     scrollToSection(scrollTo, 80);
   };
@@ -138,12 +213,18 @@ export function LandingHeader() {
           aria-label="Landing Navigation"
         >
           {navLinks.map((link) => {
-            const isActive = activeSection === link.scrollTo;
+            const isActive = pathname === "/" && activeSection === link.scrollTo;
 
             return (
               <a
                 key={link.label}
-                href={`#${link.scrollTo}`}
+                href={
+                  pathname === "/"
+                    ? `#${link.scrollTo}`
+                    : link.scrollTo === "hero"
+                    ? "/"
+                    : `/#${link.scrollTo}`
+                }
                 onClick={(e) => handleNavClick(e, link.scrollTo)}
                 className={`relative py-1 text-sm font-semibold transition-colors ${
                   isActive
@@ -215,11 +296,17 @@ export function LandingHeader() {
             <div className="px-4 pt-3 pb-6 space-y-4">
               <nav className="flex flex-col space-y-1" aria-label="Mobile Navigation">
                 {navLinks.map((link) => {
-                  const isActive = activeSection === link.scrollTo;
+                  const isActive = pathname === "/" && activeSection === link.scrollTo;
                   return (
                     <a
                       key={link.label}
-                      href={`#${link.scrollTo}`}
+                      href={
+                        pathname === "/"
+                          ? `#${link.scrollTo}`
+                          : link.scrollTo === "hero"
+                          ? "/"
+                          : `/#${link.scrollTo}`
+                      }
                       onClick={(e) => handleNavClick(e, link.scrollTo)}
                       className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                         isActive
