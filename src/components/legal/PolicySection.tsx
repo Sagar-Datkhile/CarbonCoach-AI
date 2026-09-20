@@ -15,6 +15,13 @@ import {
   RefreshCw,
   Mail,
   ExternalLink,
+  Leaf,
+  User,
+  Shield,
+  Copyright,
+  Server,
+  AlertTriangle,
+  UserX,
 } from "lucide-react";
 import { PolicySectionItem } from "./types";
 import { cn } from "@/lib/utils";
@@ -61,6 +68,13 @@ const iconMap: Record<string, React.ReactNode> = {
   Globe: <Globe className="w-5 h-5 text-[#075E45]" />,
   RefreshCw: <RefreshCw className="w-5 h-5 text-[#075E45]" />,
   Mail: <Mail className="w-5 h-5 text-[#075E45]" />,
+  Leaf: <Leaf className="w-5 h-5 text-[#075E45]" />,
+  User: <User className="w-5 h-5 text-[#075E45]" />,
+  Shield: <Shield className="w-5 h-5 text-[#075E45]" />,
+  Copyright: <Copyright className="w-5 h-5 text-[#075E45]" />,
+  Server: <Server className="w-5 h-5 text-[#075E45]" />,
+  AlertTriangle: <AlertTriangle className="w-5 h-5 text-[#075E45]" />,
+  UserX: <UserX className="w-5 h-5 text-[#075E45]" />,
 };
 
 interface PolicySectionProps {

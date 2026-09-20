@@ -7,7 +7,10 @@ export function LandingFooter() {
   const bottomLinks = [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
-    { label: "Feedback", href: "/feedback" },
+    {
+      label: "Feedback",
+      href: "mailto:sagardatkhile.official@gmail.com?subject=CarbonCoach%20AI%20Feedback",
+    },
   ];
 
   return (
@@ -21,15 +24,33 @@ export function LandingFooter() {
 
           {/* Center: Privacy Policy, Terms, Feedback */}
           <div className="flex items-center justify-center gap-6 text-center">
-            {bottomLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="hover:underline hover:text-[#111827] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45] rounded-xs"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {bottomLinks.map((link) => {
+              const isMailto = link.href.startsWith("mailto:");
+              const linkClasses =
+                "hover:underline hover:text-[#111827] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45] rounded-xs";
+
+              if (isMailto) {
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className={linkClasses}
+                  >
+                    {link.label}
+                  </a>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={linkClasses}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Right: Made with love */}

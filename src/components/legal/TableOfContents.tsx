@@ -75,6 +75,7 @@ export function TableOfContents({
           <div className="mt-2 p-3 bg-white border border-[#E3E7E3] rounded-xl shadow-md space-y-1">
             {sections.map((section, index) => {
               const isActive = activeId === section.id;
+              const cleanTitle = section.title.replace(/^\d+\.\s*/, "");
               return (
                 <a
                   key={section.id}
@@ -91,7 +92,7 @@ export function TableOfContents({
                     <span className="opacity-60 mr-1.5 font-mono">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="truncate">{section.title}</span>
+                    <span className="truncate">{cleanTitle}</span>
                   </span>
                   <span
                     className={cn(
@@ -123,6 +124,7 @@ export function TableOfContents({
         <ul className="space-y-1">
           {sections.map((section, index) => {
             const isActive = activeId === section.id;
+            const cleanTitle = section.title.replace(/^\d+\.\s*/, "");
             return (
               <li key={section.id}>
                 <a
@@ -146,7 +148,7 @@ export function TableOfContents({
                     >
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="truncate">{section.title}</span>
+                    <span className="truncate">{cleanTitle}</span>
                   </span>
                   <span
                     className={cn(

@@ -6,9 +6,6 @@ import {
   FileText,
   Calculator,
   Sliders,
-  TrendingUp,
-  Home,
-  ShieldCheck,
 } from "lucide-react";
 import { SectionReveal, staggerContainerVariants, staggerItemVariants } from "./SectionReveal";
 
@@ -31,24 +28,6 @@ export function CoreCapabilities() {
       description:
         "Model the real-world impact of LED lighting retrofits and appliance runtime adjustments before spending any money.",
       icon: <Sliders className="w-6 h-6 text-[#0B7252]" />,
-    },
-    {
-      title: "Tri-Partite Progress Tracking",
-      description:
-        "Keep estimated model projections, user-reported behavioral milestones, and verified bill-to-bill deltas strictly separated.",
-      icon: <TrendingUp className="w-6 h-6 text-[#0B7252]" />,
-    },
-    {
-      title: "Household-Specific Filtering",
-      description:
-        "Recommendations automatically adapt to your tenancy: renters get non-invasive habit tweaks; homeowners see high-impact equipment options.",
-      icon: <Home className="w-6 h-6 text-[#0B7252]" />,
-    },
-    {
-      title: "Row Level Security Isolation",
-      description:
-        "Your utility statements and account numbers are strictly isolated via PostgreSQL RLS. Your energy data is never sold or brokered.",
-      icon: <ShieldCheck className="w-6 h-6 text-[#0B7252]" />,
     },
   ];
 
