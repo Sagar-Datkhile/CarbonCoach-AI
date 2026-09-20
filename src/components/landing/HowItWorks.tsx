@@ -42,7 +42,7 @@ export function HowItWorks() {
               Transparent Workflow
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
-              How CarbonCoach AI Works
+              How Carbon Coach Works
             </h2>
             <p className="text-base sm:text-lg text-[#667085] mt-3">
               A secure, three-step human-in-the-loop pipeline designed to demystify household power consumption.

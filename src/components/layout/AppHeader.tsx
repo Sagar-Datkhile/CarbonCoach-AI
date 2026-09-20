@@ -34,12 +34,12 @@ export function AppHeader({ userRole, userEmail, userName, avatarUrl }: AppHeade
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.png"
-                alt="CarbonCoach AI Logo"
+                alt="Carbon Coach Logo"
                 className="w-full h-full object-contain"
               />
             </div>
             <span className="font-bold text-sm text-[#075E45]">
-              CarbonCoach<span className="text-[#0B7252]">.AI</span>
+              Carbon Coach
             </span>
           </Link>
         </div>

@@ -26,7 +26,7 @@ export function LandingFooter() {
                 <Zap className="w-4 h-4 fill-current text-[#EAF5EE]" />
               </div>
               <span className="font-extrabold text-lg text-[#075E45]">
-                CarbonCoach<span className="text-[#0B7252]">.AI</span>
+                Carbon Coach
               </span>
             </Link>
             <p className="text-sm text-[#667085] max-w-sm leading-relaxed">
@@ -129,7 +129,7 @@ export function LandingFooter() {
 
         {/* Bottom Copyright & Tech Stack */}
         <div className="pt-8 border-t border-[#E3E7E3] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#667085]">
-          <p>© {new Date().getFullYear()} CarbonCoach AI. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Carbon Coach. All rights reserved.</p>
           <div className="flex items-center gap-2">
             <span>Powered by Next.js 15, Supabase RLS & Gemini 1.5 Flash</span>
           </div>

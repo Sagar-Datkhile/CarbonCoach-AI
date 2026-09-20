@@ -33,7 +33,7 @@ export function LandingHero() {
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EAF5EE] border border-[#0B7252]/20 text-[#075E45] text-xs font-semibold">
                 <Leaf className="w-3.5 h-3.5 text-[#0B7252]" />
-                <span>Production-Grade Household Carbon & Energy Intelligence</span>
+                <span>Production-Grade Green Energy Intelligence</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#111827] leading-[1.1]">

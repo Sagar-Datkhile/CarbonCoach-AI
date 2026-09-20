@@ -65,16 +65,16 @@ export function AppSidebar({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.png"
-              alt="CarbonCoach AI Logo"
+              alt="Carbon Coach Logo"
               className="w-full h-full object-contain"
             />
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-base text-[#075E45] tracking-tight group-hover:text-[#0B7252] transition-colors">
-              CarbonCoach<span className="text-[#0B7252]">.AI</span>
+              Carbon Coach
             </span>
             <span className="text-[11px] text-[#667085] font-medium uppercase tracking-wider">
-              Household Energy
+              Green Energy Intelligence
             </span>
           </div>
         </Link>

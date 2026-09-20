@@ -119,7 +119,7 @@ export function ProfileDropdown({
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-[#111827] truncate">
-                  {userName || "CarbonCoach User"}
+                  {userName || "Carbon Coach User"}
                 </p>
                 <p className="text-[11px] text-[#667085] truncate">
                   {userEmail || "user@carboncoach.ai"}

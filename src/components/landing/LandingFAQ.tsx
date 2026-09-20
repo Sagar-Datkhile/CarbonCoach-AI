@@ -15,7 +15,7 @@ export function LandingFAQ() {
 
   const faqs: FAQItem[] = [
     {
-      question: "How does CarbonCoach AI extract data from my electricity bills?",
+      question: "How does Carbon Coach extract data from my electricity bills?",
       answer:
         "We utilize Google Gemini 1.5 Flash in a secure, server-side optical recognition pipeline. The model extracts key statement fields—including billing periods, kilowatt-hour consumption, rate tariffs, and utility provider names. The AI is strictly confined to transcription; it is never permitted to perform ungrounded financial calculations.",
     },
@@ -30,7 +30,7 @@ export function LandingFAQ() {
         "Yes. Uploaded bill files are stored in private, encrypted Supabase Storage buckets. Every database row is safeguarded by PostgreSQL Row Level Security (RLS), ensuring only your authenticated session can access your data. We never sell, broker, or train public models on your utility statements.",
     },
     {
-      question: "Does CarbonCoach AI work for apartment renters as well as homeowners?",
+      question: "Does Carbon Coach work for apartment renters as well as homeowners?",
       answer:
         "Absolutely. During onboarding, you can designate your housing type. Renters receive high-impact habit recommendations, plug-in smart hardware advice, and appliance scheduling that require zero structural renovations. Homeowners additionally see retrofitting and heat pump analysis.",
     },

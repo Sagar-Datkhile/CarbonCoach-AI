@@ -48,7 +48,7 @@ export function TrustTransparency() {
               Trust & Transparency First
             </h2>
             <p className="text-base sm:text-lg text-[#667085] mt-3">
-              Sustainability software requires scientific integrity. Here is how CarbonCoach AI protects your data and guarantees mathematical truth.
+              Sustainability software requires scientific integrity. Here is how Carbon Coach protects your data and guarantees mathematical truth.
             </p>
           </div>
         </SectionReveal>
