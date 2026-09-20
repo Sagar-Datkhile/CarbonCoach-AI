@@ -30,7 +30,7 @@ export function TrustTransparency() {
   ];
 
   return (
-    <section id="transparency" className="py-20 bg-[#FAFBF8]">
+    <section id="transparency" className="py-20 bg-[#FAFBF8] scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full">

@@ -5,6 +5,7 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { CoreCapabilities } from "@/components/landing/CoreCapabilities";
 import { BillToActionPreview } from "@/components/landing/BillToActionPreview";
 import { TrustTransparency } from "@/components/landing/TrustTransparency";
+import { ContactSupport } from "@/components/landing/ContactSupport";
 import { LandingCTA } from "@/components/landing/LandingCTA";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 
@@ -18,6 +19,7 @@ export default function HomePage() {
         <CoreCapabilities />
         <BillToActionPreview />
         <TrustTransparency />
+        <ContactSupport />
         <LandingCTA />
       </main>
       <LandingFooter />

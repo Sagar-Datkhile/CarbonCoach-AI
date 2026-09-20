@@ -33,6 +33,16 @@
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background-color: var(--background);
   color: var(--text-primary);

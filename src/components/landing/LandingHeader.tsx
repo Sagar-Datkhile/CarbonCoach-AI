@@ -13,6 +13,7 @@ export function LandingHeader() {
     { label: "Core Capabilities", href: "#capabilities" },
     { label: "Bill-to-Action", href: "#workflow" },
     { label: "Transparency", href: "#transparency" },
+    { label: "Contact", href: "#contact" },
   ];
 
   return (

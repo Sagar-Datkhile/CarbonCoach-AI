@@ -1,14 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import { Zap, ArrowUpRight } from "lucide-react";
+import { TEAM_CONTACTS } from "@/constants/contact";
 
 export function LandingFooter() {
   return (
     <footer className="bg-[#FAFBF8] border-t border-[#E3E7E3] py-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand Info */}
-          <div className="md:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-[#075E45] text-white flex items-center justify-center">
                 <Zap className="w-4 h-4 fill-current text-[#EAF5EE]" />
@@ -46,6 +47,64 @@ export function LandingFooter() {
               <li>
                 <a href="#transparency" className="hover:text-[#0B7252] transition-colors">
                   Data Transparency
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Support & Contact */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold text-[#111827] uppercase tracking-wider">
+              Support & Contact
+            </h4>
+            <ul className="space-y-2 text-sm text-[#667085]">
+              <li>
+                <a href="#contact" className="hover:text-[#0B7252] transition-colors font-medium text-[#075E45]">
+                  Need Help? (Support)
+                </a>
+              </li>
+              <li>
+                <a
+                  href={TEAM_CONTACTS[0].linkedInUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#0B7252] transition-colors inline-flex items-center gap-1"
+                >
+                  <span>LinkedIn — Sagar Datkhile</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={TEAM_CONTACTS[0].githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#0B7252] transition-colors inline-flex items-center gap-1"
+                >
+                  <span>GitHub — Sagar Datkhile</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={TEAM_CONTACTS[1].linkedInUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#0B7252] transition-colors inline-flex items-center gap-1"
+                >
+                  <span>LinkedIn — Pranav Patil</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={TEAM_CONTACTS[1].githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#0B7252] transition-colors inline-flex items-center gap-1"
+                >
+                  <span>GitHub — Pranav Patil</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
               </li>
             </ul>

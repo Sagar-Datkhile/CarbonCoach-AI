@@ -1,11 +1,11 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { ArrowRight, Check, Sparkles, Receipt, Zap } from "lucide-react";
+import { ArrowRight, Check, Sparkles, Receipt } from "lucide-react";
 
 export function BillToActionPreview() {
   return (
-    <section id="workflow" className="py-20 bg-white border-y border-[#E3E7E3]">
+    <section id="workflow" className="py-20 bg-white border-y border-[#E3E7E3] scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full">

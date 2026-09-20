@@ -48,11 +48,20 @@ export function LandingHero() {
                   Get Started
                 </Button>
               </Link>
-              <Link href="/login" className="w-full sm:w-auto">
+              <a href="#how-it-works" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto text-base font-semibold px-7"
+                  className="w-full sm:w-auto text-base font-semibold px-6"
+                >
+                  Learn More
+                </Button>
+              </a>
+              <Link href="/login" className="w-full sm:w-auto">
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  className="w-full sm:w-auto text-base font-semibold px-6"
                 >
                   Sign In
                 </Button>
