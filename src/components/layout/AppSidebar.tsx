@@ -50,15 +50,15 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        "w-64 bg-white border-r border-[#E3E7E3] flex flex-col justify-between h-full",
+        "w-64 bg-white border-r border-[#E3E7E3] flex flex-col justify-between h-full select-none",
         className
       )}
     >
-      {/* Brand Header & Navigation Links */}
+      {/* Brand Header & Main Navigation */}
       <div className="flex-1 overflow-y-auto">
         {/* Brand Header */}
         <div className="p-6 pb-4 flex items-center gap-3 border-b border-[#F3F8F3]">
-          <div className="w-10 h-10 rounded-xl bg-[#075E45] text-white flex items-center justify-center shadow-sm shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[#075E45] text-white flex items-center justify-center shadow-xs shrink-0">
             <Zap className="w-5 h-5 fill-current text-[#EAF5EE]" />
           </div>
           <div className="flex flex-col">
@@ -104,7 +104,7 @@ export function AppSidebar({
         </nav>
       </div>
 
-      {/* Modern Sticky Footer Profile & Account Navigation (Replaces old Sign Out and Profile links) */}
+      {/* Sticky Bottom-Left Profile & Account Navigation */}
       <div className="p-3 border-t border-[#E3E7E3] bg-white sticky bottom-0 z-20">
         <ProfileDropdown
           userName={userName}

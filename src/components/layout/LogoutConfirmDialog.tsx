@@ -44,16 +44,13 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
       aria-modal="true"
       aria-labelledby="logout-dialog-title"
     >
-      {/* Dialog Backdrop click */}
       <div
         className="absolute inset-0"
         onClick={() => !isPending && onClose()}
         aria-hidden="true"
       />
 
-      {/* Dialog Box */}
       <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#E3E7E3] p-6 z-10 space-y-5 animate-in zoom-in-95 duration-200">
-        {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
@@ -64,7 +61,6 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
           <X className="w-5 h-5" />
         </button>
 
-        {/* Icon & Title */}
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-2xl bg-[#FEF3F2] text-[#D92D20] flex items-center justify-center shrink-0 border border-[#FECDCA]">
             <AlertTriangle className="w-6 h-6" />
@@ -82,7 +78,6 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3 pt-2">
           <Button
             type="button"

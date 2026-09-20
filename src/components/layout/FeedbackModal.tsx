@@ -39,7 +39,6 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate short submission
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -98,7 +97,6 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Category selector */}
               <div>
                 <label className="text-xs font-semibold text-[#111827] block mb-1.5">
                   Category
@@ -121,7 +119,6 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                 </div>
               </div>
 
-              {/* Rating */}
               <div>
                 <label className="text-xs font-semibold text-[#111827] block mb-1.5">
                   Experience Rating
@@ -152,7 +149,6 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                 </div>
               </div>
 
-              {/* Comments */}
               <div>
                 <label htmlFor="feedback-text" className="text-xs font-semibold text-[#111827] block mb-1.5">
                   Comments or Suggestions
@@ -168,7 +164,6 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                 />
               </div>
 
-              {/* Submit Buttons */}
               <div className="flex items-center justify-end gap-3 pt-2">
                 <Button
                   type="button"
