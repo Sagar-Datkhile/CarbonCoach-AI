@@ -6,7 +6,7 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { BillToActionPreview } from "@/components/landing/BillToActionPreview";
 import { TrustTransparency } from "@/components/landing/TrustTransparency";
 import { LandingFAQ } from "@/components/landing/LandingFAQ";
-import { LandingCTA } from "@/components/landing/LandingCTA";
+import { TeamSection } from "@/components/landing/TeamSection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 
 export default function HomePage() {
@@ -20,7 +20,7 @@ export default function HomePage() {
         <BillToActionPreview />
         <TrustTransparency />
         <LandingFAQ />
-        <LandingCTA />
+        <TeamSection />
       </main>
       <LandingFooter />
     </div>

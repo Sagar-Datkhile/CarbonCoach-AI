@@ -4,16 +4,16 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Zap, Mail, ShieldCheck, Clock } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 import { SectionReveal } from "./SectionReveal";
 
 export function LandingCTA() {
   return (
     <section
-      id="contact"
+      id="cta"
       className="scroll-mt-20 py-20 bg-white"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main CTA Banner */}
         <SectionReveal>
           <div className="relative overflow-hidden rounded-3xl bg-[#075E45] px-6 py-16 sm:px-12 sm:py-20 text-center shadow-xl">
@@ -67,65 +67,6 @@ export function LandingCTA() {
                     </Button>
                   </Link>
                 </motion.div>
-              </div>
-            </div>
-          </div>
-        </SectionReveal>
-
-        {/* Contact & Support Help Grid */}
-        <SectionReveal delay={0.15}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-            <div className="p-5 rounded-2xl border border-[#E3E7E3] bg-[#FAFBF8] flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] text-[#075E45] flex items-center justify-center shrink-0">
-                <Mail className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085]">
-                  Direct Inquiries
-                </h3>
-                <a
-                  href="mailto:support@carboncoach.ai"
-                  className="text-sm font-bold text-[#075E45] hover:underline mt-0.5 block"
-                >
-                  support@carboncoach.ai
-                </a>
-                <p className="text-xs text-[#667085] mt-1">
-                  General questions, tariff requests, and partnerships.
-                </p>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-2xl border border-[#E3E7E3] bg-[#FAFBF8] flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] text-[#075E45] flex items-center justify-center shrink-0">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085]">
-                  Response Window
-                </h3>
-                <span className="text-sm font-bold text-[#111827] mt-0.5 block">
-                  Within 24 Hours
-                </span>
-                <p className="text-xs text-[#667085] mt-1">
-                  Dedicated engineering and tariff verification support.
-                </p>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-2xl border border-[#E3E7E3] bg-[#FAFBF8] flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] text-[#075E45] flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#667085]">
-                  Data Ethics
-                </h3>
-                <span className="text-sm font-bold text-[#111827] mt-0.5 block">
-                  100% Confidential
-                </span>
-                <p className="text-xs text-[#667085] mt-1">
-                  Statements are encrypted under private tenant isolation.
-                </p>
               </div>
             </div>
           </div>
