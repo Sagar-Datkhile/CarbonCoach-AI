@@ -31,45 +31,101 @@ export async function extractBillFromBuffer(
   mimeType: string
 ): Promise<ExtractionResult> {
   const startTime = Date.now();
-  const apiKey = process.env.GEMINI_API_KEY;
+  const openRouterKey = process.env.OPENROUTER_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey) {
+  if (!openRouterKey && !geminiKey) {
     return {
       success: false,
-      error: "GEMINI_API_KEY is not configured on the server. Please check environment configuration.",
+      error: "OPENROUTER_API_KEY is not configured on the server. Please check environment configuration.",
       processingTimeMs: Date.now() - startTime,
     };
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey });
     const base64Data = buffer.toString("base64");
+    let responseText = "";
 
-    const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [
+    if (openRouterKey) {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${openRouterKey.trim()}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+          "X-Title": "CarbonCoach AI",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash-lite",
+          messages: [
             {
-              text: "Extract all electricity bill data from this document accurately according to the instructions.",
+              role: "system",
+              content: SYSTEM_INSTRUCTION,
             },
             {
-              inlineData: {
-                mimeType,
-                data: base64Data,
-              },
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: "Extract all electricity bill data from this document accurately according to the instructions.",
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${mimeType};base64,${base64Data}`,
+                  },
+                },
+              ],
             },
           ],
-        },
-      ],
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: "application/json",
-      },
-    });
+          temperature: 0.1,
+          response_format: { type: "json_object" },
+        }),
+        signal: AbortSignal.timeout(45000),
+      });
 
-    const responseText = response.text || "";
+      if (!response.ok) {
+        let errDetail = "";
+        try {
+          const errObj = await response.json();
+          errDetail = errObj?.error?.message || JSON.stringify(errObj);
+        } catch {
+          errDetail = response.statusText;
+        }
+        throw new Error(`OpenRouter extraction failed (HTTP ${response.status}): ${errDetail}`);
+      }
+
+      const resJson = (await response.json()) as {
+        choices?: Array<{ message?: { content?: string } }>;
+      };
+      responseText = resJson.choices?.[0]?.message?.content || "";
+    } else if (geminiKey) {
+      const ai = new GoogleGenAI({ apiKey: geminiKey });
+      const response = await ai.models.generateContent({
+        model: "gemini-1.5-flash",
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: "Extract all electricity bill data from this document accurately according to the instructions.",
+              },
+              {
+                inlineData: {
+                  mimeType,
+                  data: base64Data,
+                },
+              },
+            ],
+          },
+        ],
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+          responseMimeType: "application/json",
+        },
+      });
+      responseText = response.text || "";
+    }
     let parsedJson: unknown;
 
     try {
