@@ -28,10 +28,6 @@ export function AppHeader({ userRole, userEmail, userName, avatarUrl }: AppHeade
     return "Household Dashboard";
   };
 
-  const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
-
-  const showAvatar = Boolean(avatarUrl && avatarUrl !== failedAvatarUrl);
-
   return (
     <>
       <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#E3E7E3] px-4 md:px-8 py-3.5 flex items-center justify-between">
@@ -76,30 +72,6 @@ export function AppHeader({ userRole, userEmail, userName, avatarUrl }: AppHeade
             href="/plan"
             className="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl text-[#075E45] bg-[#EAF5EE]/60 hover:bg-[#EAF5EE] transition-colors border border-[#0B7252]/10"
           >
-            <div className="w-8 h-8 rounded-full bg-[#EAF5EE] text-[#075E45] flex items-center justify-center font-bold text-xs overflow-hidden shrink-0 border border-[#E3E7E3]">
-              {showAvatar && avatarUrl ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={avatarUrl}
-                  alt={userName || "User Avatar"}
-                  className="w-full h-full object-cover rounded-full"
-                  referrerPolicy="no-referrer"
-                  onError={() => setFailedAvatarUrl(avatarUrl)}
-                />
-              ) : (
-                <span>{userName ? userName.charAt(0).toUpperCase() : <User className="w-4 h-4" />}</span>
-              )}
-            </div>
-            <div className="hidden sm:flex flex-col text-left">
-              <span className="text-xs font-bold text-[#111827] leading-tight">
-                {userName || "User"}
-              </span>
-              {userEmail && (
-                <span className="text-[11px] text-[#667085] leading-tight truncate max-w-[140px]">
-                  {userEmail}
-                </span>
-              )}
-            </div>
             <Sparkles className="w-3.5 h-3.5" />
             <span>View Energy Plan</span>
           </Link>

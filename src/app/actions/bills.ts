@@ -147,119 +147,29 @@ export async function confirmAuthoritativeBill(
     (validation.data.energy_consumed_kwh * defaultFactor).toFixed(2)
   );
 
-  // Look up household_id for user if the database schema requires it
-  let householdId: string | null = null;
-  try {
-    const { data: hp } = await (supabase as any)
-      .from("household_profiles")
-      .select("id")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (hp?.id) {
-      householdId = hp.id;
-    } else {
-      const { data: h } = await (supabase as any)
-        .from("households")
-        .select("id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (h?.id) {
-        householdId = h.id;
-      } else {
-        // Auto-create basic household if none exists to satisfy foreign key / not-null constraint
-        const { data: newH } = await (supabase as any)
-          .from("households")
-          .insert({
-            user_id: user.id,
-            household_name: "My Household",
-            home_type: "owned",
-          })
-          .select("id")
-          .maybeSingle();
-        if (newH?.id) {
-          householdId = newH.id;
-        }
-      }
-    }
-  } catch {
-    // Continue without householdId
-  }
-
-  const basePayload: Record<string, any> = {
-    user_id: user.id,
-    provider_name: validation.data.provider_name,
-    consumer_number: validation.data.consumer_number || null,
-    bill_number: validation.data.bill_number || null,
-    billing_period_start: validation.data.billing_period_start,
-    billing_period_end: validation.data.billing_period_end,
-    energy_consumed_kwh: validation.data.energy_consumed_kwh,
-    bill_amount: validation.data.bill_amount,
-    tariff_rate: validation.data.tariff_rate || null,
-    currency: validation.data.currency || "USD",
-    due_date: validation.data.due_date || null,
-    file_path: validation.data.file_path || null,
-    status: "confirmed",
-  };
-
-  if (householdId) {
-    basePayload.household_id = householdId;
-  }
-
-  // First attempt: insert with estimated_emissions_kg
-  let { data: bill, error } = await (supabase as any)
+  const { data: bill, error } = await supabase
     .from("electricity_bills")
     .insert({
-      ...basePayload,
+      user_id: user.id,
+      provider_name: validation.data.provider_name,
+      consumer_number: validation.data.consumer_number || null,
+      bill_number: validation.data.bill_number || null,
+      billing_period_start: validation.data.billing_period_start,
+      billing_period_end: validation.data.billing_period_end,
+      energy_consumed_kwh: validation.data.energy_consumed_kwh,
+      bill_amount: validation.data.bill_amount,
+      tariff_rate: validation.data.tariff_rate || null,
+      currency: validation.data.currency || "USD",
+      due_date: validation.data.due_date || null,
+      file_path: validation.data.file_path || null,
+      status: "confirmed",
       estimated_emissions_kg: estimatedEmissions,
     })
     .select("id")
     .single();
 
-  // If column estimated_emissions_kg is not found in schema cache, retry without it
-  if (error && (error.message?.includes("estimated_emissions_kg") || error.code === "PGRST204")) {
-    const retry = await (supabase as any)
-      .from("electricity_bills")
-      .insert(basePayload)
-      .select("id")
-      .single();
-    bill = retry.data;
-    error = retry.error;
-  }
-
-  // If household_id constraint failed, ensure household exists and retry
-  if (error && (error.message?.includes("household_id") || error.code === "23502")) {
-    if (!householdId) {
-      const { data: fallbackH } = await (supabase as any)
-        .from("households")
-        .upsert(
-          {
-            user_id: user.id,
-            household_name: "My Household",
-            home_type: "owned",
-          },
-          { onConflict: "user_id" }
-        )
-        .select("id")
-        .maybeSingle();
-      householdId = fallbackH?.id || null;
-    }
-
-    if (householdId) {
-      basePayload.household_id = householdId;
-      const retryWithHousehold = await (supabase as any)
-        .from("electricity_bills")
-        .insert(basePayload)
-        .select("id")
-        .single();
-      bill = retryWithHousehold.data;
-      error = retryWithHousehold.error;
-    }
-  }
-
-  if (error || !bill) {
-    return { success: false, error: error?.message || "Failed to save bill" };
+  if (error) {
+    return { success: false, error: error.message };
   }
 
   revalidatePath("/bills");

@@ -44,16 +44,7 @@ export async function updateProfileInfo(
     return { error: error.message };
   }
 
-  // Keep auth metadata in sync
-  await supabase.auth.updateUser({
-    data: {
-      full_name: validation.data.fullName,
-      avatar_url: validation.data.avatarUrl || null,
-    },
-  });
-
   revalidatePath("/profile");
-  revalidatePath("/", "layout");
   return { success: true, message: "Profile updated successfully!" };
 }
 
@@ -113,48 +104,6 @@ export async function updateHouseholdInfo(
     );
 
   if (error) {
-    if (error.code === "PGRST205" || error.message?.includes("household_profiles")) {
-      // Fallback: Attempt writing basic fields to legacy households table if it exists
-      try {
-        const legacyHomeType =
-          validation.data.homeType.toLowerCase() === "rented"
-            ? "rented"
-            : validation.data.homeType.toLowerCase() === "shared"
-            ? "shared"
-            : "owned";
-
-        const { error: legacyError } = await (supabase as any)
-          .from("households")
-          .upsert(
-            {
-              user_id: user.id,
-              household_name: validation.data.householdName,
-              home_type: legacyHomeType,
-              occupants_count: validation.data.occupantsCount,
-              region_code: validation.data.region,
-              updated_at: new Date().toISOString(),
-            },
-            { onConflict: "user_id" }
-          );
-
-        if (!legacyError) {
-          revalidatePath("/profile");
-          revalidatePath("/dashboard");
-          return {
-            success: true,
-            message:
-              "Basic household settings saved! NOTE: To unlock all preferences (Budget tier, Heating, Cooling, Currency), run 'supabase/migrations/00002_fix_household_profiles.sql' in Supabase SQL Editor.",
-          };
-        }
-      } catch {
-        // Fallback failed, proceed to return migration instruction
-      }
-
-      return {
-        error:
-          "Database table 'household_profiles' not found in Supabase. Please run the migration script in 'supabase/migrations/00002_fix_household_profiles.sql' in your Supabase SQL Editor.",
-      };
-    }
     return { error: error.message };
   }
 

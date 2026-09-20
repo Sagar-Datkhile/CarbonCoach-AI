@@ -13,35 +13,21 @@ export default async function DashboardLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const userMetadataName =
-    (user?.user_metadata?.full_name as string) ||
-    (user?.user_metadata?.name as string) ||
-    "";
-
   let userRole = "user";
-  let userEmail = user?.email || "";
-  let userName = userMetadataName || (userEmail ? userEmail.split("@")[0] : "User");
-  let userAvatarUrl =
-    (user?.user_metadata?.avatar_url as string) ||
-    (user?.user_metadata?.picture as string) ||
-    "";
+  let userName = "Household User";
+  let userEmail = user?.email || "user@example.com";
 
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role, full_name, email, avatar_url")
+      .select("role, full_name, email")
       .eq("id", user.id)
       .maybeSingle();
 
     if (profile) {
-      userRole = profile.role || userRole;
-      if (profile.full_name && profile.full_name.trim()) {
-        userName = profile.full_name.trim();
-      }
+      userRole = profile.role || "user";
+      userName = profile.full_name || userName;
       userEmail = profile.email || userEmail;
-      if (profile.avatar_url && profile.avatar_url.trim()) {
-        userAvatarUrl = profile.avatar_url.trim();
-      }
     }
   }
 
@@ -63,7 +49,6 @@ export default async function DashboardLayout({
           userRole={userRole}
           userEmail={userEmail}
           userName={userName}
-          avatarUrl={userAvatarUrl}
         />
         <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
           {children}
