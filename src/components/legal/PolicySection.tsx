@@ -72,15 +72,16 @@ export function PolicySection({ section, className }: PolicySectionProps) {
   const shouldReduceMotion = useReducedMotion();
 
   const getContactIcon = (iconName: string) => {
+    const iconClass = "w-4 h-4 text-[#075E45] group-hover:text-white transition-colors";
     switch (iconName.toLowerCase()) {
       case "mail":
-        return <Mail className="w-4 h-4 text-[#075E45]" />;
+        return <Mail className={iconClass} />;
       case "github":
-        return <GitHubIcon className="w-4 h-4 text-[#075E45]" />;
+        return <GitHubIcon className={iconClass} />;
       case "linkedin":
-        return <LinkedInIcon className="w-4 h-4 text-[#075E45]" />;
+        return <LinkedInIcon className={iconClass} />;
       default:
-        return <ExternalLink className="w-4 h-4 text-[#075E45]" />;
+        return <ExternalLink className={iconClass} />;
     }
   };
 
@@ -155,9 +156,9 @@ export function PolicySection({ section, className }: PolicySectionProps) {
         </ul>
       )}
 
-      {/* Contact Cards */}
+      {/* Contact Icons / Action Buttons */}
       {section.contactCards && section.contactCards.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-5">
+        <div className="flex flex-wrap items-center gap-3.5 mt-5">
           {section.contactCards.map((card, idx) => {
             const isMailto = card.url.startsWith("mailto:");
             return (
@@ -166,19 +167,14 @@ export function PolicySection({ section, className }: PolicySectionProps) {
                 href={card.url}
                 target={isMailto ? undefined : "_blank"}
                 rel={isMailto ? undefined : "noopener noreferrer"}
-                className="group flex flex-col p-4 rounded-xl border border-[#E3E7E3] bg-[#FAFBF8] hover:bg-[#EAF5EE] hover:border-[#075E45]/30 transition-all duration-200"
+                aria-label={`${card.label}: ${card.value}`}
+                title={`${card.label}: ${card.value}`}
+                className="group inline-flex items-center gap-3 px-4 py-2.5 rounded-xl border border-[#E3E7E3] bg-[#FAFBF8] hover:bg-[#EAF5EE] hover:border-[#075E45]/30 text-xs font-semibold text-[#111827] hover:text-[#075E45] shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#667085] group-hover:text-[#075E45] transition-colors">
-                    {card.label}
-                  </span>
-                  <div className="w-7 h-7 rounded-lg bg-white border border-[#E3E7E3] flex items-center justify-center group-hover:bg-[#075E45] group-hover:text-white transition-colors">
-                    {getContactIcon(card.icon)}
-                  </div>
-                </div>
-                <span className="text-xs sm:text-sm font-semibold text-[#111827] group-hover:text-[#075E45] break-all truncate">
-                  {card.value}
+                <span className="w-8 h-8 rounded-lg bg-white border border-[#E3E7E3] group-hover:bg-[#075E45] group-hover:border-[#075E45] flex items-center justify-center transition-colors shadow-2xs">
+                  {getContactIcon(card.icon)}
                 </span>
+                <span className="text-sm font-semibold">{card.label}</span>
               </a>
             );
           })}
