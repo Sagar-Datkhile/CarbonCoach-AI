@@ -16,11 +16,12 @@ export default async function DashboardLayout({
   let userRole = "user";
   let userName = "Household User";
   let userEmail = user?.email || "user@example.com";
+  let userAvatarUrl: string | null = (user?.user_metadata?.avatar_url as string) || null;
 
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role, full_name, email")
+      .select("role, full_name, email, avatar_url")
       .eq("id", user.id)
       .maybeSingle();
 
@@ -28,6 +29,7 @@ export default async function DashboardLayout({
       userRole = profile.role || "user";
       userName = profile.full_name || userName;
       userEmail = profile.email || userEmail;
+      userAvatarUrl = profile.avatar_url || userAvatarUrl;
     }
   }
 
@@ -49,6 +51,7 @@ export default async function DashboardLayout({
           userRole={userRole}
           userEmail={userEmail}
           userName={userName}
+          avatarUrl={userAvatarUrl}
         />
         <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
           {children}
