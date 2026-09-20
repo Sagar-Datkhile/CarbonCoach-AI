@@ -9,10 +9,14 @@ interface AppHeaderProps {
   userRole?: string;
   userEmail?: string;
   userName?: string;
+  avatarUrl?: string | null;
 }
 
-export function AppHeader({ userRole, userEmail, userName }: AppHeaderProps) {
+export function AppHeader({ userRole, userEmail, userName, avatarUrl }: AppHeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
+
+  const showAvatar = Boolean(avatarUrl && avatarUrl !== failedAvatarUrl);
 
   return (
     <>
@@ -51,16 +55,29 @@ export function AppHeader({ userRole, userEmail, userName }: AppHeaderProps) {
             href="/profile"
             className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full hover:bg-[#F3F8F3] transition-colors border border-transparent hover:border-[#E3E7E3]"
           >
-            <div className="w-8 h-8 rounded-full bg-[#EAF5EE] text-[#075E45] flex items-center justify-center font-bold text-xs">
-              {userName ? userName.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
+            <div className="w-8 h-8 rounded-full bg-[#EAF5EE] text-[#075E45] flex items-center justify-center font-bold text-xs overflow-hidden shrink-0 border border-[#E3E7E3]">
+              {showAvatar && avatarUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={avatarUrl}
+                  alt={userName || "User Avatar"}
+                  className="w-full h-full object-cover rounded-full"
+                  referrerPolicy="no-referrer"
+                  onError={() => setFailedAvatarUrl(avatarUrl)}
+                />
+              ) : (
+                <span>{userName ? userName.charAt(0).toUpperCase() : <User className="w-4 h-4" />}</span>
+              )}
             </div>
             <div className="hidden sm:flex flex-col text-left">
               <span className="text-xs font-bold text-[#111827] leading-tight">
-                {userName || "My Profile"}
+                {userName || "User"}
               </span>
-              <span className="text-[11px] text-[#667085] leading-tight truncate max-w-[140px]">
-                {userEmail || "Household User"}
-              </span>
+              {userEmail && (
+                <span className="text-[11px] text-[#667085] leading-tight truncate max-w-[140px]">
+                  {userEmail}
+                </span>
+              )}
             </div>
           </Link>
         </div>

@@ -13,8 +13,11 @@ export default async function ProfilePage() {
   } = await supabase.auth.getUser();
 
   let profile = {
-    email: user?.email || "user@example.com",
-    fullName: (user?.user_metadata?.full_name as string) || "Household User",
+    email: user?.email || "",
+    fullName:
+      (user?.user_metadata?.full_name as string) ||
+      (user?.user_metadata?.name as string) ||
+      (user?.email ? user.email.split("@")[0] : "User"),
     avatarUrl: (user?.user_metadata?.avatar_url as string) || "",
     role: "user",
   };
@@ -63,6 +66,41 @@ export default async function ProfilePage() {
         coolingType: dbHousehold.cooling_type || "Air Conditioning",
         preferredCurrency: dbHousehold.preferred_currency || "USD",
       };
+    } else {
+      // Fallback: check legacy households table if household_profiles is empty or not yet migrated
+      try {
+        const { data: legacyHousehold } = await (supabase as any)
+          .from("households")
+          .select("*")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (legacyHousehold) {
+          const lH = legacyHousehold as {
+            household_name?: string;
+            home_type?: string;
+            occupants_count?: number;
+            region_code?: string;
+          };
+          household = {
+            householdName: lH.household_name || household.householdName,
+            homeType:
+              lH.home_type === "rented"
+                ? "Rented"
+                : lH.home_type === "shared"
+                ? "Shared"
+                : "Owned",
+            occupantsCount: lH.occupants_count || 2,
+            region: lH.region_code || "Global",
+            budgetTier: "Moderate",
+            heatingType: "Electric",
+            coolingType: "Air Conditioning",
+            preferredCurrency: "USD",
+          };
+        }
+      } catch {
+        // Fallback gracefully to default values
+      }
     }
   }
 
