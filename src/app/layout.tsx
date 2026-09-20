@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "CarbonCoach AI — Understand your energy. Make practical changes.",
+  title: "Carbon Coach — Green Energy Intelligence",
   description:
     "Turn electricity bills into understandable insights and achievable energy-saving actions with deterministic modeling and private data control.",
   icons: {

@@ -22,7 +22,7 @@ export default function ForgotPasswordPage() {
               <Zap className="w-6 h-6 fill-current text-[#EAF5EE]" />
             </div>
             <span className="text-2xl font-bold tracking-tight text-[#075E45]">
-              CarbonCoach<span className="text-[#0B7252]">.AI</span>
+              Carbon Coach
             </span>
           </Link>
           <p className="text-sm text-[#667085]">

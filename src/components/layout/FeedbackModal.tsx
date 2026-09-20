@@ -77,7 +77,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
             </div>
             <h2 className="text-xl font-bold text-[#111827]">Thank You for Your Feedback!</h2>
             <p className="text-sm text-[#667085] max-w-xs mx-auto">
-              Your insights directly help us improve CarbonCoach AI for households worldwide.
+              Your insights directly help us improve Carbon Coach for households worldwide.
             </p>
           </div>
         ) : (

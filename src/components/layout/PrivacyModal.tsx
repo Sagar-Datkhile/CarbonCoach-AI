@@ -56,7 +56,7 @@ export function PrivacyModal({ isOpen, onClose }: PrivacyModalProps) {
               Privacy & Data Protection
             </h2>
             <p className="text-xs text-[#667085]">
-              How CarbonCoach AI safeguards your household energy statements
+              How Carbon Coach safeguards your household energy statements
             </p>
           </div>
         </div>

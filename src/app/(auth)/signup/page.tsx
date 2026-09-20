@@ -23,12 +23,12 @@ export default function SignUpPage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.png"
-                alt="CarbonCoach AI Logo"
+                alt="Carbon Coach Logo"
                 className="w-full h-full object-contain"
               />
             </div>
             <span className="text-2xl font-bold tracking-tight text-[#075E45]">
-              CarbonCoach<span className="text-[#0B7252]">.AI</span>
+              Carbon Coach
             </span>
           </Link>
           <p className="text-sm text-[#667085]">
@@ -41,7 +41,7 @@ export default function SignUpPage() {
           <CardHeader>
             <CardTitle>Create your account</CardTitle>
             <CardDescription>
-              Join CarbonCoach AI to track electricity and cut waste
+              Join Carbon Coach to track electricity and cut waste
             </CardDescription>
           </CardHeader>
 

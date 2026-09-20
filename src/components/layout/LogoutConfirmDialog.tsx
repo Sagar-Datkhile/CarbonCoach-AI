@@ -73,7 +73,7 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
               Log Out?
             </h2>
             <p className="text-sm text-[#667085]">
-              Are you sure you want to sign out of CarbonCoach AI? You will need to sign in again to access your household dashboard and electricity data.
+              Are you sure you want to sign out of Carbon Coach? You will need to sign in again to access your household dashboard and electricity data.
             </p>
           </div>
         </div>
