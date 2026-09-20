@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getSupabaseUrl } from "@/lib/supabase/config";
 
 export const dynamic = "force-dynamic";
 
@@ -8,8 +7,7 @@ export async function GET() {
   const timestamp = new Date().toISOString();
   const service = "carboncoach-api";
 
-  const hasEnvUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseUrl = getSupabaseUrl();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -17,7 +15,7 @@ export async function GET() {
   let dbStatus: "connected" | "unavailable" = "unavailable";
   let overallStatus: "ok" | "degraded" | "error" = "degraded";
 
-  if (!hasEnvUrl || !supabaseKey) {
+  if (!supabaseUrl || !supabaseKey) {
     return NextResponse.json(
       {
         status: overallStatus,

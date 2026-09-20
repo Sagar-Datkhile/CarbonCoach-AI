@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AppSidebar } from "./AppSidebar";
 import { Menu, X, Zap } from "lucide-react";
 

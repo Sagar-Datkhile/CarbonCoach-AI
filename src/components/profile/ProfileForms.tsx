@@ -7,7 +7,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
-import { User, Home, Shield, LogOut, Save, Users, Globe } from "lucide-react";
+import { Badge } from "@/components/ui/Badge";
+import { User, Home, Shield, LogOut, Save, Users, Globe, DollarSign } from "lucide-react";
 
 interface ProfileFormsProps {
   profile: {
@@ -31,22 +32,24 @@ interface ProfileFormsProps {
 export function ProfileForms({ profile, household }: ProfileFormsProps) {
   const [profileState, profileAction, isProfilePending] = useActionState(updateProfileInfo, null);
   const [householdState, householdAction, isHouseholdPending] = useActionState(updateHouseholdInfo, null);
-  const [customAvatar, setCustomAvatar] = React.useState<string | null>(null);
-  const [failedAvatarUrl, setFailedAvatarUrl] = React.useState<string | null>(null);
-
-  const currentAvatarUrl = customAvatar !== null ? customAvatar : profile.avatarUrl;
-  const showAvatar = Boolean(currentAvatarUrl && currentAvatarUrl !== failedAvatarUrl);
 
   return (
     <div className="space-y-8">
       {/* Top Banner / Heading */}
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#111827]">
-          Profile & Household Settings
-        </h1>
-        <p className="text-sm text-[#667085] mt-1">
-          Manage your personal credentials, home profile, and energy modeling preferences.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#111827]">
+            Profile & Household Settings
+          </h1>
+          <p className="text-sm text-[#667085] mt-1">
+            Manage your personal credentials, home profile, and energy modeling preferences.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant={profile.role === "admin" ? "primary" : "neutral"}>
+            Role: {profile.role.toUpperCase()}
+          </Badge>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -85,37 +88,12 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                   placeholder="Your full name"
                 />
 
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#EAF5EE] text-[#075E45] flex items-center justify-center font-bold text-base overflow-hidden border border-[#E3E7E3] shrink-0">
-                    {showAvatar && currentAvatarUrl ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={currentAvatarUrl}
-                        alt="Avatar Preview"
-                        className="w-full h-full object-cover rounded-full"
-                        referrerPolicy="no-referrer"
-                        onError={() => setFailedAvatarUrl(currentAvatarUrl)}
-                      />
-                    ) : (
-                      <span>
-                        {profile.fullName
-                          ? profile.fullName.charAt(0).toUpperCase()
-                          : <User className="w-5 h-5" />}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <Input
-                      label="Avatar URL (Optional)"
-                      name="avatarUrl"
-                      defaultValue={profile.avatarUrl}
-                      placeholder="https://example.com/avatar.jpg"
-                      onChange={(e) => {
-                        setCustomAvatar(e.target.value.trim());
-                      }}
-                    />
-                  </div>
-                </div>
+                <Input
+                  label="Avatar URL (Optional)"
+                  name="avatarUrl"
+                  defaultValue={profile.avatarUrl}
+                  placeholder="https://example.com/avatar.jpg"
+                />
 
                 <div className="pt-2">
                   <Button
@@ -148,30 +126,7 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
               </div>
             </CardHeader>
             <CardContent>
-              {householdState?.error && (
-                <div className="mb-4 space-y-2">
-                  <Alert variant="error">{householdState.error}</Alert>
-                  {(householdState.error.includes("household_profiles") ||
-                    householdState.error.includes("migration")) && (
-                    <div className="p-3 bg-[#FEF3F2] border border-[#FECDCA] rounded-lg text-xs text-[#B42318] space-y-2">
-                      <p className="font-semibold">Quick Database Fix:</p>
-                      <p>
-                        The table <code className="bg-white/80 px-1 py-0.5 rounded font-mono">household_profiles</code> is not created yet in your Supabase database. Run the migration script in your Supabase SQL Editor:
-                      </p>
-                      <div>
-                        <a
-                          href="https://supabase.com/dashboard/project/emthwbyihnoklrrzdenv/sql/new"
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1 font-semibold underline hover:text-[#912018]"
-                        >
-                          Open Supabase SQL Editor &rarr;
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
+              {householdState?.error && <Alert variant="error" className="mb-4">{householdState.error}</Alert>}
               {householdState?.message && <Alert variant="success" className="mb-4">{householdState.message}</Alert>}
 
               <form action={householdAction} className="space-y-4">
