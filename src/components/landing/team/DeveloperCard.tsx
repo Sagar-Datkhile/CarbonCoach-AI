@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { TeamMember } from "./types";
 import { SocialButton } from "./SocialButton";
@@ -26,6 +25,10 @@ export function DeveloperCard({
 }: DeveloperCardProps) {
   const shouldReduceMotion = useReducedMotion();
   const [imgError, setImgError] = React.useState(false);
+
+  React.useEffect(() => {
+    setImgError(false);
+  }, [member.avatar.src]);
 
   return (
     <motion.div
@@ -52,11 +55,10 @@ export function DeveloperCard({
             <div className="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-[#075E45] to-[#10B981] shadow-md">
               <div className="w-full h-full rounded-full bg-[#FAFBF8] flex items-center justify-center overflow-hidden border-2 border-white">
                 {member.avatar.src && !imgError ? (
-                  <Image
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
                     src={member.avatar.src}
                     alt={member.name}
-                    width={96}
-                    height={96}
                     className="w-full h-full object-cover"
                     onError={() => setImgError(true)}
                   />
