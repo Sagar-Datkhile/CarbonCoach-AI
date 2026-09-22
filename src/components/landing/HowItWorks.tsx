@@ -33,18 +33,18 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="scroll-mt-20 py-20 bg-white border-y border-[#E3E7E3]"
+      className="scroll-mt-20 py-12 md:py-16 bg-white border-y border-[#E3E7E3]"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionReveal>
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full">
               Transparent Workflow
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-3.5 tracking-tight">
               How Carbon Coach Works
             </h2>
-            <p className="text-base sm:text-lg text-[#667085] mt-3">
+            <p className="text-base sm:text-lg text-[#667085] mt-2.5">
               A secure, three-step human-in-the-loop pipeline designed to demystify household power consumption.
             </p>
           </div>

@@ -7,42 +7,51 @@ export const metadata = {
 };
 
 export default async function SimulatorPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   let preferredCurrency = "USD";
   let defaultTariff = 0.165;
   let defaultEmissionFactor = 0.386;
 
-  if (user) {
-    const { data: dbHousehold } = await supabase
-      .from("household_profiles")
-      .select("preferred_currency, region")
-      .eq("user_id", user.id)
-      .maybeSingle();
+  const isConfigured =
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder");
 
-    if (dbHousehold) {
-      preferredCurrency = dbHousehold.preferred_currency || preferredCurrency;
-    }
+  if (isConfigured) {
+    try {
+      const supabase = await createClient();
+      const { data } = await supabase.auth.getUser();
+      const user = data?.user || null;
 
-    // Check latest confirmed bill for actual tariff rate
-    const { data: latestBill } = await supabase
-      .from("electricity_bills")
-      .select("tariff_rate, currency")
-      .eq("user_id", user.id)
-      .order("billing_period_start", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      if (user) {
+        const { data: dbHousehold } = await supabase
+          .from("household_profiles")
+          .select("preferred_currency, region")
+          .eq("user_id", user.id)
+          .maybeSingle();
 
-    if (latestBill) {
-      if (latestBill.tariff_rate) {
-        defaultTariff = Number(latestBill.tariff_rate);
+        if (dbHousehold) {
+          preferredCurrency = dbHousehold.preferred_currency || preferredCurrency;
+        }
+
+        // Check latest confirmed bill for actual tariff rate
+        const { data: latestBill } = await supabase
+          .from("electricity_bills")
+          .select("tariff_rate, currency")
+          .eq("user_id", user.id)
+          .order("billing_period_start", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (latestBill) {
+          if (latestBill.tariff_rate) {
+            defaultTariff = Number(latestBill.tariff_rate);
+          }
+          if (latestBill.currency) {
+            preferredCurrency = latestBill.currency;
+          }
+        }
       }
-      if (latestBill.currency) {
-        preferredCurrency = latestBill.currency;
-      }
+    } catch {
+      // Fallback gracefully to default parameters
     }
   }
 

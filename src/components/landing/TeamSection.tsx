@@ -52,7 +52,7 @@ function FloatingLeaf({
         ease: "easeInOut",
         delay,
       }}
-      className={`absolute pointer-events-none ${className}`}
+      className={`absolute pointer-events-none hardware-accelerated ${className}`}
       aria-hidden="true"
     >
       <svg
@@ -90,7 +90,7 @@ export function TeamSection({
   return (
     <section
       id={id}
-      className={`relative scroll-mt-20 py-24 bg-gradient-to-b from-[#FAFBF8] via-white to-[#FAFBF8] overflow-hidden ${className}`}
+      className={`relative scroll-mt-20 py-14 md:py-18 bg-gradient-to-b from-[#FAFBF8] via-white to-[#FAFBF8] overflow-hidden ${className}`}
     >
       {/* Background Soft Glows (Low opacity emerald glows) */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#075E45]/5 rounded-full blur-3xl pointer-events-none -z-10" />

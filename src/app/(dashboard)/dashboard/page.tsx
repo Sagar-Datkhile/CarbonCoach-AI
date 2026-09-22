@@ -24,10 +24,10 @@ export const metadata = {
 };
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  const isConfigured =
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder");
 
   // 1. Fetch Household Profile
   let household = {
@@ -39,26 +39,6 @@ export default async function DashboardPage() {
     preferredCurrency: "USD",
   };
 
-  if (user) {
-    const { data: dbHousehold } = await supabase
-      .from("household_profiles")
-      .select("*")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (dbHousehold) {
-      household = {
-        householdName: dbHousehold.household_name || household.householdName,
-        homeType: dbHousehold.home_type || household.homeType,
-        occupantsCount: dbHousehold.occupants_count || 2,
-        region: dbHousehold.region || "Global",
-        budgetTier: dbHousehold.budget_tier || "Moderate",
-        preferredCurrency: dbHousehold.preferred_currency || "USD",
-      };
-    }
-  }
-
-  // 2. Fetch Confirmed Electricity Bills
   let bills: Array<{
     id: string;
     provider_name: string;
@@ -73,20 +53,6 @@ export default async function DashboardPage() {
     created_at: string;
   }> = [];
 
-  if (user) {
-    const { data: dbBills } = await supabase
-      .from("electricity_bills")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("status", "confirmed")
-      .order("billing_period_start", { ascending: false });
-
-    if (dbBills) {
-      bills = dbBills;
-    }
-  }
-
-  // 3. Fetch User Actions (My Plan)
   let userActions: Array<{
     id: string;
     status: string;
@@ -94,14 +60,52 @@ export default async function DashboardPage() {
     estimated_cost_saving: number;
   }> = [];
 
-  if (user) {
-    const { data: dbActions } = await supabase
-      .from("user_actions")
-      .select("id, status, estimated_kwh_saving, estimated_cost_saving")
-      .eq("user_id", user.id);
+  if (isConfigured) {
+    try {
+      const supabase = await createClient();
+      const userRes = await supabase.auth.getUser();
+      user = userRes.data?.user || null;
 
-    if (dbActions) {
-      userActions = dbActions;
+      if (user) {
+        const { data: dbHousehold } = await supabase
+          .from("household_profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (dbHousehold) {
+          household = {
+            householdName: dbHousehold.household_name || household.householdName,
+            homeType: dbHousehold.home_type || household.homeType,
+            occupantsCount: dbHousehold.occupants_count || 2,
+            region: dbHousehold.region || "Global",
+            budgetTier: dbHousehold.budget_tier || "Moderate",
+            preferredCurrency: dbHousehold.preferred_currency || "USD",
+          };
+        }
+
+        const { data: dbBills } = await supabase
+          .from("electricity_bills")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("status", "confirmed")
+          .order("billing_period_start", { ascending: false });
+
+        if (dbBills) {
+          bills = dbBills;
+        }
+
+        const { data: dbActions } = await supabase
+          .from("user_actions")
+          .select("id, status, estimated_kwh_saving, estimated_cost_saving")
+          .eq("user_id", user.id);
+
+        if (dbActions) {
+          userActions = dbActions;
+        }
+      }
+    } catch {
+      // Gracefully fall back to local defaults if Supabase connection fails
     }
   }
 

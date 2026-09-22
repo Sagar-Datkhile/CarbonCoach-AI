@@ -1,17 +1,24 @@
 "use client";
 
-import React, { useActionState } from "react";
+import React, { useActionState, useTransition } from "react";
 import Link from "next/link";
-import { signInWithEmail } from "@/app/actions/auth";
+import { signInWithEmail, signInWithDemo } from "@/app/actions/auth";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";
 import { Alert } from "@/components/ui/Alert";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
-import { Zap, Mail, Lock } from "lucide-react";
+import { Zap, Mail, Lock, Sparkles } from "lucide-react";
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(signInWithEmail, null);
+  const [isDemoPending, startDemoTransition] = useTransition();
+
+  const handleDemoSignIn = () => {
+    startDemoTransition(async () => {
+      await signInWithDemo();
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-[#FAFBF8]">
@@ -49,6 +56,27 @@ export default function LoginPage() {
             {state?.error && (
               <Alert variant="error">{state.error}</Alert>
             )}
+
+            {/* Instant Demo Account Access Button */}
+            <div className="p-3.5 rounded-xl bg-[#EAF5EE] border border-[#0B7252]/20 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="text-xs text-[#075E45] leading-snug text-center sm:text-left">
+                <span className="font-bold flex items-center justify-center sm:justify-start gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#0B7252]" />
+                  Testing or Evaluating?
+                </span>
+                <span>Explore the full dashboard instantly without setup.</span>
+              </div>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                isLoading={isDemoPending}
+                onClick={handleDemoSignIn}
+                className="w-full sm:w-auto shrink-0 bg-[#075E45] hover:bg-[#064E3B] text-white text-xs font-bold"
+              >
+                Demo Sign In
+              </Button>
+            </div>
 
             <form action={formAction} className="space-y-4">
               <Input

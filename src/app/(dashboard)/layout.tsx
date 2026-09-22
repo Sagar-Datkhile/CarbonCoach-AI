@@ -1,5 +1,6 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { AppHeader } from "@/components/layout/AppHeader";
 
@@ -8,10 +9,23 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const cookieStore = await cookies();
+  const isDemoSession = cookieStore.get("cc_demo_session")?.value === "active";
+
+  let user = null;
+  const isConfigured =
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder");
+
+  if (isConfigured) {
+    try {
+      const supabase = await createClient();
+      const res = await supabase.auth.getUser();
+      user = res.data?.user || null;
+    } catch {
+      user = null;
+    }
+  }
 
   // Extract user's display name from user_metadata or email
   const metaName =
@@ -23,8 +37,8 @@ export default async function DashboardLayout({
     (user?.app_metadata?.role as string) ||
     (user?.user_metadata?.role as string) ||
     "user";
-  let userEmail = user?.email || "user@example.com";
-  let userName = metaName || (user?.email ? user.email.split("@")[0] : "User");
+  let userEmail = user?.email || (isDemoSession ? "demo@carboncoach.ai" : "user@example.com");
+  let userName = metaName || (user?.email ? user.email.split("@")[0] : isDemoSession ? "Demo Evaluator" : "User");
   let userAvatarUrl: string | null =
     (user?.user_metadata?.avatar_url as string) ||
     (user?.user_metadata?.picture as string) ||

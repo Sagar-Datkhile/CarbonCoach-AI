@@ -34,18 +34,18 @@ export function CoreCapabilities() {
   return (
     <section
       id="features"
-      className="scroll-mt-20 py-20 bg-[#FAFBF8]"
+      className="scroll-mt-20 py-12 md:py-16 bg-[#FAFBF8]"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionReveal>
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full">
               Engineering Precision
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-3.5 tracking-tight">
               Built for Real Household Impact
             </h2>
-            <p className="text-base sm:text-lg text-[#667085] mt-3">
+            <p className="text-base sm:text-lg text-[#667085] mt-2.5">
               Every feature is engineered to provide actionable clarity rather than superficial carbon offset badges.
             </p>
           </div>
