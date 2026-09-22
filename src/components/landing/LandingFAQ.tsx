@@ -15,29 +15,44 @@ export function LandingFAQ() {
 
   const faqs: FAQItem[] = [
     {
-      question: "How does Carbon Coach extract data from my electricity bills?",
+      question: "What is Carbon Coach and what problem does it solve?",
       answer:
-        "We utilize Google Gemini 1.5 Flash in a secure, server-side optical recognition pipeline. The model extracts key statement fields—including billing periods, kilowatt-hour consumption, rate tariffs, and utility provider names. The AI is strictly confined to transcription; it is never permitted to perform ungrounded financial calculations.",
+        "Carbon Coach is a household green energy intelligence tool designed to demystify complex electric utility statements. Instead of vague badges or confusing tariff structures, it gives you authoritative metrics: your exact daily consumption velocity (kWh/day), grid carbon emissions (kg CO₂e), and mathematically grounded actions to lower your power bill.",
     },
     {
-      question: "How are energy reductions and monetary savings calculated?",
+      question: "How does the AI bill parser extract data from my statements?",
       answer:
-        "Every kWh savings figure and estimated dollar amount is computed using 100% deterministic mathematical formulas backed by published energy standards. Because we do not use generative AI for math, there are zero hallucinations or fabricated projections in your household dashboard.",
+        "When you upload an electricity statement (PDF, JPEG, PNG, or WEBP), our server-side pipeline utilizes Google Gemini 1.5 Flash to locate and transcribe billing period dates, total billing days, energy consumed in kWh, utility provider name, currency, and total amount. The model output is strictly validated against a strict schema before presentation.",
     },
     {
-      question: "Is my utility statement and private information secure?",
+      question: "Why is there a human review step before saving bills?",
       answer:
-        "Yes. Uploaded bill files are stored in private, encrypted Supabase Storage buckets. Every database row is safeguarded by PostgreSQL Row Level Security (RLS), ensuring only your authenticated session can access your data. We never sell, broker, or train public models on your utility statements.",
+        "We adhere to a strict Anti-Hallucination policy. AI is treated strictly as an initial transcription draft. You always inspect the extracted kilowatt-hours and billing dates with a side-by-side review screen, allowing you to make instant corrections before the bill is confirmed into your authoritative database history.",
     },
     {
-      question: "Does Carbon Coach work for apartment renters as well as homeowners?",
+      question: "How are emissions and financial savings calculated?",
       answer:
-        "Absolutely. During onboarding, you can designate your housing type. Renters receive high-impact habit recommendations, plug-in smart hardware advice, and appliance scheduling that require zero structural renovations. Homeowners additionally see retrofitting and heat pump analysis.",
+        "Every calculation is 100% deterministic mathematical code. For example, lighting savings use exact formulas: ((Current Watts - Proposed Watts) × Fixtures × Daily Hours × Days) / 1000 = kWh Saved. We never use generative models to estimate or invent financial figures.",
     },
     {
-      question: "What file formats can I upload for bill processing?",
+      question: "What can I do with the What-If Energy Simulator?",
       answer:
-        "We support standard PDF utility statements directly downloaded from your power company portal, as well as high-resolution mobile camera captures (JPEG, PNG, WebP). The system preprocesses images to optimize clarity before extraction.",
+        "The simulator lets you test scenarios before spending money. You can adjust current bulb wattages (e.g., 60W incandescent), proposed LED wattages (e.g., 9W), fixture count, and operating hours across different projection horizons (30 days to 1 year) to see your calculated potential savings in kWh, money, and avoided carbon.",
+    },
+    {
+      question: "Can I use Carbon Coach if I rent an apartment?",
+      answer:
+        "Yes! During account setup, you select your dwelling type (Owned, Rented, Shared, or Other). Our simulator scenarios and recommendations focus on practical, non-invasive adjustments—such as LED swaps and runtime scheduling—that require zero structural alterations to your living space.",
+    },
+    {
+      question: "How is my utility data kept private and secure?",
+      answer:
+        "Your bill documents are kept in private, encrypted Supabase Storage buckets. Every database row is protected by PostgreSQL Row Level Security (RLS), meaning your statements and household metrics are only accessible by your authenticated session. We never sell, broker, or publicize your personal utility data.",
+    },
+    {
+      question: "Can I explore the application without setting up API keys?",
+      answer:
+        "Yes. If you are evaluating or reviewing the project, you can click 'Demo Sign In' on the Sign In page. This gives you instant access to the full household dashboard, simulator, and bill tracking workflows without needing any cloud credentials.",
     },
   ];
 
@@ -48,26 +63,26 @@ export function LandingFAQ() {
   return (
     <section
       id="faq"
-      className="scroll-mt-20 py-20 bg-white border-y border-[#E3E7E3]"
+      className="scroll-mt-20 py-12 md:py-16 bg-white border-y border-[#E3E7E3]"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionReveal>
-          <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full inline-flex items-center gap-1.5">
               <HelpCircle className="w-3.5 h-3.5 text-[#0B7252]" />
               <span>Questions & Answers</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-3.5 tracking-tight">
               Frequently Asked Questions
             </h2>
-            <p className="text-base sm:text-lg text-[#667085] mt-3">
-              Clear, transparent details about our deterministic engine, privacy architecture, and supported utility providers.
+            <p className="text-base sm:text-lg text-[#667085] mt-2.5">
+              Genuine, transparent details about our deterministic engine, privacy architecture, and practical household features.
             </p>
           </div>
         </SectionReveal>
 
         <SectionReveal delay={0.1}>
-          <div className="space-y-3.5" role="region" aria-label="Frequently Asked Questions">
+          <div className="space-y-3" role="region" aria-label="Frequently Asked Questions">
             {faqs.map((faq, index) => {
               const isOpen = openIndex === index;
 
@@ -86,13 +101,13 @@ export function LandingFAQ() {
                     aria-expanded={isOpen}
                     aria-controls={`faq-answer-${index}`}
                     id={`faq-question-${index}`}
-                    className="w-full py-4.5 px-5 sm:px-6 flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
+                    className="w-full py-4 px-5 sm:px-6 flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
                   >
                     <span className="font-bold text-sm sm:text-base text-[#111827]">
                       {faq.question}
                     </span>
                     <div
-                      className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-200 ${
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border transition-all duration-200 ${
                         isOpen
                           ? "bg-[#EAF5EE] border-[#0B7252]/30 text-[#075E45] rotate-180"
                           : "bg-[#FAFBF8] border-[#E3E7E3] text-[#667085]"
@@ -111,10 +126,10 @@ export function LandingFAQ() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="px-5 sm:px-6 pb-5 pt-1 text-sm text-[#667085] leading-relaxed border-t border-[#F3F8F3]">
+                        <div className="px-5 sm:px-6 pb-4.5 pt-1 text-sm text-[#667085] leading-relaxed border-t border-[#F3F8F3]">
                           {faq.answer}
                         </div>
                       </motion.div>

@@ -33,6 +33,11 @@
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 body {
   background-color: var(--background);
   color: var(--text-primary);
@@ -42,6 +47,12 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hardware accelerated transform for silky smooth scrolling animations */
+.hardware-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Tabular numbers utility for financial & energy figures */

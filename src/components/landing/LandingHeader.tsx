@@ -86,71 +86,69 @@ export function LandingHeader() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, [pathname]);
 
-  // Monitor scroll distance and track active home page section smoothly without fast-scroll jitter
+  // Monitor scroll distance for navbar blur and track active section with zero-lag IntersectionObserver
   useEffect(() => {
-    let ticking = false;
+    if (typeof window === "undefined") return;
 
     const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setIsScrolled(scrollPosition > 20);
-
-      // Only track home page scroll positions
-      if (pathname !== "/") return;
-
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          ticking = false;
-          const currentScroll = window.scrollY;
-          const windowHeight = window.innerHeight;
-          const documentHeight = document.documentElement.scrollHeight;
-
-          // Handle top boundary
-          if (currentScroll < 80) {
-            setActiveSection("hero");
-            return;
-          }
-
-          // Handle bottom boundary
-          if (windowHeight + Math.round(currentScroll) >= documentHeight - 80) {
-            setActiveSection("contact");
-            return;
-          }
-
-          const sectionIds = [
-            "hero",
-            "features",
-            "how-it-works",
-            "simulator",
-            "benefits",
-            "faq",
-            "contact",
-          ];
-
-          const targetOffset = 180;
-          let currentActive = "hero";
-
-          for (let i = 0; i < sectionIds.length; i++) {
-            const id = sectionIds[i];
-            const el = document.getElementById(id);
-            if (el) {
-              const top = el.getBoundingClientRect().top;
-              if (top <= targetOffset) {
-                currentActive = id === "benefits" ? "simulator" : id;
-              } else {
-                break;
-              }
-            }
-          }
-
-          setActiveSection((prev) => (prev === currentActive ? prev : currentActive));
-        });
-        ticking = true;
-      }
+      const scrolled = window.scrollY > 20;
+      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
     };
 
-    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    handleScroll();
+
+    if (pathname !== "/") {
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+
+    const sectionIds = [
+      "hero",
+      "features",
+      "how-it-works",
+      "simulator",
+      "benefits",
+      "faq",
+      "contact",
+    ];
+
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (elements.length === 0) {
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // If at the very top of the page, ensure hero is active
+        if (window.scrollY < 80) {
+          setActiveSection("hero");
+          return;
+        }
+
+        const visibleEntries = entries.filter((e) => e.isIntersecting);
+        if (visibleEntries.length > 0) {
+          visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          const targetId = visibleEntries[0].target.id;
+          const mapped = targetId === "benefits" ? "simulator" : targetId;
+          setActiveSection((prev) => (prev !== mapped ? mapped : prev));
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-15% 0px -55% 0px",
+        threshold: [0, 0.2, 0.5, 0.8],
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, [pathname]);
 
   const handleNavClick = (e: React.MouseEvent, scrollTo: string) => {

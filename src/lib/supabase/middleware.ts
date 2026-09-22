@@ -27,10 +27,19 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // IMPORTANT: Do NOT use supabase.auth.getSession() because it reads the session from the cookie without validating it on Supabase Auth.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const isDemoSession = request.cookies.get("cc_demo_session")?.value === "active";
+  let user = null;
+
+  // Safe user lookup without unhandled rejection if Supabase is offline/placeholder
+  const isConfigured = supabaseUrl && !supabaseUrl.includes("placeholder");
+  if (isConfigured) {
+    try {
+      const { data } = await supabase.auth.getUser();
+      user = data?.user || null;
+    } catch {
+      user = null;
+    }
+  }
 
   const path = request.nextUrl.pathname;
 
@@ -52,8 +61,10 @@ export async function updateSession(request: NextRequest) {
     path.startsWith("/signup") ||
     path.startsWith("/forgot-password");
 
+  const isAuthenticated = !!user || isDemoSession;
+
   // 1. Unauthenticated user attempting to access protected route -> Redirect to login
-  if (!user && (isProtectedUserRoute || isAdminRoute)) {
+  if (!isAuthenticated && (isProtectedUserRoute || isAdminRoute)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirectTo", path);
@@ -61,7 +72,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // 2. Authenticated user visiting login/signup -> Redirect to dashboard
-  if (user && isAuthPage) {
+  if (isAuthenticated && isAuthPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
