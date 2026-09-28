@@ -151,10 +151,6 @@ export default async function DashboardPage() {
           actionHref="/bills/add"
           icon={<Receipt className="w-8 h-8 text-[#0B7252]" />}
         />
-
-        <div className="max-w-xl mx-auto">
-          <HouseholdSnapshotCard household={household} />
-        </div>
       </div>
     );
   }
