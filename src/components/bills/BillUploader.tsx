@@ -231,7 +231,7 @@ export function BillUploader() {
                 onClick={handleStartExtraction}
                 rightIcon={<Sparkles className="w-4 h-4 ml-1" />}
               >
-                Extract with Gemini AI
+                Next
               </Button>
             </div>
           </CardContent>
