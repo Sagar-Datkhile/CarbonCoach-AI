@@ -3,7 +3,7 @@
 import React, { useTransition, useEffect } from "react";
 import { signOut } from "@/app/actions/auth";
 import { Button } from "@/components/ui/Button";
-import { LogOut, AlertTriangle, X } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 interface LogoutConfirmDialogProps {
   isOpen: boolean;
@@ -39,7 +39,7 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
       role="dialog"
       aria-modal="true"
       aria-labelledby="logout-dialog-title"
@@ -50,53 +50,42 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
         aria-hidden="true"
       />
 
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-[#E3E7E3] p-6 z-10 space-y-5 animate-in zoom-in-95 duration-200">
-        <button
-          type="button"
-          onClick={onClose}
-          disabled={isPending}
-          className="absolute top-4 right-4 p-1.5 rounded-lg text-[#667085] hover:text-[#111827] hover:bg-[#F3F8F3] transition-colors"
-          aria-label="Close dialog"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#FEF3F2] text-[#D92D20] flex items-center justify-center shrink-0 border border-[#FECDCA]">
-            <AlertTriangle className="w-6 h-6" />
+      <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl border border-[#E3E7E3] p-5 z-10 space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-[#F3F8F3] text-[#075E45] flex items-center justify-center shrink-0 border border-[#0B7252]/15">
+            <LogOut className="w-5 h-5" />
           </div>
-          <div className="space-y-1 pr-6">
+          <div>
             <h2
               id="logout-dialog-title"
-              className="text-lg font-bold text-[#111827] tracking-tight"
+              className="text-base font-bold text-[#111827] tracking-tight"
             >
-              Log Out?
+              Log Out
             </h2>
-            <p className="text-sm text-[#667085]">
-              Are you sure you want to sign out of Carbon Coach? You will need to sign in again to access your household dashboard and electricity data.
+            <p className="text-xs text-[#667085]">
+              Are you sure you want to log out?
             </p>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-2">
+        <div className="flex items-center justify-end gap-2 pt-1">
           <Button
             type="button"
-            variant="outline"
-            size="md"
+            variant="ghost"
+            size="sm"
             onClick={onClose}
             disabled={isPending}
-            className="rounded-xl px-4 font-semibold"
+            className="rounded-lg px-3 text-xs"
           >
             Cancel
           </Button>
           <Button
             type="button"
             variant="destructive"
-            size="md"
+            size="sm"
             onClick={handleLogout}
             isLoading={isPending}
-            leftIcon={<LogOut className="w-4 h-4" />}
-            className="rounded-xl px-5 font-semibold bg-[#D92D20] hover:bg-[#B42318] text-white"
+            className="rounded-lg px-3.5 text-xs font-semibold"
           >
             Log Out
           </Button>

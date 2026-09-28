@@ -6,13 +6,11 @@ import {
   User,
   Settings,
   MessageSquare,
-  Shield,
   LogOut,
   ChevronsUpDown,
 } from "lucide-react";
 import { LogoutConfirmDialog } from "./LogoutConfirmDialog";
 import { FeedbackModal } from "./FeedbackModal";
-import { PrivacyModal } from "./PrivacyModal";
 
 export interface ProfileDropdownProps {
   userName: string;
@@ -36,7 +34,6 @@ export function ProfileDropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [avatarFailed, setAvatarFailed] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -162,19 +159,6 @@ export function ProfileDropdown({
               <MessageSquare className="w-4 h-4 text-[#667085] group-hover:text-[#075E45] transition-colors shrink-0" />
               <span>Feedback</span>
             </button>
-
-            <button
-              type="button"
-              role="menuitem"
-              onClick={() => {
-                setIsOpen(false);
-                setShowPrivacyModal(true);
-              }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-xs font-semibold text-[#344054] rounded-xl hover:bg-[#F3F8F3] hover:text-[#075E45] transition-colors group text-left cursor-pointer"
-            >
-              <Shield className="w-4 h-4 text-[#667085] group-hover:text-[#075E45] transition-colors shrink-0" />
-              <span>Privacy Policy</span>
-            </button>
           </div>
 
           {/* Divider */}
@@ -259,12 +243,6 @@ export function ProfileDropdown({
         isOpen={showFeedbackModal}
         onClose={() => setShowFeedbackModal(false)}
         userEmail={userEmail}
-      />
-
-      {/* Privacy Modal */}
-      <PrivacyModal
-        isOpen={showPrivacyModal}
-        onClose={() => setShowPrivacyModal(false)}
       />
     </div>
   );
