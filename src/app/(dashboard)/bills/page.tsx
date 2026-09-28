@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatCurrency, formatKwh, formatEmissions } from "@/lib/utils";
-import { deleteBill } from "@/app/actions/bills";
+import { DeleteBillButton } from "@/components/bills/DeleteBillButton";
 import {
   Plus,
   Receipt,
@@ -15,12 +15,13 @@ import {
   DollarSign,
   Leaf,
   Calendar,
-  Trash2,
 } from "lucide-react";
 
 export const metadata = {
   title: "Electricity Bills — CarbonCoach AI",
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function BillsPage() {
   const supabase = await createClient();
@@ -188,20 +189,10 @@ export default async function BillsPage() {
                           <Badge variant="success">Confirmed</Badge>
                         </td>
                         <td className="px-5 py-4 text-center">
-                          <form
-                            action={async () => {
-                              "use server";
-                              await deleteBill(bill.id);
-                            }}
-                          >
-                            <button
-                              type="submit"
-                              aria-label="Delete bill"
-                              className="p-1.5 rounded-lg text-[#667085] hover:text-[#B42318] hover:bg-[#FEE4E2] transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </form>
+                          <DeleteBillButton
+                            billId={bill.id}
+                            providerName={bill.provider_name}
+                          />
                         </td>
                       </tr>
                     );

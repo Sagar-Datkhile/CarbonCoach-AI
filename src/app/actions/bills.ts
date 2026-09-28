@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { extractBillFromBuffer } from "@/lib/gemini/extractor";
 import { confirmedBillSchema, type ConfirmedBillData, type BillExtractionData } from "@/lib/validations/bill";
 import { revalidatePath } from "next/cache";
@@ -183,28 +184,64 @@ export async function confirmAuthoritativeBill(
 export async function deleteBill(
   billId: string
 ): Promise<{ success: boolean; error?: string }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const userClient = await createClient();
+    const {
+      data: { user },
+    } = await userClient.auth.getUser();
 
-  if (!user) {
-    return { success: false, error: "Authentication required" };
+    if (!user) {
+      return { success: false, error: "Authentication required. Please log in again." };
+    }
+
+    const admin = createAdminClient();
+
+    // Verify bill exists and belongs to this user
+    const { data: bill, error: fetchError } = await admin
+      .from("electricity_bills")
+      .select("id, file_path")
+      .eq("id", billId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error("Error looking up bill for deletion:", fetchError);
+      return { success: false, error: fetchError.message };
+    }
+
+    if (!bill) {
+      return { success: false, error: "Bill statement not found or permission denied." };
+    }
+
+    const { error: deleteError } = await admin
+      .from("electricity_bills")
+      .delete()
+      .eq("id", billId)
+      .eq("user_id", user.id);
+
+    if (deleteError) {
+      console.error("Failed to delete electricity bill:", deleteError);
+      return { success: false, error: deleteError.message };
+    }
+
+    // Clean up uploaded statement file from storage if present
+    if (bill.file_path) {
+      try {
+        await admin.storage.from("bills").remove([bill.file_path]);
+      } catch (storageErr) {
+        console.warn("Could not delete file from storage bucket:", storageErr);
+      }
+    }
+
+    revalidatePath("/bills");
+    revalidatePath("/dashboard");
+    revalidatePath("/progress");
+    revalidatePath("/plan");
+
+    return { success: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unexpected error during bill deletion";
+    console.error("deleteBill error:", message);
+    return { success: false, error: message };
   }
-
-  const { error } = await supabase
-    .from("electricity_bills")
-    .delete()
-    .eq("id", billId)
-    .eq("user_id", user.id);
-
-  if (error) {
-    return { success: false, error: error.message };
-  }
-
-  revalidatePath("/bills");
-  revalidatePath("/dashboard");
-  revalidatePath("/progress");
-
-  return { success: true };
 }
