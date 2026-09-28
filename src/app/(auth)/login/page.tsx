@@ -1,14 +1,28 @@
 "use client";
 
-import React, { useActionState } from "react";
+import React, { useActionState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { signInWithEmail } from "@/app/actions/auth";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";
 import { Alert } from "@/components/ui/Alert";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
-import { Zap, Mail, Lock } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
+
+function OAuthErrorMessage() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+  if (!error) return null;
+
+  const friendlyMessage =
+    error === "auth_callback_failed"
+      ? "Google authentication could not be completed. Please try again."
+      : decodeURIComponent(error);
+
+  return <Alert variant="error">{friendlyMessage}</Alert>;
+}
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(signInWithEmail, null);
@@ -46,6 +60,10 @@ export default function LoginPage() {
           </CardHeader>
 
           <CardContent className="space-y-4">
+            <Suspense fallback={null}>
+              <OAuthErrorMessage />
+            </Suspense>
+
             {state?.error && (
               <Alert variant="error">{state.error}</Alert>
             )}
@@ -109,7 +127,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <GoogleAuthButton label="Sign in with Google" />
+            <GoogleAuthButton label="Continue with Google" />
           </CardContent>
 
           <CardFooter className="justify-center text-center">
