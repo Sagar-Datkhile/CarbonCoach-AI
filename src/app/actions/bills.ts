@@ -36,10 +36,10 @@ export async function uploadAndExtractBill(
     };
   }
 
-  // 10MB file limit
-  const maxBytes = 10 * 1024 * 1024;
+  // 1MB file limit
+  const maxBytes = 1 * 1024 * 1024;
   if (file.size > maxBytes) {
-    return { success: false, error: "File exceeds 10MB limit. Please upload a smaller file." };
+    return { success: false, error: "File exceeds 1MB limit. Please upload an image or PDF with size less than 1MB." };
   }
 
   const supabase = await createClient();

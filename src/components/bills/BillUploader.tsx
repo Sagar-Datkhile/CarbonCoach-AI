@@ -46,7 +46,14 @@ export function BillUploader() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      if (file.size > 1 * 1024 * 1024) {
+        setErrorMessage("File exceeds 1MB limit. Please upload an image or PDF with size less than 1MB.");
+        setSelectedFile(null);
+        e.target.value = "";
+        return;
+      }
+      setSelectedFile(file);
       setErrorMessage(null);
     }
   };
@@ -182,9 +189,14 @@ export function BillUploader() {
               <h4 className="text-base font-bold text-[#111827] mb-1">
                 Choose a bill statement file
               </h4>
-              <p className="text-xs text-[#667085] max-w-sm mb-4">
-                Supported formats: PDF, JPG, PNG, WEBP. Maximum file size: 10MB.
+              <p className="text-xs text-[#667085] max-w-sm mb-2">
+                Supported formats: PDF, JPG, PNG, WEBP
               </p>
+              <div className="mb-4">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#EAF5EE] text-[#075E45] border border-[#0B7252]/20 text-xs font-medium">
+                  Use image or PDF size less than 1MB
+                </span>
+              </div>
 
               <label
                 htmlFor="billFile"
