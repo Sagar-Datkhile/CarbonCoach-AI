@@ -11,7 +11,9 @@ export default async function AdminHealthPage() {
   const hasSupabaseUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
   const hasSupabaseAnonKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const hasServiceRoleKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const hasGeminiKey = !!process.env.GEMINI_API_KEY;
+  const hasGeminiKey = !!process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== "your-gemini-api-key";
+  const hasOpenRouterKey = !!process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY !== "your_openrouter_api_key_here";
+  const hasAiConfigured = hasGeminiKey || hasOpenRouterKey;
 
   const isConfigured = hasSupabaseUrl && hasSupabaseAnonKey;
 
@@ -72,10 +74,10 @@ export default async function AdminHealthPage() {
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-[#667085] uppercase">
-                Gemini 1.5 Flash
+                Gemini Extraction
               </span>
-              <Badge variant={hasGeminiKey ? "success" : "neutral"}>
-                {hasGeminiKey ? "Configured" : "Draft / Mock"}
+              <Badge variant={hasAiConfigured ? "success" : "neutral"}>
+                {hasAiConfigured ? "Configured" : "Draft / Mock"}
               </Badge>
             </div>
             <CardTitle className="text-xl mt-2 flex items-center gap-2">
@@ -84,7 +86,11 @@ export default async function AdminHealthPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-[#667085]">
-            Isolated to server action execution
+            {hasGeminiKey
+              ? "Direct Google GenAI (gemini-1.5-flash)"
+              : hasOpenRouterKey
+              ? "OpenRouter (google/gemini-2.5-flash-lite)"
+              : "Isolated to server action execution"}
           </CardContent>
         </Card>
       </div>
@@ -115,9 +121,14 @@ export default async function AdminHealthPage() {
               desc: "Server-only privileged execution key",
             },
             {
+              name: "OPENROUTER_API_KEY",
+              present: hasOpenRouterKey,
+              desc: "OpenRouter server-side AI key (google/gemini-2.5-flash-lite)",
+            },
+            {
               name: "GEMINI_API_KEY",
               present: hasGeminiKey,
-              desc: "Google GenAI server-side bill extraction key",
+              desc: "Google GenAI direct server-side bill extraction key (optional if OpenRouter configured)",
             },
           ].map((item) => (
             <div

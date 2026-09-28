@@ -31,45 +31,107 @@ export async function extractBillFromBuffer(
   mimeType: string
 ): Promise<ExtractionResult> {
   const startTime = Date.now();
-  const apiKey = process.env.GEMINI_API_KEY;
+  const geminiApiKey =
+    process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== "" && process.env.GEMINI_API_KEY !== "your-gemini-api-key"
+      ? process.env.GEMINI_API_KEY.trim()
+      : null;
+  const openRouterApiKey =
+    process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY.trim() !== "" && process.env.OPENROUTER_API_KEY !== "your_openrouter_api_key_here"
+      ? process.env.OPENROUTER_API_KEY.trim()
+      : null;
 
-  if (!apiKey) {
+  if (!geminiApiKey && !openRouterApiKey) {
     return {
       success: false,
-      error: "GEMINI_API_KEY is not configured on the server. Please check environment configuration.",
+      error: "Neither GEMINI_API_KEY nor OPENROUTER_API_KEY is configured on the server. Please check your .env.local configuration.",
       processingTimeMs: Date.now() - startTime,
     };
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey });
     const base64Data = buffer.toString("base64");
+    let responseText = "";
 
-    const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [
+    if (geminiApiKey) {
+      const ai = new GoogleGenAI({ apiKey: geminiApiKey });
+      const response = await ai.models.generateContent({
+        model: "gemini-1.5-flash",
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: "Extract all electricity bill data from this document accurately according to the instructions.",
+              },
+              {
+                inlineData: {
+                  mimeType,
+                  data: base64Data,
+                },
+              },
+            ],
+          },
+        ],
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+          responseMimeType: "application/json",
+        },
+      });
+      responseText = response.text || "";
+    } else if (openRouterApiKey) {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${openRouterApiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+          "X-Title": "CarbonCoach AI",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash-lite",
+          messages: [
             {
-              text: "Extract all electricity bill data from this document accurately according to the instructions.",
+              role: "system",
+              content: SYSTEM_INSTRUCTION,
             },
             {
-              inlineData: {
-                mimeType,
-                data: base64Data,
-              },
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: "Extract all electricity bill data from this document accurately according to the instructions.",
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${mimeType};base64,${base64Data}`,
+                  },
+                },
+              ],
             },
           ],
-        },
-      ],
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: "application/json",
-      },
-    });
+          temperature: 0.1,
+          response_format: { type: "json_object" },
+        }),
+        signal: AbortSignal.timeout(45000),
+      });
 
-    const responseText = response.text || "";
+      if (!response.ok) {
+        let errDetail = "";
+        try {
+          const errObj = await response.json();
+          errDetail = errObj?.error?.message || JSON.stringify(errObj);
+        } catch {
+          errDetail = response.statusText;
+        }
+        throw new Error(`AI extraction failed (HTTP ${response.status}): ${errDetail}`);
+      }
+
+      const resJson = (await response.json()) as {
+        choices?: Array<{ message?: { content?: string } }>;
+      };
+      responseText = resJson.choices?.[0]?.message?.content || "";
+    }
     let parsedJson: unknown;
 
     try {

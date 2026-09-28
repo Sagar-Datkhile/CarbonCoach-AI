@@ -14,7 +14,6 @@ import {
   FileCheck,
   CheckCircle2,
   FileText,
-  AlertTriangle,
   ArrowRight,
   RotateCcw,
   Sparkles,
@@ -254,24 +253,19 @@ export function BillUploader() {
       {step === 2 && (
         <Card elevated>
           <CardHeader>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <CardTitle>Review Extracted Bill Information</CardTitle>
                 <CardDescription>
                   Verify or correct each extracted field before confirming into your authoritative history.
                 </CardDescription>
               </div>
-              <Badge variant="warning">Human Verification Required</Badge>
+              <Badge variant="warning" className="self-start sm:self-center shrink-0">
+                Human Verification Required
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="p-4 rounded-xl bg-[#FFF7E8] border border-[#9A5B00]/20 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-[#9A5B00] shrink-0 mt-0.5" />
-              <p className="text-xs text-[#9A5B00] leading-relaxed">
-                <strong>Anti-Hallucination Policy:</strong> Never silently trust raw AI extraction. Ensure the energy consumption (kWh) and billing dates precisely match your physical statement.
-              </p>
-            </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Utility Provider Name"
