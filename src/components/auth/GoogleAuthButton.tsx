@@ -39,10 +39,6 @@ export function GoogleAuthButton({
         provider: "google",
         options: {
           redirectTo: callbackUrl.toString(),
-          queryParams: {
-            access_type: "offline",
-            prompt: "select_account",
-          },
         },
       });
 

@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${baseUrl}${next}`);
     } else {
       console.error("Supabase code exchange error:", exchangeError.message);
+      return NextResponse.redirect(`${baseUrl}/login?error=${encodeURIComponent(exchangeError.message)}`);
     }
   }
 

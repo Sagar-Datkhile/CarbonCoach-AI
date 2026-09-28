@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, Suspense } from "react";
+import React, { useActionState, Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signInWithEmail } from "@/app/actions/auth";
@@ -13,13 +13,27 @@ import { Mail, Lock } from "lucide-react";
 
 function OAuthErrorMessage() {
   const searchParams = useSearchParams();
-  const error = searchParams.get("error");
-  if (!error) return null;
+  const [hashError, setHashError] = useState<string | null>(null);
 
-  const friendlyMessage =
-    error === "auth_callback_failed"
-      ? "Google authentication could not be completed. Please try again."
-      : decodeURIComponent(error);
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const desc = hashParams.get("error_description") || hashParams.get("error");
+      if (desc) {
+        setHashError(desc.replace(/\+/g, " "));
+      }
+    }
+  }, []);
+
+  const error = searchParams.get("error");
+  if (!error && !hashError) return null;
+
+  const raw = hashError || (error === "auth_callback_failed" ? null : decodeURIComponent(error || ""));
+
+  let friendlyMessage = raw || "Google authentication could not be completed. Please try again.";
+  if (friendlyMessage.includes("Unable to exchange external code") || friendlyMessage === "server_error") {
+    friendlyMessage = "Google OAuth Server Error: Google rejected the token exchange. Please verify the Client Secret and Authorized Redirect URI in Google Cloud Console and Supabase.";
+  }
 
   return <Alert variant="error">{friendlyMessage}</Alert>;
 }
