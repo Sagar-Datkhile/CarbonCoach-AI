@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { X, MessageSquare, Star, CheckCircle2 } from "lucide-react";
 
@@ -11,12 +12,17 @@ interface FeedbackModalProps {
 }
 
 export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [category, setCategory] = useState<"General" | "Bug" | "Feature" | "Accuracy">("General");
   const [rating, setRating] = useState<number>(5);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [comments, setComments] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,7 +40,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
     };
   }, [isOpen, isSubmitting, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,9 +56,9 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
     }, 600);
   };
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-labelledby="feedback-dialog-title"
@@ -189,6 +195,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

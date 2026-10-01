@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useTransition, useEffect } from "react";
+import React, { useTransition, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { signOut } from "@/app/actions/auth";
 import { Button } from "@/components/ui/Button";
 import { LogOut } from "lucide-react";
@@ -11,7 +12,12 @@ interface LogoutConfirmDialogProps {
 }
 
 export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProps) {
+  const [mounted, setMounted] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -29,7 +35,7 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
     };
   }, [isOpen, isPending, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleLogout = () => {
     startTransition(async () => {
@@ -37,9 +43,9 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
     });
   };
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150"
       role="dialog"
       aria-modal="true"
       aria-labelledby="logout-dialog-title"
@@ -50,7 +56,7 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
         aria-hidden="true"
       />
 
-      <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl border border-[#E3E7E3] p-5 z-10 space-y-4 animate-in zoom-in-95 duration-150">
+      <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-[#E3E7E3] p-5 z-10 space-y-4 animate-in zoom-in-95 duration-150">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[#F3F8F3] text-[#075E45] flex items-center justify-center shrink-0 border border-[#0B7252]/15">
             <LogOut className="w-5 h-5" />
@@ -91,6 +97,7 @@ export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProp
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

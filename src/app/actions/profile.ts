@@ -45,6 +45,7 @@ export async function updateProfileInfo(
   }
 
   revalidatePath("/profile");
+  revalidatePath("/", "layout");
   return { success: true, message: "Profile updated successfully!" };
 }
 
