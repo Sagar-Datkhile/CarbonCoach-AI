@@ -104,6 +104,25 @@ export interface Database {
         };
         Relationships: [];
       };
+      user_roles: {
+        Row: {
+          user_id: string;
+          role: UserRole;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          role?: UserRole;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          role?: UserRole;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       household_profiles: {
         Row: {
           id: string;

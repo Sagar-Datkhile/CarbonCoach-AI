@@ -1,4 +1,5 @@
 import React from "react";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { SettingsView } from "@/components/settings/SettingsView";
 import type { UserSettingsInput } from "@/app/actions/settings";
@@ -41,12 +42,23 @@ export default async function SettingsPage() {
   const energyUnit =
     typeof meta.energy_unit === "string" ? meta.energy_unit : "kWh";
 
+  const cookieStore = await cookies();
+  const cookieTheme = cookieStore.get("carboncoach_theme")?.value;
+  const theme: "light" | "dark" =
+    meta.theme === "dark" || cookieTheme === "dark" ? "dark" : "light";
+
   const initialSettings: UserSettingsInput = {
     emailNotifications,
     energySavingReminders,
     currency: preferredCurrency,
     energyUnit,
+    theme,
   };
 
-  return <SettingsView initialSettings={initialSettings} />;
+  return (
+    <SettingsView
+      initialSettings={initialSettings}
+      userEmail={user?.email || ""}
+    />
+  );
 }

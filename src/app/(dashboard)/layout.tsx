@@ -56,7 +56,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FAFBF8]">
+    <div className="flex min-h-screen bg-[#FAFBF8] dark:bg-[#0B0F17]">
       {/* Desktop Fixed Sidebar */}
       <div className="hidden md:flex h-screen sticky top-0 shrink-0 z-30">
         <AppSidebar

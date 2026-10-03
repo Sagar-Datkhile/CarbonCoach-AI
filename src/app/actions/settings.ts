@@ -2,17 +2,49 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export interface UserSettingsInput {
   emailNotifications: boolean;
   energySavingReminders: boolean;
   currency: string;
   energyUnit: string;
+  theme: "light" | "dark";
 }
 
 export interface SettingsActionResult {
   success: boolean;
   error?: string;
+}
+
+export async function setThemePreference(theme: "light" | "dark"): Promise<SettingsActionResult> {
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set("carboncoach_theme", theme, {
+      path: "/",
+      maxAge: 31536000,
+      sameSite: "lax",
+    });
+
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      await supabase.auth.updateUser({
+        data: {
+          theme,
+        },
+      });
+    }
+
+    revalidatePath("/settings");
+    return { success: true };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to update theme";
+    return { success: false, error: msg };
+  }
 }
 
 export async function updateUserSettings(
@@ -27,13 +59,22 @@ export async function updateUserSettings(
     return { success: false, error: "Authentication required" };
   }
 
-  // 1. Update user metadata in Supabase Auth
+  // 1. Update theme cookie
+  const cookieStore = await cookies();
+  cookieStore.set("carboncoach_theme", settings.theme || "light", {
+    path: "/",
+    maxAge: 31536000,
+    sameSite: "lax",
+  });
+
+  // 2. Update user metadata in Supabase Auth
   const { error: authErr } = await supabase.auth.updateUser({
     data: {
       email_notifications: settings.emailNotifications,
       energy_saving_reminders: settings.energySavingReminders,
       energy_unit: settings.energyUnit,
       preferred_currency: settings.currency,
+      theme: settings.theme || "light",
     },
   });
 
