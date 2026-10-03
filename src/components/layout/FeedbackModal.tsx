@@ -108,12 +108,12 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
     >
       <div className="absolute inset-0" onClick={() => !isSubmitting && handleClose()} aria-hidden="true" />
 
-      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-[#E3E7E3] p-6 z-10 space-y-5 animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-lg bg-white dark:bg-[#151D2A] rounded-2xl shadow-2xl border border-[#E3E7E3] dark:border-[#222F3E] p-6 z-10 space-y-5 animate-in zoom-in-95 duration-200">
         <button
           type="button"
           onClick={handleClose}
           disabled={isSubmitting}
-          className="absolute top-4 right-4 p-1.5 rounded-lg text-[#667085] hover:text-[#111827] hover:bg-[#F3F8F3] transition-colors"
+          className="absolute top-4 right-4 p-1.5 rounded-lg text-[#667085] dark:text-[#9CA3AF] hover:text-[#111827] dark:hover:text-[#F9FAFB] hover:bg-[#F3F8F3] dark:hover:bg-[#1E293B] transition-colors"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -121,25 +121,25 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
 
         {isSubmitted ? (
           <div className="py-8 text-center space-y-3">
-            <div className="w-14 h-14 rounded-full bg-[#EAF5EE] text-[#075E45] flex items-center justify-center mx-auto border border-[#0B7252]/20">
+            <div className="w-14 h-14 rounded-full bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399] flex items-center justify-center mx-auto border border-[#0B7252]/20 dark:border-[#10B981]/30">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-bold text-[#111827]">Thank You for Your Feedback!</h2>
-            <p className="text-sm text-[#667085] max-w-xs mx-auto">
+            <h2 className="text-xl font-bold text-[#111827] dark:text-[#F9FAFB]">Thank You for Your Feedback!</h2>
+            <p className="text-sm text-[#667085] dark:text-[#9CA3AF] max-w-xs mx-auto">
               Your insights directly help us improve Carbon Coach for households worldwide.
             </p>
           </div>
         ) : (
           <>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] text-[#075E45] flex items-center justify-center shrink-0 border border-[#0B7252]/20">
+              <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399] flex items-center justify-center shrink-0 border border-[#0B7252]/20 dark:border-[#10B981]/30">
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h2 id="feedback-dialog-title" className="text-lg font-bold text-[#111827]">
+                <h2 id="feedback-dialog-title" className="text-lg font-bold text-[#111827] dark:text-[#F9FAFB]">
                   Share Your Feedback
                 </h2>
-                <p className="text-xs text-[#667085]">
+                <p className="text-xs text-[#667085] dark:text-[#9CA3AF]">
                   Help us refine energy models, recommendations, and household tools
                 </p>
               </div>
@@ -153,7 +153,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="text-xs font-semibold text-[#111827] block mb-1.5">
+                <label className="text-xs font-semibold text-[#111827] dark:text-[#F9FAFB] block mb-1.5">
                   Category
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -164,7 +164,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                       onClick={() => setCategory(cat)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${category === cat
                           ? "bg-[#075E45] text-white border-[#075E45] shadow-xs"
-                          : "bg-white text-[#667085] border-[#E3E7E3] hover:bg-[#F3F8F3]"
+                          : "bg-white dark:bg-[#0E1522] text-[#667085] dark:text-[#9CA3AF] border-[#E3E7E3] dark:border-[#222F3E] hover:bg-[#F3F8F3] dark:hover:bg-[#1E293B]"
                         }`}
                     >
                       {cat}
@@ -174,7 +174,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-[#111827] block mb-1.5">
+                <label className="text-xs font-semibold text-[#111827] dark:text-[#F9FAFB] block mb-1.5">
                   Experience Rating
                 </label>
                 <div className="flex items-center gap-1.5">
@@ -193,7 +193,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                         <Star
                           className={`w-6 h-6 transition-colors ${active
                               ? "text-[#FDB022] fill-[#FDB022]"
-                              : "text-[#D0D5DD]"
+                              : "text-[#D0D5DD] dark:text-[#475569]"
                             }`}
                         />
                       </button>
@@ -203,7 +203,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
               </div>
 
               <div>
-                <label htmlFor="feedback-text" className="text-xs font-semibold text-[#111827] block mb-1.5">
+                <label htmlFor="feedback-text" className="text-xs font-semibold text-[#111827] dark:text-[#F9FAFB] block mb-1.5">
                   Comments or Suggestions
                 </label>
                 <textarea
@@ -213,7 +213,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                   value={comments}
                   onChange={(e) => setComments(e.target.value)}
                   placeholder="Tell us what you love or how we can make energy management easier for your home..."
-                  className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-[#E3E7E3] text-[#111827] placeholder:text-[#98A2B3] focus:outline-none focus:border-[#0B7252] focus:ring-2 focus:ring-[#0B7252]/20 resize-none"
+                  className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-[#E3E7E3] dark:border-[#222F3E] bg-white dark:bg-[#0E1522] text-[#111827] dark:text-[#F9FAFB] placeholder:text-[#98A2B3] dark:placeholder:text-[#64748B] focus:outline-none focus:border-[#0B7252] dark:focus:border-[#10B981] focus:ring-2 focus:ring-[#0B7252]/20 resize-none"
                 />
               </div>
 

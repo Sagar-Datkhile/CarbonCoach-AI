@@ -25,19 +25,19 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-dashed border-[#E3E7E3] bg-[#FAFBF8] p-8 md:p-12 text-center flex flex-col items-center justify-center max-w-lg mx-auto my-6",
+        "rounded-2xl border border-dashed border-[#E3E7E3] dark:border-[#222F3E] bg-[#FAFBF8] dark:bg-[#151D2A] p-8 md:p-12 text-center flex flex-col items-center justify-center max-w-lg mx-auto my-6",
         className
       )}
     >
-      <div className="w-14 h-14 rounded-2xl bg-[#EAF5EE] text-[#0B7252] flex items-center justify-center mb-4 shadow-sm">
+      <div className="w-14 h-14 rounded-2xl bg-[#EAF5EE] dark:bg-[#063D2E] text-[#0B7252] dark:text-[#34D399] flex items-center justify-center mb-4 shadow-sm">
         {icon || <Zap className="w-7 h-7" />}
       </div>
 
-      <h3 className="text-lg md:text-xl font-bold text-[#111827] mb-2">
+      <h3 className="text-lg md:text-xl font-bold text-[#111827] dark:text-[#F9FAFB] mb-2">
         {title}
       </h3>
 
-      <p className="text-sm text-[#667085] leading-relaxed max-w-sm mb-6">
+      <p className="text-sm text-[#667085] dark:text-[#9CA3AF] leading-relaxed max-w-sm mb-6">
         {description}
       </p>
 

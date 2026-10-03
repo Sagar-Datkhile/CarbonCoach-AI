@@ -15,6 +15,8 @@ interface DeveloperCardProps {
   showAvailabilityIndicator?: boolean;
 }
 
+const emptySubscribe = () => () => {};
+
 export function DeveloperCard({
   member,
   index = 0,
@@ -24,11 +26,8 @@ export function DeveloperCard({
   showAvailabilityIndicator = false,
 }: DeveloperCardProps) {
   const shouldReduceMotion = useReducedMotion();
-  const [imgError, setImgError] = React.useState(false);
-
-  React.useEffect(() => {
-    setImgError(false);
-  }, [member.avatar.src]);
+  const hasMounted = React.useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const [failedSrc, setFailedSrc] = React.useState<string | null>(null);
 
   return (
     <motion.div
@@ -54,13 +53,13 @@ export function DeveloperCard({
           <div className="relative shrink-0">
             <div className="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-[#075E45] to-[#10B981] shadow-md">
               <div className="w-full h-full rounded-full bg-[#FAFBF8] flex items-center justify-center overflow-hidden border-2 border-white">
-                {member.avatar.src && !imgError ? (
+                {hasMounted && member.avatar.src && failedSrc !== member.avatar.src ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={member.avatar.src}
                     alt={member.name}
                     className="w-full h-full object-cover"
-                    onError={() => setImgError(true)}
+                    onError={() => setFailedSrc(member.avatar.src || null)}
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-[#075E45] to-[#0B7252] flex items-center justify-center text-white font-bold text-2xl tracking-wide select-none">

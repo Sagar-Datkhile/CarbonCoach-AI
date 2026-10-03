@@ -51,8 +51,8 @@ export async function createTemplate(formData: FormData) {
 
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
-  const category = (formData.get("category") as any) || "electricity";
-  const difficulty = (formData.get("difficulty") as any) || "Easy";
+  const category = (formData.get("category") as string) || "electricity";
+  const difficulty = (formData.get("difficulty") as string) || "Easy";
   const estimatedKwh = Number(formData.get("estimatedKwh") || 0);
   const upfrontCost = Number(formData.get("upfrontCost") || 0);
 

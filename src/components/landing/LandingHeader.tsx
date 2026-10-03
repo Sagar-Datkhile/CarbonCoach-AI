@@ -47,7 +47,9 @@ export function LandingHeader() {
 
     if (targetId === "hero") {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      setActiveSection("hero");
+      requestAnimationFrame(() => {
+        setActiveSection("hero");
+      });
       return;
     }
 

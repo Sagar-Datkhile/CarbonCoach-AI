@@ -34,11 +34,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         "bg-[#0B7252] text-white hover:bg-[#085B43] shadow-sm focus-visible:ring-[#0B7252]",
       secondary:
-        "bg-[#EAF5EE] text-[#075E45] hover:bg-[#d8edd0] focus-visible:ring-[#075E45]",
+        "bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399] hover:bg-[#d8edd0] dark:hover:bg-[#085B43] focus-visible:ring-[#075E45]",
       outline:
-        "border-1.5 border-[#0B7252] text-[#0B7252] hover:bg-[#EAF5EE] bg-transparent focus-visible:ring-[#0B7252]",
+        "border-1.5 border-[#0B7252] dark:border-[#10B981] text-[#0B7252] dark:text-[#34D399] hover:bg-[#EAF5EE] dark:hover:bg-[#063D2E]/40 bg-transparent focus-visible:ring-[#0B7252]",
       ghost:
-        "text-[#075E45] hover:bg-[#F3F8F3] bg-transparent focus-visible:ring-[#075E45]",
+        "text-[#075E45] dark:text-[#34D399] hover:bg-[#F3F8F3] dark:hover:bg-[#1E293B] bg-transparent focus-visible:ring-[#075E45]",
       destructive:
         "bg-[#B42318] text-white hover:bg-[#911c13] shadow-sm focus-visible:ring-[#B42318]",
     };

@@ -127,12 +127,12 @@ export default async function BillsPage() {
 
           {/* Detailed Bills Table */}
           <Card elevated>
-            <CardHeader className="pb-3 border-b border-[#F3F8F3]">
-              <CardTitle className="text-lg">Statement History</CardTitle>
+            <CardHeader className="pb-3 border-b border-[#F3F8F3] dark:border-[#222F3E]">
+              <CardTitle className="text-lg text-[#111827] dark:text-[#F9FAFB]">Statement History</CardTitle>
             </CardHeader>
             <CardContent className="p-0 overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="bg-[#FAFBF8] border-b border-[#E3E7E3] text-[#667085] text-xs uppercase font-semibold">
+                <thead className="bg-[#FAFBF8] dark:bg-[#0E1522] border-b border-[#E3E7E3] dark:border-[#222F3E] text-[#667085] dark:text-[#9CA3AF] text-xs uppercase font-semibold">
                   <tr>
                     <th className="px-5 py-3.5">Provider / Account</th>
                     <th className="px-5 py-3.5">Billing Period</th>
@@ -144,7 +144,7 @@ export default async function BillsPage() {
                     <th className="px-5 py-3.5 text-center">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E3E7E3]">
+                <tbody className="divide-y divide-[#E3E7E3] dark:divide-[#222F3E]">
                   {bills.map((bill) => {
                     const days = bill.billing_days || 30;
                     const dailyAvg = (bill.energy_consumed_kwh / days).toFixed(1);
@@ -152,35 +152,35 @@ export default async function BillsPage() {
                     return (
                       <tr
                         key={bill.id}
-                        className="hover:bg-[#FAFBF8]/70 transition-colors"
+                        className="hover:bg-[#FAFBF8]/70 dark:hover:bg-[#1A2436]/60 transition-colors"
                       >
-                        <td className="px-5 py-4 font-semibold text-[#111827]">
+                        <td className="px-5 py-4 font-semibold text-[#111827] dark:text-[#F9FAFB]">
                           <div>{bill.provider_name}</div>
                           {bill.consumer_number && (
-                            <div className="text-xs text-[#667085] font-normal">
+                            <div className="text-xs text-[#667085] dark:text-[#9CA3AF] font-normal">
                               Acct: {bill.consumer_number}
                             </div>
                           )}
                         </td>
-                        <td className="px-5 py-4 text-[#667085]">
-                          <div className="flex items-center gap-1.5 text-xs text-[#111827] font-medium">
-                            <Calendar className="w-3.5 h-3.5 text-[#667085]" />
+                        <td className="px-5 py-4 text-[#667085] dark:text-[#9CA3AF]">
+                          <div className="flex items-center gap-1.5 text-xs text-[#111827] dark:text-[#F9FAFB] font-medium">
+                            <Calendar className="w-3.5 h-3.5 text-[#667085] dark:text-[#9CA3AF]" />
                             {bill.billing_period_start} → {bill.billing_period_end}
                           </div>
-                          <div className="text-xs text-[#667085] mt-0.5">
+                          <div className="text-xs text-[#667085] dark:text-[#9CA3AF] mt-0.5">
                             {days} days
                           </div>
                         </td>
-                        <td className="px-5 py-4 text-right font-bold text-[#111827] tabular-nums">
+                        <td className="px-5 py-4 text-right font-bold text-[#111827] dark:text-[#F9FAFB] tabular-nums">
                           {formatKwh(bill.energy_consumed_kwh)} kWh
                         </td>
-                        <td className="px-5 py-4 text-right text-xs font-semibold text-[#667085] tabular-nums">
+                        <td className="px-5 py-4 text-right text-xs font-semibold text-[#667085] dark:text-[#9CA3AF] tabular-nums">
                           {dailyAvg} kWh/d
                         </td>
-                        <td className="px-5 py-4 text-right font-extrabold text-[#075E45] tabular-nums">
+                        <td className="px-5 py-4 text-right font-extrabold text-[#075E45] dark:text-[#34D399] tabular-nums">
                           {formatCurrency(bill.bill_amount, bill.currency)}
                         </td>
-                        <td className="px-5 py-4 text-right text-xs text-[#667085] tabular-nums">
+                        <td className="px-5 py-4 text-right text-xs text-[#667085] dark:text-[#9CA3AF] tabular-nums">
                           {bill.estimated_emissions_kg
                             ? `${bill.estimated_emissions_kg} kg`
                             : "—"}

@@ -157,14 +157,14 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-3 border-b border-[#E3E7E3] pb-1">
+      <div className="flex items-center gap-3 border-b border-[#E3E7E3] dark:border-[#222F3E] pb-1">
         <button
           type="button"
           onClick={() => setActiveTab("catalog")}
           className={`pb-3 px-1 text-sm font-bold transition-colors border-b-2 flex items-center gap-2 ${
             activeTab === "catalog"
-              ? "border-[#0B7252] text-[#075E45]"
-              : "border-transparent text-[#667085] hover:text-[#111827]"
+              ? "border-[#0B7252] text-[#075E45] dark:text-[#34D399] dark:border-[#10B981]"
+              : "border-transparent text-[#667085] dark:text-[#9CA3AF] hover:text-[#111827] dark:hover:text-[#F9FAFB]"
           }`}
         >
           <Sparkles className="w-4 h-4" />
@@ -176,8 +176,8 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
           onClick={() => setActiveTab("my-plan")}
           className={`pb-3 px-1 text-sm font-bold transition-colors border-b-2 flex items-center gap-2 ${
             activeTab === "my-plan"
-              ? "border-[#0B7252] text-[#075E45]"
-              : "border-transparent text-[#667085] hover:text-[#111827]"
+              ? "border-[#0B7252] text-[#075E45] dark:text-[#34D399] dark:border-[#10B981]"
+              : "border-transparent text-[#667085] dark:text-[#9CA3AF] hover:text-[#111827] dark:hover:text-[#F9FAFB]"
           }`}
         >
           <CheckCircle2 className="w-4 h-4" />
@@ -188,7 +188,7 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
       {/* Category Filter Chips */}
       {activeTab === "catalog" && (
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-[#667085] mr-1 flex items-center gap-1">
+          <span className="text-xs font-semibold text-[#667085] dark:text-[#9CA3AF] mr-1 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5" /> Category:
           </span>
           {categories.map((cat) => (
@@ -199,7 +199,7 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
                 selectedCategory === cat.id
                   ? "bg-[#075E45] text-white shadow-xs"
-                  : "bg-white border border-[#E3E7E3] text-[#667085] hover:bg-[#F3F8F3]"
+                  : "bg-white dark:bg-[#151D2A] border border-[#E3E7E3] dark:border-[#222F3E] text-[#667085] dark:text-[#9CA3AF] hover:bg-[#F3F8F3] dark:hover:bg-[#1E293B]"
               }`}
             >
               {cat.label}
@@ -219,7 +219,7 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
               <Card
                 key={template.id}
                 elevated
-                className="flex flex-col justify-between hover:border-[#0B7252]/40 transition-all"
+                className="flex flex-col justify-between hover:border-[#0B7252]/40 dark:hover:border-[#10B981]/40 transition-all"
               >
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2 mb-2">
@@ -230,32 +230,32 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
                       {template.difficulty}
                     </Badge>
                   </div>
-                  <CardTitle className="text-lg text-[#111827]">
+                  <CardTitle className="text-lg text-[#111827] dark:text-[#F9FAFB]">
                     {template.title}
                   </CardTitle>
-                  <CardDescription className="leading-relaxed">
+                  <CardDescription className="leading-relaxed text-[#667085] dark:text-[#9CA3AF]">
                     {template.description}
                   </CardDescription>
                 </CardHeader>
 
                 <CardContent className="pt-0 space-y-4">
-                  <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-[#FAFBF8] border border-[#E3E7E3] text-xs">
+                  <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-[#FAFBF8] dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] text-xs">
                     <div>
-                      <span className="text-[#667085] block">Annual Saving</span>
-                      <span className="font-extrabold text-[#075E45] text-sm tabular-nums">
+                      <span className="text-[#667085] dark:text-[#9CA3AF] block">Annual Saving</span>
+                      <span className="font-extrabold text-[#075E45] dark:text-[#34D399] text-sm tabular-nums">
                         {formatKwh(template.estimated_kwh_reduction_annual)} kWh / yr
                       </span>
                     </div>
                     <div>
-                      <span className="text-[#667085] block">Est. Financial</span>
-                      <span className="font-extrabold text-[#111827] text-sm tabular-nums">
+                      <span className="text-[#667085] dark:text-[#9CA3AF] block">Est. Financial</span>
+                      <span className="font-extrabold text-[#111827] dark:text-[#F9FAFB] text-sm tabular-nums">
                         ~{formatCurrency(Number(template.estimated_cost_saving || estimatedCostSaving), household.preferredCurrency)} / yr
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-[#F3F8F3]">
-                    <span className="text-xs text-[#667085]">
+                  <div className="flex items-center justify-between pt-2 border-t border-[#F3F8F3] dark:border-[#222F3E]">
+                    <span className="text-xs text-[#667085] dark:text-[#9CA3AF]">
                       Cost: {template.upfront_cost_estimate > 0 ? formatCurrency(template.upfront_cost_estimate, household.preferredCurrency) : "Free ($0)"}
                     </span>
 
@@ -305,7 +305,9 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
                   key={action.id}
                   elevated
                   className={`p-5 transition-all ${
-                    isDone ? "bg-[#EAF5EE]/40 border-[#0B7252]/30" : "bg-white border-[#E3E7E3]"
+                    isDone
+                      ? "bg-[#EAF5EE]/40 dark:bg-[#063D2E]/25 border-[#0B7252]/30 dark:border-[#10B981]/30"
+                      : "bg-white dark:bg-[#151D2A] border-[#E3E7E3] dark:border-[#222F3E]"
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -317,18 +319,18 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
                         className={`w-6 h-6 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                           isDone
                             ? "bg-[#0B7252] border-[#0B7252] text-white"
-                            : "border-[#E3E7E3] bg-white hover:border-[#0B7252]"
+                            : "border-[#E3E7E3] dark:border-[#222F3E] bg-white dark:bg-[#0E1522] hover:border-[#0B7252] dark:hover:border-[#10B981]"
                         }`}
                       >
                         {isDone && <CheckCircle2 className="w-4 h-4" />}
                       </button>
 
                       <div>
-                        <h4 className={`text-base font-bold text-[#111827] ${isDone ? "line-through opacity-75" : ""}`}>
+                        <h4 className={`text-base font-bold text-[#111827] dark:text-[#F9FAFB] ${isDone ? "line-through opacity-75" : ""}`}>
                           {action.custom_title || "Household Energy Action"}
                         </h4>
-                        <div className="flex items-center gap-3 text-xs text-[#667085] mt-1">
-                          <span className="font-semibold text-[#075E45] tabular-nums">
+                        <div className="flex items-center gap-3 text-xs text-[#667085] dark:text-[#9CA3AF] mt-1">
+                          <span className="font-semibold text-[#075E45] dark:text-[#34D399] tabular-nums">
                             {formatKwh(action.estimated_kwh_saving)} kWh / yr
                           </span>
                           <span>•</span>
@@ -336,7 +338,7 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
                           {action.completed_at && (
                             <>
                               <span>•</span>
-                              <span className="text-[#0B7252] font-semibold">
+                              <span className="text-[#0B7252] dark:text-[#34D399] font-semibold">
                                 Completed on {new Date(action.completed_at).toLocaleDateString()}
                               </span>
                             </>
@@ -359,7 +361,7 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
                         type="button"
                         disabled={isPending}
                         onClick={() => handleRemove(action.id)}
-                        className="p-2 rounded-lg text-[#667085] hover:text-[#B42318] hover:bg-[#FEE4E2] transition-colors"
+                        className="p-2 rounded-lg text-[#667085] dark:text-[#9CA3AF] hover:text-[#B42318] hover:bg-[#FEE4E2] dark:hover:bg-[#7F1D1D]/30 transition-colors"
                         aria-label="Remove action"
                       >
                         <Trash2 className="w-4 h-4" />

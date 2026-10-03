@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { TrendingDown, TrendingUp, Minus, Calendar, CheckCircle2 } from "lucide-react";
+import { TrendingDown, TrendingUp, Minus } from "lucide-react";
 import { formatKwh } from "@/lib/utils";
 
 interface BillComparisonProps {
@@ -20,15 +20,15 @@ export function BillComparisonCard({ bills }: BillComparisonProps) {
   if (bills.length < 2) {
     return (
       <Card elevated>
-        <CardHeader className="pb-3 border-b border-[#F3F8F3]">
+        <CardHeader className="pb-3 border-b border-[#F3F8F3] dark:border-[#222F3E]">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base">Observed Trend Status</CardTitle>
+            <CardTitle className="text-base text-[#111827] dark:text-[#F9FAFB]">Observed Trend Status</CardTitle>
             <Badge variant="neutral">Baseline Established</Badge>
           </div>
         </CardHeader>
-        <CardContent className="pt-4 text-xs text-[#667085] leading-relaxed space-y-2">
+        <CardContent className="pt-4 text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed space-y-2">
           <p>
-            You have <strong>1 confirmed statement</strong> in your profile.
+            You have <strong className="text-[#111827] dark:text-[#F9FAFB]">1 confirmed statement</strong> in your profile.
           </p>
           <p>
             Upload your next utility statement to unlock direct bill-to-bill variance analysis and verify real-world energy reductions.
@@ -51,8 +51,8 @@ export function BillComparisonCard({ bills }: BillComparisonProps) {
 
   return (
     <Card elevated>
-      <CardHeader className="pb-3 border-b border-[#F3F8F3] flex flex-row items-center justify-between">
-        <CardTitle className="text-base">Observed Bill Comparison</CardTitle>
+      <CardHeader className="pb-3 border-b border-[#F3F8F3] dark:border-[#222F3E] flex flex-row items-center justify-between">
+        <CardTitle className="text-base text-[#111827] dark:text-[#F9FAFB]">Observed Bill Comparison</CardTitle>
         <Badge variant={isZero ? "neutral" : isDecreased ? "success" : "warning"}>
           {isZero
             ? "Unchanged"
@@ -68,10 +68,10 @@ export function BillComparisonCard({ bills }: BillComparisonProps) {
             <div
               className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                 isDecreased
-                  ? "bg-[#EAF5EE] text-[#075E45]"
+                  ? "bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399]"
                   : isZero
-                  ? "bg-gray-100 text-gray-600"
-                  : "bg-[#FFF7E8] text-[#9A5B00]"
+                  ? "bg-gray-100 dark:bg-[#1E293B] text-gray-600 dark:text-gray-300"
+                  : "bg-[#FFF7E8] dark:bg-[#2E2305] text-[#9A5B00] dark:text-[#FBBF24]"
               }`}
             >
               {isDecreased ? (
@@ -84,26 +84,26 @@ export function BillComparisonCard({ bills }: BillComparisonProps) {
             </div>
 
             <div>
-              <span className="text-xs text-[#667085] block">
+              <span className="text-xs text-[#667085] dark:text-[#9CA3AF] block">
                 Observed Cycle Change
               </span>
-              <span className="text-lg font-bold text-[#111827] tabular-nums">
+              <span className="text-lg font-bold text-[#111827] dark:text-[#F9FAFB] tabular-nums">
                 {isDecreased ? "-" : isZero ? "" : "+"}
                 {formatKwh(Math.abs(deltaKwh))} kWh
               </span>
             </div>
           </div>
 
-          <div className="text-right text-xs text-[#667085]">
+          <div className="text-right text-xs text-[#667085] dark:text-[#9CA3AF]">
             <div>vs Previous Cycle</div>
-            <div className="font-semibold text-[#111827] tabular-nums">
+            <div className="font-semibold text-[#111827] dark:text-[#F9FAFB] tabular-nums">
               ({formatKwh(previous.energy_consumed_kwh)} kWh)
             </div>
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#FAFBF8] border border-[#E3E7E3] text-[11px] text-[#667085] leading-relaxed">
-          <span className="font-bold text-[#111827] block mb-0.5">
+        <div className="p-3 rounded-xl bg-[#FAFBF8] dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] text-[11px] text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
+          <span className="font-bold text-[#111827] dark:text-[#F9FAFB] block mb-0.5">
             Verified Bill Measurement:
           </span>
           Comparing cycle {latest.billing_period_start} to previous cycle {previous.billing_period_start}.
