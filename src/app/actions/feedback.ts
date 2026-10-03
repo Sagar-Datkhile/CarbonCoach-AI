@@ -76,7 +76,7 @@ export async function submitFeedback(input: FeedbackInput): Promise<FeedbackActi
   const recipient = (process.env.FEEDBACK_RECEIVER_EMAIL || "").trim() || "sagardatkhile.official@gmail.com";
 
   // Use verified sender address belonging to the verified domain carboncoach.work.gd
-  const verifiedSender = "CarbonCoach Feedback <feedback@carboncoach.work.gd>";
+  const verifiedSender = "Carbon Coach Feedback <feedback@carboncoach.work.gd>";
   const rawSender = (process.env.FEEDBACK_SENDER_EMAIL || "").trim();
   const sender = rawSender.toLowerCase().includes("@carboncoach.work.gd")
     ? rawSender
@@ -98,7 +98,7 @@ export async function submitFeedback(input: FeedbackInput): Promise<FeedbackActi
   const badge = categoryBadgeColors[category] || categoryBadgeColors.General;
 
   // Plaintext body matching requested specification
-  const textContent = `New CarbonCoach AI Feedback
+  const textContent = `New Carbon Coach AI Feedback
 
 Sender Name: ${userName}
 Sender Email: ${userEmail || "Not provided / Anonymous"}
@@ -111,7 +111,7 @@ Feedback:
 ${comments}
 
 Timestamp: ${currentTime}
-Source: CarbonCoach AI Dashboard`;
+Source: Carbon Coach AI Dashboard`;
 
   // HTML version with strict escaping and clean responsive styling
   const safeComments = escapeHtml(comments);
@@ -128,15 +128,15 @@ Source: CarbonCoach AI Dashboard`;
     <html lang="en">
       <head>
         <meta charset="utf-8" />
-        <title>New CarbonCoach AI Feedback</title>
+        <title>New Carbon Coach AI Feedback</title>
       </head>
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #FAFBF8; margin: 0; padding: 32px 16px; color: #111827;">
         <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background: #ffffff; border: 1px solid #E3E7E3; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
           <!-- Header Banner -->
           <tr>
             <td style="padding: 24px 32px; background-color: #075E45; color: #ffffff;">
-              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.85; font-weight: 600; display: block; margin-bottom: 4px;">CarbonCoach AI Dashboard</span>
-              <h1 style="margin: 0; font-size: 20px; font-weight: 700; color: #ffffff;">New CarbonCoach AI Feedback</h1>
+              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.85; font-weight: 600; display: block; margin-bottom: 4px;">Carbon Coach AI Dashboard</span>
+              <h1 style="margin: 0; font-size: 20px; font-weight: 700; color: #ffffff;">New Carbon Coach AI Feedback</h1>
             </td>
           </tr>
 
@@ -185,7 +185,7 @@ Source: CarbonCoach AI Dashboard`;
               <table width="100%" style="font-size: 11px; color: #9CA3AF;">
                 <tr>
                   <td><strong>Timestamp:</strong> ${currentTime}</td>
-                  <td align="right"><strong>Source:</strong> CarbonCoach AI Dashboard</td>
+                  <td align="right"><strong>Source:</strong> Carbon Coach AI Dashboard</td>
                 </tr>
               </table>
             </td>
@@ -211,7 +211,7 @@ Source: CarbonCoach AI Dashboard`;
       from: sender,
       to: [recipient],
       replyTo: userEmail && userEmail.includes("@") ? userEmail : undefined,
-      subject: "New CarbonCoach AI Feedback",
+      subject: "New Carbon Coach AI Feedback",
       text: textContent,
       html: htmlContent,
     });

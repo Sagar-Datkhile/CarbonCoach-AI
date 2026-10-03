@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
 :root {
   --primary-dark-green: #075E45;
   --primary-green: #0B7252;
@@ -14,6 +16,24 @@
   --warning-background: #FFF7E8;
   --warning-text: #9A5B00;
   --error: #B42318;
+}
+
+html.dark,
+[data-theme="dark"] {
+  --primary-dark-green: #10B981;
+  --primary-green: #10B981;
+  --primary-hover: #059669;
+  --light-green: #064E3B;
+  --pale-green: #022C22;
+  --background: #0B0F17;
+  --card: #151D2A;
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --border: #222F3E;
+  --warning-background: #2E2305;
+  --warning-text: #FBBF24;
+  --error: #F87171;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -42,6 +62,102 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================================
+   DARK THEME COMPONENT OVERRIDES
+   Ensures existing dashboard shell, cards, modals, and settings adapt cleanly
+   ========================================================================= */
+html.dark body {
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+
+html.dark .bg-\[\#FAFBF8\] {
+  background-color: var(--background) !important;
+}
+
+html.dark .bg-white {
+  background-color: var(--card) !important;
+}
+
+html.dark .bg-\[\#F8FAF9\] {
+  background-color: #1A2333 !important;
+}
+
+html.dark .bg-\[\#F3F8F3\] {
+  background-color: #16222F !important;
+}
+
+html.dark .bg-\[\#EAF5EE\] {
+  background-color: #063D2E !important;
+}
+
+/* Dark mode text colors */
+html.dark .text-\[\#111827\] {
+  color: var(--text-primary) !important;
+}
+
+html.dark .text-\[\#344054\] {
+  color: #D1D5DB !important;
+}
+
+html.dark .text-\[\#475467\] {
+  color: #9CA3AF !important;
+}
+
+html.dark .text-\[\#667085\] {
+  color: var(--text-secondary) !important;
+}
+
+html.dark .text-\[\#075E45\],
+html.dark .text-\[\#0B7252\],
+html.dark .text-\[\#047857\] {
+  color: #34D399 !important;
+}
+
+/* Dark mode borders */
+html.dark .border-\[\#E3E7E3\],
+html.dark .border-\[\#EAF0EB\],
+html.dark .border-\[\#EAECF0\] {
+  border-color: var(--border) !important;
+}
+
+html.dark .border-\[\#F3F8F3\] {
+  border-color: #1F2937 !important;
+}
+
+html.dark .divide-\[\#F3F8F3\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: #1F2937 !important;
+}
+
+/* Form controls in dark mode */
+html.dark input:not([type="checkbox"]):not([type="radio"]),
+html.dark select,
+html.dark textarea {
+  background-color: #1A2333 !important;
+  color: #F9FAFB !important;
+  border-color: var(--border) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #6B7280 !important;
+}
+
+/* Subtle hover states in dark mode */
+html.dark .hover\:bg-\[\#F3F8F3\]:hover {
+  background-color: #1F2C3F !important;
+}
+
+html.dark .hover\:bg-\[\#EAF5EE\]\/70:hover {
+  background-color: #074333 !important;
+}
+
+/* Modals backdrop */
+html.dark .bg-black\/60,
+html.dark .bg-black\/40 {
+  background-color: rgba(0, 0, 0, 0.75) !important;
 }
 
 /* Tabular numbers utility for financial & energy figures */

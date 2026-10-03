@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "Dashboard — CarbonCoach AI",
+  title: "Dashboard — Carbon Coach AI",
 };
 
 export default async function DashboardPage() {

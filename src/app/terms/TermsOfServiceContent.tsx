@@ -137,7 +137,7 @@ export function TermsOfServiceContent() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-base sm:text-lg text-[#667085] leading-relaxed"
             >
-              These Terms govern your use of CarbonCoach AI. By accessing or using
+              These Terms govern your use of Carbon Coach AI. By accessing or using
               the platform, you agree to these terms.
             </motion.p>
           </header>

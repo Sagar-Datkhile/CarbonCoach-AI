@@ -138,7 +138,7 @@ export function ProfileDropdown({
             </Link>
 
             <Link
-              href="/profile"
+              href="/settings"
               role="menuitem"
               onClick={handleMenuItemClick}
               className="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-[#344054] rounded-xl hover:bg-[#F3F8F3] hover:text-[#075E45] transition-colors group"

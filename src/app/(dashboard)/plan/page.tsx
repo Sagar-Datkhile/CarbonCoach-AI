@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PlanManager } from "@/components/plan/PlanManager";
 
 export const metadata = {
-  title: "My Plan — CarbonCoach AI",
+  title: "My Plan — Carbon Coach AI",
 };
 
 export default async function PlanPage() {
@@ -12,116 +12,133 @@ export default async function PlanPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 1. Fetch Household Profile
-  let household = {
+  // 1. Fetch Household Profile & Preferences
+  const household = {
     homeType: "Owned",
     budgetTier: "Moderate",
-    preferredCurrency: "USD",
+    preferredCurrency: "INR",
   };
+
+  let effectiveTariff = 7.5;
 
   if (user) {
     const { data: dbHousehold } = await supabase
-      .from("household_profiles")
-      .select("home_type, budget_tier, preferred_currency")
+      .from("households")
+      .select("home_type, occupants_count, region_code")
       .eq("user_id", user.id)
       .maybeSingle();
 
-    if (dbHousehold) {
-      household = {
-        homeType: dbHousehold.home_type || household.homeType,
-        budgetTier: dbHousehold.budget_tier || household.budgetTier,
-        preferredCurrency: dbHousehold.preferred_currency || household.preferredCurrency,
-      };
+    const { data: dbPrefs } = await supabase
+      .from("user_preferences")
+      .select("preferred_currency, upfront_budget")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (dbHousehold && dbHousehold.home_type) {
+      const rawType = dbHousehold.home_type;
+      household.homeType = rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase();
+    }
+
+    if (dbPrefs) {
+      if (dbPrefs.preferred_currency) {
+        household.preferredCurrency = dbPrefs.preferred_currency.trim();
+      }
+      if (dbPrefs.upfront_budget !== null && dbPrefs.upfront_budget !== undefined) {
+        const b = Number(dbPrefs.upfront_budget);
+        household.budgetTier = b === 0 ? "Zero-Cost" : b <= 100 ? "Low" : b <= 1000 ? "Moderate" : "High";
+      }
+    }
+
+    // Resolve tariff rate and currency from confirmed electricity bills
+    const { data: latestBill } = await supabase
+      .from("electricity_bills")
+      .select("tariff_rate, bill_amount, energy_consumed_kwh, currency")
+      .eq("user_id", user.id)
+      .eq("status", "confirmed")
+      .order("billing_period_start", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (latestBill) {
+      if (latestBill.currency) household.preferredCurrency = latestBill.currency.trim();
+      if (latestBill.tariff_rate && Number(latestBill.tariff_rate) > 0) {
+        effectiveTariff = Number(latestBill.tariff_rate);
+      } else if (Number(latestBill.energy_consumed_kwh) > 0 && Number(latestBill.bill_amount) > 0) {
+        effectiveTariff = Number(
+          (Number(latestBill.bill_amount) / Number(latestBill.energy_consumed_kwh)).toFixed(4)
+        );
+      }
+    } else {
+      effectiveTariff = household.preferredCurrency === "INR" ? 7.5 : 0.165;
     }
   }
 
-  // 2. Fetch Active Recommendation Templates
-  let templates: any[] = [];
+  // 2. Fetch Active Recommendation Templates from Supabase
   const { data: dbTemplates } = await supabase
     .from("recommendation_templates")
     .select("*")
-    .eq("is_active", true)
-    .order("estimated_kwh_reduction_annual", { ascending: false });
+    .eq("is_active", true);
 
-  if (dbTemplates && dbTemplates.length > 0) {
-    templates = dbTemplates;
-  } else {
-    // Fallback baseline templates in case DB has not yet been seeded
-    templates = [
-      {
-        id: "tpl-1",
-        title: "Switch High-Use Fixtures to High-Efficiency LEDs",
-        description: "Replace five standard 60W incandescent bulbs used ~4 hours daily with energy-saving 9W LEDs.",
-        category: "electricity",
-        applicable_home_types: ["Owned", "Rented", "Shared"],
-        applicable_budget_tiers: ["Low", "Moderate"],
-        difficulty: "Easy",
-        estimated_kwh_reduction_annual: 372.3,
-        estimated_percent_reduction: 5.5,
-        upfront_cost_estimate: 25.0,
-      },
-      {
-        id: "tpl-2",
-        title: "Eliminate Phantom Power with Smart Power Strips",
-        description: "Plug television consoles, audio equipment, and home office workstations into smart power strips that cut standby vampire load automatically.",
-        category: "appliances",
-        applicable_home_types: ["Owned", "Rented", "Shared"],
-        applicable_budget_tiers: ["Zero-Cost", "Low"],
-        difficulty: "Easy",
-        estimated_kwh_reduction_annual: 180.0,
-        estimated_percent_reduction: 2.8,
-        upfront_cost_estimate: 30.0,
-      },
-      {
-        id: "tpl-3",
-        title: "Adjust Thermostat Setpoint by 1°C / 2°F",
-        description: "Adjust cooling setpoint up 1°C in warm months and heating down 1°C in cold months to reduce continuous compressor load.",
-        category: "habits",
-        applicable_home_types: ["Owned", "Rented", "Shared"],
-        applicable_budget_tiers: ["Zero-Cost"],
-        difficulty: "Easy",
-        estimated_kwh_reduction_annual: 240.0,
-        estimated_percent_reduction: 4.0,
-        upfront_cost_estimate: 0.0,
-      },
-      {
-        id: "tpl-4",
-        title: "Cold Water Laundry Cycles",
-        description: "Wash 80% of routine laundry loads in cold water instead of warm/hot cycles. Water heating accounts for up to 90% of washing machine energy.",
-        category: "habits",
-        applicable_home_types: ["Owned", "Rented", "Shared"],
-        applicable_budget_tiers: ["Zero-Cost"],
-        difficulty: "Easy",
-        estimated_kwh_reduction_annual: 160.0,
-        estimated_percent_reduction: 2.5,
-        upfront_cost_estimate: 0.0,
-      },
-      {
-        id: "tpl-5",
-        title: "Clean Refrigerator Condenser Coils & Check Gasket",
-        description: "Vacuum dust from behind and beneath the refrigerator twice a year to maintain compressor efficiency and heat dissipation.",
-        category: "appliances",
-        applicable_home_types: ["Owned", "Rented", "Shared"],
-        applicable_budget_tiers: ["Zero-Cost"],
-        difficulty: "Easy",
-        estimated_kwh_reduction_annual: 95.0,
-        estimated_percent_reduction: 1.5,
-        upfront_cost_estimate: 0.0,
-      },
-    ];
-  }
+  const templates = (dbTemplates || []).map((t) => {
+    const calcConfig = (t.calculation_config || {}) as Record<string, unknown>;
+    const eligConfig = (t.eligibility_config || {}) as Record<string, unknown>;
 
-  // 3. Fetch User Actions
-  let userActions: any[] = [];
+    const homeTypes = (t.applicable_home_types || ["owned", "rented", "shared"]).map((ht: string) =>
+      ht ? ht.charAt(0).toUpperCase() + ht.slice(1).toLowerCase() : "Owned"
+    );
+
+    const kwh = Number(calcConfig.estimated_kwh_reduction_annual || t.estimated_kwh_reduction_annual || 100);
+    const estimatedCostSaving = Number((kwh * effectiveTariff).toFixed(0));
+
+    return {
+      id: t.id,
+      title: t.title,
+      description: t.description,
+      category: t.category || "electricity",
+      applicable_home_types: homeTypes,
+      applicable_budget_tiers:
+        (calcConfig.applicable_budget_tiers as string[]) ||
+        (eligConfig.applicable_budget_tiers as string[]) ||
+        ["Zero-Cost", "Low", "Moderate", "High"],
+      difficulty: String(calcConfig.difficulty || t.difficulty || "Easy"),
+      estimated_kwh_reduction_annual: kwh,
+      estimated_percent_reduction: Number(calcConfig.estimated_percent_reduction || t.estimated_percent_reduction || 2),
+      upfront_cost_estimate: Number(calcConfig.upfront_cost_estimate ?? t.minimum_budget ?? 0),
+      estimated_cost_saving: estimatedCostSaving,
+    };
+  });
+
+  // 3. Fetch User Actions from Supabase
+  let userActions: Array<{
+    id: string;
+    template_id: string | null;
+    custom_title: string | null;
+    status: "planned" | "completed" | "in_progress" | "dismissed";
+    estimated_kwh_saving: number;
+    estimated_cost_saving: number;
+    estimated_co2_saving: number;
+    completed_at: string | null;
+  }> = [];
+
   if (user) {
     const { data: dbActions } = await supabase
       .from("user_actions")
       .select("*")
       .eq("user_id", user.id)
+      .neq("status", "dismissed")
       .order("created_at", { ascending: false });
 
     if (dbActions) {
-      userActions = dbActions;
+      userActions = dbActions.map((a) => ({
+        id: a.id,
+        template_id: a.recommendation_id || a.template_id || null,
+        custom_title: a.title || a.custom_title || "Household Energy Action",
+        status: (a.status as "planned" | "completed" | "in_progress" | "dismissed") || "planned",
+        estimated_kwh_saving: Number(a.estimated_kwh_saving || 0),
+        estimated_cost_saving: Number(a.estimated_money_saving ?? a.estimated_cost_saving ?? 0),
+        estimated_co2_saving: Number(a.estimated_co2_saving_kg ?? a.estimated_co2_saving ?? 0),
+        completed_at: a.completed_at,
+      }));
     }
   }
 

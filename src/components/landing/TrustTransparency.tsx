@@ -10,7 +10,7 @@ export function TrustTransparency() {
     {
       title: "AI for Extraction. Mathematics for Accuracy.",
       description:
-        "CarbonCoach AI uses AI only to read your electricity bill. Every recommendation, savings estimate, and carbon calculation is generated using deterministic formulas for consistent and reliable results.",
+        "Carbon Coach AI uses AI only to read your electricity bill. Every recommendation, savings estimate, and carbon calculation is generated using deterministic formulas for consistent and reliable results.",
       icon: <Cpu className="w-6 h-6 text-[#0B7252]" />,
     },
     {

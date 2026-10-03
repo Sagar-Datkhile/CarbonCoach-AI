@@ -140,7 +140,7 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                   value={profile.email}
                   disabled
                   leftIcon={<Lock className="w-4 h-4 text-[#98A2B3]" />}
-                  helperText="Email is linked to your Supabase Auth account (read-only)."
+                  helperText="Email address cannot be changed."
                 />
 
                 <Input

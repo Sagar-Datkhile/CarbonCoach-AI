@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "Admin Dashboard — CarbonCoach AI",
+  title: "Admin Dashboard — Carbon Coach AI",
 };
 
 export default async function AdminDashboardPage() {

@@ -6,10 +6,10 @@ export const termsSections: PolicySectionItem[] = [
     icon: "BadgeCheck",
     title: "Acceptance of Terms",
     description:
-      "By accessing, creating an account, or using CarbonCoach AI, you agree to comply with and be bound by these Terms of Service and all applicable laws and regulations.",
+      "By accessing, creating an account, or using Carbon Coach AI, you agree to comply with and be bound by these Terms of Service and all applicable laws and regulations.",
     points: [
       "If you do not agree with any part of these Terms, please discontinue using the platform.",
-      "Continued use of CarbonCoach AI following any updates indicates your acceptance of the revised Terms.",
+      "Continued use of Carbon Coach AI following any updates indicates your acceptance of the revised Terms.",
     ],
   },
   {
@@ -17,7 +17,7 @@ export const termsSections: PolicySectionItem[] = [
     icon: "Leaf",
     title: "Our Service",
     description:
-      "CarbonCoach AI is an AI-powered household energy platform providing electricity bill analysis, personalized efficiency recommendations, and carbon emission estimates.",
+      "Carbon Coach AI is an AI-powered household energy platform providing electricity bill analysis, personalized efficiency recommendations, and carbon emission estimates.",
     points: [
       "AI-assisted bill extraction helps households organize and interpret historical consumption.",
       "All energy recommendations, savings projections, and carbon figures are informational insights.",
@@ -29,7 +29,7 @@ export const termsSections: PolicySectionItem[] = [
     icon: "User",
     title: "User Responsibilities",
     description:
-      "Users are expected to use CarbonCoach AI responsibly and help maintain account security and platform integrity.",
+      "Users are expected to use Carbon Coach AI responsibly and help maintain account security and platform integrity.",
     points: [
       "Maintain the confidentiality of your account credentials and Google Sign-In session.",
       "Provide accurate, authentic electricity bill uploads and household profile details.",
@@ -42,7 +42,7 @@ export const termsSections: PolicySectionItem[] = [
     icon: "AlertTriangle",
     title: "Limitation of Liability",
     description:
-      "CarbonCoach AI delivers data-driven insights and AI suggestions solely for informational and educational purposes.",
+      "Carbon Coach AI delivers data-driven insights and AI suggestions solely for informational and educational purposes.",
     points: [
       "Users should review and verify extracted bill figures before making operational or financial decisions.",
       "Recommendations do not constitute certified engineering, professional financial, or legal advice.",
@@ -54,7 +54,7 @@ export const termsSections: PolicySectionItem[] = [
     icon: "Mail",
     title: "Contact Information",
     description:
-      "Have questions, feedback, or need clarification regarding these Terms of Service? Reach out to the CarbonCoach AI team.",
+      "Have questions, feedback, or need clarification regarding these Terms of Service? Reach out to the Carbon Coach AI team.",
     contactCards: [
       {
         label: "Email",

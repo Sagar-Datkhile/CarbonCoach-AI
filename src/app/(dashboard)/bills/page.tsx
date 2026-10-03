@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "Electricity Bills — CarbonCoach AI",
+  title: "Electricity Bills — Carbon Coach AI",
 };
 
 export const dynamic = "force-dynamic";

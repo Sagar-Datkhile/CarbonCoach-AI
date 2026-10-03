@@ -2,7 +2,7 @@ import React from "react";
 import { BillUploader } from "@/components/bills/BillUploader";
 
 export const metadata = {
-  title: "Add Electricity Bill — CarbonCoach AI",
+  title: "Add Electricity Bill — Carbon Coach AI",
 };
 
 export default function AddBillPage() {

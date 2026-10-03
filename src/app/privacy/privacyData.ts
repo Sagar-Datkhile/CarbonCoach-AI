@@ -6,7 +6,7 @@ export const privacySections: PolicySectionItem[] = [
     icon: "ShieldCheck",
     title: "Introduction",
     description:
-      "CarbonCoach AI is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store and protect your personal information when you use our platform.",
+      "Carbon Coach AI is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store and protect your personal information when you use our platform.",
   },
   {
     id: "information-we-collect",
@@ -84,7 +84,7 @@ export const privacySections: PolicySectionItem[] = [
     points: [
       "We never sell your personal information.",
       "We do not share your uploaded electricity bills with advertisers.",
-      "Information is shared only when required to provide CarbonCoach AI services or comply with legal obligations.",
+      "Information is shared only when required to provide Carbon Coach AI services or comply with legal obligations.",
     ],
   },
   {
@@ -127,14 +127,14 @@ export const privacySections: PolicySectionItem[] = [
     icon: "RefreshCw",
     title: "Changes to this Privacy Policy",
     description:
-      "This Privacy Policy may be updated periodically as CarbonCoach AI evolves. Significant changes will be reflected by updating the 'Last Updated' date.",
+      "This Privacy Policy may be updated periodically as Carbon Coach AI evolves. Significant changes will be reflected by updating the 'Last Updated' date.",
   },
   {
     id: "contact-information",
     icon: "Mail",
     title: "Contact Information",
     description:
-      "If you have any questions regarding this Privacy Policy or your personal information, please contact the CarbonCoach AI team.",
+      "If you have any questions regarding this Privacy Policy or your personal information, please contact the Carbon Coach AI team.",
     contactCards: [
       {
         label: "Email",

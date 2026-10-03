@@ -62,7 +62,7 @@ export default async function AdminLayout({
                   Admin Portal
                 </span>
                 <span className="text-[10px] text-gray-400 uppercase tracking-wider block">
-                  CarbonCoach Governance
+                  Carbon Coach Governance
                 </span>
               </div>
             </div>
