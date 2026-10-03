@@ -188,11 +188,10 @@ export function ProfileDropdown({
         aria-haspopup="menu"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center gap-3 p-2.5 rounded-2xl transition-all duration-200 text-left border cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#075E45]/20 ${
-          isOpen
+        className={`w-full flex items-center gap-3 p-2.5 rounded-2xl transition-all duration-200 text-left border cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#075E45]/20 ${isOpen
             ? "bg-[#EAF5EE] border-[#0B7252]/30 shadow-xs"
             : "border-transparent hover:bg-[#EAF5EE]/70 hover:border-[#E3E7E3]"
-        }`}
+          }`}
       >
         {/* Avatar (48px) */}
         <div className="relative w-12 h-12 rounded-full bg-[#EAF5EE] text-[#075E45] flex items-center justify-center font-bold text-sm shrink-0 border border-[#E3E7E3] group-hover:border-[#075E45]/40 overflow-hidden shadow-xs transition-colors">
@@ -226,9 +225,8 @@ export function ProfileDropdown({
 
         {/* Chevron Indicator */}
         <ChevronsUpDown
-          className={`w-4 h-4 text-[#98A2B3] group-hover:text-[#111827] shrink-0 transition-transform duration-200 ${
-            isOpen ? "rotate-180 text-[#075E45]" : ""
-          }`}
+          className={`w-4 h-4 text-[#98A2B3] group-hover:text-[#111827] shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180 text-[#075E45]" : ""
+            }`}
         />
       </button>
 
