@@ -1,17 +1,15 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import { calculateLightingSavings, type LightingSimulationInput } from "@/lib/calculations/simulator";
-import { recordSimulationRun } from "@/app/actions/plan";
+import { calculateLightingSavings } from "@/lib/calculations/simulator";
+import { recordSimulationRun, deleteSimulationRun } from "@/app/actions/plan";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
-import { MetricCard } from "@/components/ui/MetricCard";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Alert } from "@/components/ui/Alert";
 import { formatCurrency, formatKwh, formatEmissions } from "@/lib/utils";
 import {
-  Lightbulb,
   Zap,
   DollarSign,
   Leaf,
@@ -19,22 +17,50 @@ import {
   Save,
   AlertTriangle,
   RotateCcw,
-  CheckCircle2,
+  Trash2,
+  Info,
 } from "lucide-react";
+
+export interface BaselineData {
+  energyConsumedKwh: number;
+  billAmount: number;
+  tariffRate: number | null;
+  estimatedEmissionsKg: number | null;
+  billingPeriodStart: string;
+  billingPeriodEnd: string;
+}
+
+export interface SavedSimulation {
+  id: string;
+  simulation_type: string;
+  input_parameters: Record<string, unknown>;
+  projection_days: number | null;
+  calculated_kwh_saving: number;
+  calculated_money_saving: number | null;
+  calculated_co2_saving_kg: number | null;
+  created_at: string;
+}
 
 interface LightingSimulatorProps {
   defaultTariff?: number;
   defaultEmissionFactor?: number;
   currency?: string;
+  baseline?: BaselineData | null;
+  savedSimulations?: SavedSimulation[];
 }
 
 export function LightingSimulator({
   defaultTariff = 0.165,
   defaultEmissionFactor = 0.386,
   currency = "USD",
+  baseline = null,
+  savedSimulations = [],
 }: LightingSimulatorProps) {
   const [isPending, startTransition] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [savedList, setSavedList] = useState<SavedSimulation[]>(savedSimulations);
 
   // Input states
   const [currentWatts, setCurrentWatts] = useState(60);
@@ -45,41 +71,97 @@ export function LightingSimulator({
   const [tariffRate, setTariffRate] = useState(defaultTariff);
   const [emissionFactor, setEmissionFactor] = useState(defaultEmissionFactor);
 
+  // Validations & sanitizations
+  const validCurrentWatts = Math.max(1, currentWatts || 0);
+  const validProposedWatts = Math.max(1, proposedWatts || 0);
+  const validQuantity = Math.max(1, Math.min(500, quantity || 0));
+  const validHours = Math.max(0.1, Math.min(24, hoursPerDay || 0));
+  const validDays = Math.max(1, numberOfDays || 0);
+  const validTariff = Math.max(0, tariffRate || 0);
+  const validFactor = Math.max(0, emissionFactor || 0);
+
   // Instant deterministic calculation
   const results = calculateLightingSavings({
-    currentWatts,
-    proposedWatts,
-    quantity,
-    hoursPerDay,
-    numberOfDays,
-    tariffRate,
-    emissionFactor,
+    currentWatts: validCurrentWatts,
+    proposedWatts: validProposedWatts,
+    quantity: validQuantity,
+    hoursPerDay: validHours,
+    numberOfDays: validDays,
+    tariffRate: validTariff,
+    emissionFactor: validFactor,
   });
+
+  // Calculate simulated monthly equivalent vs baseline monthly if baseline exists
+  const simulatedMonthlyKwh = validDays > 0 ? (results.kwhSaved / validDays) * 30 : 0;
+  const baselineMonthlyReductionPct =
+    baseline && baseline.energyConsumedKwh > 0
+      ? Math.min(100, Math.round((simulatedMonthlyKwh / baseline.energyConsumedKwh) * 100))
+      : null;
 
   const handleSaveSimulation = () => {
     startTransition(async () => {
       setSaveSuccess(false);
+      setErrorMessage(null);
+
+      const params = {
+        currentWatts: validCurrentWatts,
+        proposedWatts: validProposedWatts,
+        quantity: validQuantity,
+        hoursPerDay: validHours,
+        numberOfDays: validDays,
+        tariffRate: validTariff,
+        emissionFactor: validFactor,
+      };
+
       const res = await recordSimulationRun(
         "lighting_replacement",
-        {
-          currentWatts,
-          proposedWatts,
-          quantity,
-          hoursPerDay,
-          numberOfDays,
-          tariffRate,
-          emissionFactor,
-        },
+        params,
         results.kwhSaved,
         results.moneySaved,
-        results.co2SavedKg
+        results.co2SavedKg,
+        validDays
       );
 
       if (res.success) {
         setSaveSuccess(true);
+        if (res.simulation) {
+          const newSimItem: SavedSimulation = {
+            id: res.simulation.id,
+            simulation_type: res.simulation.simulation_type,
+            input_parameters: (res.simulation.input_parameters as Record<string, unknown>) || {},
+            projection_days: res.simulation.projection_days ?? null,
+            calculated_kwh_saving: Number(res.simulation.calculated_kwh_saving),
+            calculated_money_saving:
+              res.simulation.calculated_money_saving !== undefined &&
+              res.simulation.calculated_money_saving !== null
+                ? Number(res.simulation.calculated_money_saving)
+                : null,
+            calculated_co2_saving_kg:
+              res.simulation.calculated_co2_saving_kg !== undefined &&
+              res.simulation.calculated_co2_saving_kg !== null
+                ? Number(res.simulation.calculated_co2_saving_kg)
+                : null,
+            created_at: res.simulation.created_at,
+          };
+          setSavedList((prev) => [newSimItem, ...prev.filter((s) => s.id !== newSimItem.id)]);
+        }
         setTimeout(() => setSaveSuccess(false), 4000);
+      } else {
+        setErrorMessage(res.error || "Failed to save simulation record");
       }
     });
+  };
+
+  const handleDeleteSimulation = async (id: string) => {
+    setDeletingId(id);
+    setErrorMessage(null);
+    const res = await deleteSimulationRun(id);
+    setDeletingId(null);
+    if (res.success) {
+      setSavedList((prev) => prev.filter((s) => s.id !== id));
+    } else {
+      setErrorMessage(res.error || "Failed to delete simulation run");
+    }
   };
 
   const handleReset = () => {
@@ -91,10 +173,51 @@ export function LightingSimulator({
     setTariffRate(defaultTariff);
     setEmissionFactor(defaultEmissionFactor);
     setSaveSuccess(false);
+    setErrorMessage(null);
   };
 
   return (
     <div className="space-y-8">
+      {/* Baseline Status Banner */}
+      {baseline ? (
+        <div className="p-4 rounded-xl bg-[#EAF5EE] border border-[#0B7252]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#075E45] text-white flex items-center justify-center shrink-0">
+              <Zap className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-[#075E45] uppercase tracking-wider block">
+                  Confirmed Utility Baseline
+                </span>
+                <Badge variant="success">Verified Statement</Badge>
+              </div>
+              <span className="text-sm font-bold text-[#111827]">
+                {formatKwh(baseline.energyConsumedKwh)} kWh ({formatCurrency(baseline.billAmount, currency)})
+              </span>
+              <span className="text-xs text-[#667085] ml-2">
+                Period: {baseline.billingPeriodStart} to {baseline.billingPeriodEnd}
+              </span>
+            </div>
+          </div>
+          {baselineMonthlyReductionPct !== null && (
+            <div className="text-left sm:text-right">
+              <span className="text-xs text-[#667085] block">Modeled Monthly Reduction</span>
+              <span className="text-sm font-extrabold text-[#075E45]">
+                ~{baselineMonthlyReductionPct}% of baseline bill
+              </span>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="p-4 rounded-xl bg-[#FAFBF8] border border-[#E3E7E3] flex items-start gap-3">
+          <Info className="w-5 h-5 text-[#667085] shrink-0 mt-0.5" />
+          <div className="text-xs text-[#667085] leading-relaxed">
+            <strong className="text-[#111827]">No Confirmed Baseline Statement:</strong> You do not currently have a confirmed electricity bill in your profile. Simulation is running with regional standard defaults ({formatCurrency(defaultTariff, currency)}/kWh, {defaultEmissionFactor} kg CO₂e/kWh). Confirm an uploaded bill in Bills to benchmark simulations against your actual household consumption.
+          </div>
+        </div>
+      )}
+
       {/* Simulation Disclaimer Banner */}
       <div className="p-4 sm:p-5 rounded-2xl bg-[#FFF7E8] border border-[#9A5B00]/30 flex items-start gap-3.5">
         <AlertTriangle className="w-5 h-5 text-[#9A5B00] shrink-0 mt-0.5" />
@@ -106,6 +229,12 @@ export function LightingSimulator({
       {saveSuccess && (
         <Alert variant="success" className="animate-in fade-in">
           Simulation run recorded to your historical audit log!
+        </Alert>
+      )}
+
+      {errorMessage && (
+        <Alert variant="error" className="animate-in fade-in">
+          {errorMessage}
         </Alert>
       )}
 
@@ -146,7 +275,7 @@ export function LightingSimulator({
                     max="150"
                     step="5"
                     value={currentWatts}
-                    onChange={(e) => setCurrentWatts(Number(e.target.value))}
+                    onChange={(e) => setCurrentWatts(Math.max(1, Number(e.target.value)))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
                   <span className="text-[11px] text-[#667085] mt-1 block">
@@ -166,7 +295,7 @@ export function LightingSimulator({
                     max="30"
                     step="1"
                     value={proposedWatts}
-                    onChange={(e) => setProposedWatts(Number(e.target.value))}
+                    onChange={(e) => setProposedWatts(Math.max(1, Number(e.target.value)))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
                   <span className="text-[11px] text-[#667085] mt-1 block">
@@ -174,6 +303,12 @@ export function LightingSimulator({
                   </span>
                 </div>
               </div>
+
+              {proposedWatts >= currentWatts && (
+                <div className="text-xs text-[#9A5B00] bg-[#FFF7E8] p-2.5 rounded-lg border border-[#9A5B00]/20">
+                  Notice: Proposed bulb wattage ({proposedWatts}W) should be lower than current wattage ({currentWatts}W) to generate energy savings.
+                </div>
+              )}
 
               {/* Quantity and Hours */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -189,7 +324,7 @@ export function LightingSimulator({
                     max="40"
                     step="1"
                     value={quantity}
-                    onChange={(e) => setQuantity(Number(e.target.value))}
+                    onChange={(e) => setQuantity(Math.max(1, Math.min(500, Number(e.target.value))))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
                 </div>
@@ -206,7 +341,7 @@ export function LightingSimulator({
                     max="24"
                     step="0.5"
                     value={hoursPerDay}
-                    onChange={(e) => setHoursPerDay(Number(e.target.value))}
+                    onChange={(e) => setHoursPerDay(Math.max(0.1, Math.min(24, Number(e.target.value))))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
                 </div>
@@ -246,16 +381,18 @@ export function LightingSimulator({
                   label="Electricity Tariff Rate"
                   type="number"
                   step="0.001"
+                  min="0"
                   value={tariffRate}
-                  onChange={(e) => setTariffRate(Number(e.target.value))}
+                  onChange={(e) => setTariffRate(Math.max(0, Number(e.target.value)))}
                   helperText={`${currency} per kWh`}
                 />
                 <Input
                   label="Grid Emission Factor"
                   type="number"
                   step="0.001"
+                  min="0"
                   value={emissionFactor}
-                  onChange={(e) => setEmissionFactor(Number(e.target.value))}
+                  onChange={(e) => setEmissionFactor(Math.max(0, Number(e.target.value)))}
                   helperText="kg CO₂e per kWh"
                 />
               </div>
@@ -272,7 +409,7 @@ export function LightingSimulator({
                 <Badge variant="success">Deterministic</Badge>
               </div>
               <CardDescription>
-                Over {numberOfDays} days projection period
+                Over {validDays} days projection period
               </CardDescription>
             </CardHeader>
 
@@ -322,7 +459,7 @@ export function LightingSimulator({
               {/* Formula Transparency Box */}
               <div className="p-3 rounded-xl bg-[#FAFBF8] border border-[#E3E7E3] text-[11px] text-[#667085] leading-relaxed">
                 <span className="font-bold text-[#111827] block mb-0.5">Applied Formula:</span>
-                (({currentWatts}W - {proposedWatts}W) × {quantity} bulbs × {hoursPerDay}h × {numberOfDays}d) / 1000 ={" "}
+                (({validCurrentWatts}W - {validProposedWatts}W) × {validQuantity} bulbs × {validHours}h × {validDays}d) / 1000 ={" "}
                 <strong>{results.kwhSaved} kWh</strong>
               </div>
 
@@ -340,6 +477,91 @@ export function LightingSimulator({
           </Card>
         </div>
       </div>
+
+      {/* Saved Simulations Audit Log Table */}
+      <Card elevated>
+        <CardHeader className="pb-3 border-b border-[#F3F8F3]">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg">Saved Simulation Scenarios</CardTitle>
+              <CardDescription>
+                Audit history of your calculated what-if simulations
+              </CardDescription>
+            </div>
+            <Badge variant="neutral">{savedList.length} Saved</Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0 overflow-x-auto">
+          {savedList.length === 0 ? (
+            <div className="p-8 text-center text-xs text-[#667085]">
+              No saved simulations yet. Adjust variables above and click <strong>&quot;Save Simulation Run&quot;</strong> to record a scenario for comparison.
+            </div>
+          ) : (
+            <table className="w-full text-left text-sm">
+              <thead className="bg-[#FAFBF8] border-b border-[#E3E7E3] text-[#667085] text-xs uppercase font-semibold">
+                <tr>
+                  <th className="px-5 py-3.5">Scenario Type</th>
+                  <th className="px-5 py-3.5">Parameters</th>
+                  <th className="px-5 py-3.5 text-center">Horizon</th>
+                  <th className="px-5 py-3.5 text-right">Potential kWh</th>
+                  <th className="px-5 py-3.5 text-right">Potential Savings</th>
+                  <th className="px-5 py-3.5 text-right">Emissions Avoided</th>
+                  <th className="px-5 py-3.5 text-right">Saved Date</th>
+                  <th className="px-5 py-3.5 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E3E7E3]">
+                {savedList.map((sim) => {
+                  const p = (sim.input_parameters as Record<string, unknown>) || {};
+                  return (
+                    <tr key={sim.id} className="hover:bg-[#FAFBF8]/70">
+                      <td className="px-5 py-3.5 font-semibold text-[#111827]">
+                        {sim.simulation_type === "lighting_replacement"
+                          ? "Lighting Upgrade"
+                          : sim.simulation_type}
+                      </td>
+                      <td className="px-5 py-3.5 text-xs text-[#667085]">
+                        {p.quantity ? `${p.quantity} fixtures` : ""}{" "}
+                        {p.currentWatts && p.proposedWatts ? `(${p.currentWatts}W → ${p.proposedWatts}W)` : ""}{" "}
+                        {p.hoursPerDay ? `@ ${p.hoursPerDay}h/d` : ""}
+                      </td>
+                      <td className="px-5 py-3.5 text-center text-xs text-[#667085]">
+                        {sim.projection_days || 365} days
+                      </td>
+                      <td className="px-5 py-3.5 text-right font-bold text-[#075E45] tabular-nums">
+                        {formatKwh(sim.calculated_kwh_saving)} kWh
+                      </td>
+                      <td className="px-5 py-3.5 text-right font-semibold text-[#111827] tabular-nums">
+                        {formatCurrency(sim.calculated_money_saving || 0, currency)}
+                      </td>
+                      <td className="px-5 py-3.5 text-right text-xs text-[#0B7252] font-semibold tabular-nums">
+                        {formatEmissions(sim.calculated_co2_saving_kg || 0)}
+                      </td>
+                      <td className="px-5 py-3.5 text-right text-xs text-[#667085]">
+                        {new Date(sim.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="px-5 py-3.5 text-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          disabled={deletingId === sim.id}
+                          isLoading={deletingId === sim.id}
+                          onClick={() => handleDeleteSimulation(sim.id)}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5"
+                          title="Delete simulation"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
+

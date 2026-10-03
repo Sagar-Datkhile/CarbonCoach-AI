@@ -12,11 +12,7 @@ import {
   Plus,
   CheckCircle2,
   Trash2,
-  Home,
-  DollarSign,
   Filter,
-  ArrowRight,
-  ShieldCheck,
 } from "lucide-react";
 
 interface TemplateItem {
@@ -30,6 +26,7 @@ interface TemplateItem {
   estimated_kwh_reduction_annual: number;
   estimated_percent_reduction: number;
   upfront_cost_estimate: number;
+  estimated_cost_saving?: number;
 }
 
 interface UserActionItem {
@@ -58,6 +55,7 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
   const [activeTab, setActiveTab] = useState<"catalog" | "my-plan">("catalog");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Planned template IDs
   const plannedTemplateIds = new Set(
@@ -67,34 +65,52 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
   // Filter templates by household eligibility and selected category
   const filteredTemplates = templates.filter((t) => {
     const matchesCategory =
-      selectedCategory === "all" || t.category === selectedCategory;
+      selectedCategory === "all" || t.category.toLowerCase() === selectedCategory.toLowerCase();
 
-    // Household homeType eligibility check
+    // Household homeType eligibility check (case-insensitive)
+    const currentHomeType = (household.homeType || "Owned").toLowerCase();
     const matchesHomeType =
-      t.applicable_home_types.includes(household.homeType) ||
-      t.applicable_home_types.includes("Shared");
+      t.applicable_home_types.some(
+        (ht) => ht.toLowerCase() === currentHomeType || ht.toLowerCase() === "shared"
+      );
 
     return matchesCategory && matchesHomeType;
   });
 
   const handleAdd = (templateId: string) => {
+    setStatusMessage(null);
+    setErrorMessage(null);
     startTransition(async () => {
       const res = await addTemplateToPlan(templateId);
       if (res.success) {
         setStatusMessage("Action added to your plan!");
+        setTimeout(() => setStatusMessage(null), 4000);
+      } else {
+        setErrorMessage(res.error || "Failed to add action to plan.");
+        setTimeout(() => setErrorMessage(null), 5000);
       }
     });
   };
 
   const handleToggle = (actionId: string, currentStatus: "planned" | "completed" | "in_progress" | "dismissed") => {
+    setStatusMessage(null);
+    setErrorMessage(null);
     startTransition(async () => {
-      await toggleActionCompletion(actionId, currentStatus);
+      const res = await toggleActionCompletion(actionId, currentStatus);
+      if (!res.success) {
+        setErrorMessage(res.error || "Failed to update action status.");
+      }
     });
   };
 
   const handleRemove = (actionId: string) => {
+    setStatusMessage(null);
+    setErrorMessage(null);
     startTransition(async () => {
-      await removeActionFromPlan(actionId);
+      const res = await removeActionFromPlan(actionId);
+      if (!res.success) {
+        setErrorMessage(res.error || "Failed to remove action.");
+      }
     });
   };
 
@@ -131,6 +147,12 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
       {statusMessage && (
         <Alert variant="success" className="animate-in fade-in">
           {statusMessage}
+        </Alert>
+      )}
+
+      {errorMessage && (
+        <Alert variant="error" className="animate-in fade-in">
+          {errorMessage}
         </Alert>
       )}
 
@@ -227,14 +249,14 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
                     <div>
                       <span className="text-[#667085] block">Est. Financial</span>
                       <span className="font-extrabold text-[#111827] text-sm tabular-nums">
-                        ~${estimatedCostSaving} / yr
+                        ~{formatCurrency(Number(template.estimated_cost_saving || estimatedCostSaving), household.preferredCurrency)} / yr
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-[#F3F8F3]">
                     <span className="text-xs text-[#667085]">
-                      Cost: {template.upfront_cost_estimate > 0 ? `$${template.upfront_cost_estimate}` : "Free ($0)"}
+                      Cost: {template.upfront_cost_estimate > 0 ? formatCurrency(template.upfront_cost_estimate, household.preferredCurrency) : "Free ($0)"}
                     </span>
 
                     {isAlreadyPlanned ? (
@@ -310,7 +332,7 @@ export function PlanManager({ templates, userActions, household }: PlanManagerPr
                             {formatKwh(action.estimated_kwh_saving)} kWh / yr
                           </span>
                           <span>•</span>
-                          <span>Est. ~${action.estimated_cost_saving} / yr</span>
+                          <span>Est. ~{formatCurrency(action.estimated_cost_saving, household.preferredCurrency)} / yr</span>
                           {action.completed_at && (
                             <>
                               <span>•</span>
