@@ -217,7 +217,7 @@ export function DeleteAccountModal({
                   </p>
                 </div>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   isLoading={isPending}
                   onClick={handleDeactivate}
@@ -328,7 +328,7 @@ export function DeleteAccountModal({
 
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   disabled={isPending}
                   onClick={handleClose}

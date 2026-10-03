@@ -196,10 +196,10 @@ export default async function ProgressPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#111827]">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#111827] dark:text-[#F9FAFB]">
             Progress & Impact Verification
           </h1>
-          <p className="text-sm text-[#667085] mt-1">
+          <p className="text-sm text-[#667085] dark:text-[#9CA3AF] mt-1">
             Tri-partite separation between modeled projections, user habits, and observed utility data.
           </p>
         </div>
@@ -212,9 +212,9 @@ export default async function ProgressPage() {
       </div>
 
       {/* Governance Rule Banner */}
-      <div className="p-4 rounded-xl bg-[#F3F8F3] border border-[#0B7252]/30 flex items-start gap-3">
-        <Info className="w-5 h-5 text-[#0B7252] shrink-0 mt-0.5" />
-        <div className="text-xs text-[#075E45] leading-relaxed">
+      <div className="p-4 rounded-xl bg-[#F3F8F3] dark:bg-[#063D2E]/30 border border-[#0B7252]/30 dark:border-[#10B981]/30 flex items-start gap-3">
+        <Info className="w-5 h-5 text-[#0B7252] dark:text-[#34D399] shrink-0 mt-0.5" />
+        <div className="text-xs text-[#075E45] dark:text-[#34D399] leading-relaxed">
           <strong>Methodological Separation:</strong> Completing an action represents user-reported behavioral effort. Real-world verified savings are only established when confirmed across consecutive utility bills using deterministic formula calculation.
         </div>
       </div>
@@ -225,15 +225,15 @@ export default async function ProgressPage() {
         <Card elevated className="border-t-4 border-t-[#075E45]">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#075E45]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#075E45] dark:text-[#34D399]">
                 Tier 1: Modeled Potential
               </span>
               <Badge variant="neutral">Theoretical</Badge>
             </div>
-            <CardTitle className="text-2xl tabular-nums text-[#111827] mt-2">
+            <CardTitle className="text-2xl tabular-nums text-[#111827] dark:text-[#F9FAFB] mt-2">
               {formatKwh(totalModeledKwh)} kWh / yr
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-[#667085] dark:text-[#9CA3AF]">
               Potential reduction from all {userActions.length} planned & completed items ({formatCurrency(totalModeledMoney, preferredCurrency)}/yr, {formatEmissions(totalModeledCo2)}).
               {simulationsCount > 0 && ` (${simulationsCount} what-if simulations logged)`}
             </CardDescription>
@@ -244,15 +244,15 @@ export default async function ProgressPage() {
         <Card elevated className="border-t-4 border-t-[#0B7252]">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] dark:text-[#34D399]">
                 Tier 2: User-Reported
               </span>
               <Badge variant="success">Completed</Badge>
             </div>
-            <CardTitle className="text-2xl tabular-nums text-[#075E45] mt-2">
+            <CardTitle className="text-2xl tabular-nums text-[#075E45] dark:text-[#34D399] mt-2">
               {completedActions.length} Actions Done
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-[#667085] dark:text-[#9CA3AF]">
               {inProgressActions.length > 0 && `${inProgressActions.length} in progress. `}
               Representing ~{formatKwh(totalCompletedKwh)} kWh / yr ({formatCurrency(totalCompletedMoney, preferredCurrency)}/yr, {formatEmissions(totalCompletedCo2)}) of self-reported changes.
             </CardDescription>
@@ -263,7 +263,7 @@ export default async function ProgressPage() {
         <Card elevated className="border-t-4 border-t-[#9A5B00]">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#9A5B00]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#9A5B00] dark:text-[#FBBF24]">
                 Tier 3: Observed Change
               </span>
               <Badge
@@ -286,7 +286,7 @@ export default async function ProgressPage() {
                   : "No Confirmed Bills"}
               </Badge>
             </div>
-            <CardTitle className="text-2xl tabular-nums text-[#111827] mt-2">
+            <CardTitle className="text-2xl tabular-nums text-[#111827] dark:text-[#F9FAFB] mt-2">
               {observedDeltaKwh !== null ? (
                 <>
                   {observedDeltaKwh <= 0 ? "-" : "+"}
@@ -298,7 +298,7 @@ export default async function ProgressPage() {
                 "No Statement"
               )}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-[#667085] dark:text-[#9CA3AF]">
               {bills.length >= 2 ? (
                 <>
                   Cycle variance vs previous statement. Cost:{" "}
@@ -324,11 +324,11 @@ export default async function ProgressPage() {
       {/* Confirmed Statement History & Trends */}
       {billsWithMetrics.length > 0 && (
         <Card elevated>
-          <CardHeader className="pb-3 border-b border-[#F3F8F3]">
+          <CardHeader className="pb-3 border-b border-[#F3F8F3] dark:border-[#222F3E]">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg">Confirmed Billing Statement Trends</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg text-[#111827] dark:text-[#F9FAFB]">Confirmed Billing Statement Trends</CardTitle>
+                <CardDescription className="text-[#667085] dark:text-[#9CA3AF]">
                   Empirical utility data from your confirmed statements with emission factor calculation ({emissionFactor} kg CO₂e/kWh)
                 </CardDescription>
               </div>
@@ -337,7 +337,7 @@ export default async function ProgressPage() {
           </CardHeader>
           <CardContent className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-[#FAFBF8] border-b border-[#E3E7E3] text-[#667085] text-xs uppercase font-semibold">
+              <thead className="bg-[#FAFBF8] dark:bg-[#0E1522] border-b border-[#E3E7E3] dark:border-[#222F3E] text-[#667085] dark:text-[#9CA3AF] text-xs uppercase font-semibold">
                 <tr>
                   <th className="px-5 py-3.5">Statement Cycle</th>
                   <th className="px-5 py-3.5 text-center">Days</th>
@@ -347,11 +347,11 @@ export default async function ProgressPage() {
                   <th className="px-5 py-3.5 text-right">Cycle Variance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E3E7E3]">
+              <tbody className="divide-y divide-[#E3E7E3] dark:divide-[#222F3E]">
                 {billsWithMetrics.map((b, idx) => {
                   const prevBill = idx + 1 < billsWithMetrics.length ? billsWithMetrics[idx + 1] : null;
                   let deltaText: React.ReactNode = (
-                    <span className="text-xs text-[#667085]">Baseline</span>
+                    <span className="text-xs text-[#667085] dark:text-[#9CA3AF]">Baseline</span>
                   );
 
                   if (prevBill && prevBill.energy_consumed_kwh > 0) {
@@ -364,10 +364,10 @@ export default async function ProgressPage() {
                       <span
                         className={`text-xs font-bold tabular-nums ${
                           isLower
-                            ? "text-[#075E45]"
+                            ? "text-[#075E45] dark:text-[#34D399]"
                             : isSame
-                            ? "text-gray-500"
-                            : "text-[#9A5B00]"
+                            ? "text-gray-500 dark:text-gray-400"
+                            : "text-[#9A5B00] dark:text-[#FBBF24]"
                         }`}
                       >
                         {isLower ? "-" : isSame ? "" : "+"}
@@ -377,20 +377,20 @@ export default async function ProgressPage() {
                   }
 
                   return (
-                    <tr key={b.id} className="hover:bg-[#FAFBF8]/70">
-                      <td className="px-5 py-3.5 font-semibold text-[#111827]">
+                    <tr key={b.id} className="hover:bg-[#FAFBF8]/70 dark:hover:bg-[#1A2436]/60 transition-colors">
+                      <td className="px-5 py-3.5 font-semibold text-[#111827] dark:text-[#F9FAFB]">
                         {b.billing_period_start} → {b.billing_period_end}
                       </td>
-                      <td className="px-5 py-3.5 text-center text-xs text-[#667085]">
+                      <td className="px-5 py-3.5 text-center text-xs text-[#667085] dark:text-[#9CA3AF]">
                         {b.billing_days}d
                       </td>
-                      <td className="px-5 py-3.5 text-right font-bold text-[#111827] tabular-nums">
+                      <td className="px-5 py-3.5 text-right font-bold text-[#111827] dark:text-[#F9FAFB] tabular-nums">
                         {formatKwh(b.energy_consumed_kwh)} kWh
                       </td>
-                      <td className="px-5 py-3.5 text-right font-semibold text-[#111827] tabular-nums">
+                      <td className="px-5 py-3.5 text-right font-semibold text-[#111827] dark:text-[#F9FAFB] tabular-nums">
                         {formatCurrency(b.bill_amount, b.currency)}
                       </td>
-                      <td className="px-5 py-3.5 text-right text-xs text-[#0B7252] font-semibold tabular-nums">
+                      <td className="px-5 py-3.5 text-right text-xs text-[#0B7252] dark:text-[#34D399] font-semibold tabular-nums">
                         {formatEmissions(b.emissionsKg)}
                       </td>
                       <td className="px-5 py-3.5 text-right">{deltaText}</td>
@@ -405,11 +405,11 @@ export default async function ProgressPage() {
 
       {/* User-Reported Action Log Table */}
       <Card elevated>
-        <CardHeader className="pb-3 border-b border-[#F3F8F3]">
+        <CardHeader className="pb-3 border-b border-[#F3F8F3] dark:border-[#222F3E]">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-lg">User-Reported Action Log</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-lg text-[#111827] dark:text-[#F9FAFB]">User-Reported Action Log</CardTitle>
+              <CardDescription className="text-[#667085] dark:text-[#9CA3AF]">
                 Audit log of energy-saving actions you have planned, active, or implemented
               </CardDescription>
             </div>
@@ -418,16 +418,16 @@ export default async function ProgressPage() {
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
           {userActions.length === 0 ? (
-            <div className="p-8 text-center text-xs text-[#667085]">
+            <div className="p-8 text-center text-xs text-[#667085] dark:text-[#9CA3AF]">
               No energy actions logged yet. Explore{" "}
-              <Link href="/plan" className="text-[#0B7252] font-semibold underline">
+              <Link href="/plan" className="text-[#0B7252] dark:text-[#34D399] font-semibold underline">
                 My Plan
               </Link>{" "}
               to implement energy-saving recommendations.
             </div>
           ) : (
             <table className="w-full text-left text-sm">
-              <thead className="bg-[#FAFBF8] border-b border-[#E3E7E3] text-[#667085] text-xs uppercase font-semibold">
+              <thead className="bg-[#FAFBF8] dark:bg-[#0E1522] border-b border-[#E3E7E3] dark:border-[#222F3E] text-[#667085] dark:text-[#9CA3AF] text-xs uppercase font-semibold">
                 <tr>
                   <th className="px-5 py-3.5">Action Title</th>
                   <th className="px-5 py-3.5 text-right">Modeled Energy</th>
@@ -437,24 +437,24 @@ export default async function ProgressPage() {
                   <th className="px-5 py-3.5 text-right">Date</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E3E7E3]">
+              <tbody className="divide-y divide-[#E3E7E3] dark:divide-[#222F3E]">
                 {userActions.map((action) => (
-                  <tr key={action.id} className="hover:bg-[#FAFBF8]/70">
-                    <td className="px-5 py-3.5 font-semibold text-[#111827]">
+                  <tr key={action.id} className="hover:bg-[#FAFBF8]/70 dark:hover:bg-[#1A2436]/60 transition-colors">
+                    <td className="px-5 py-3.5 font-semibold text-[#111827] dark:text-[#F9FAFB]">
                       {action.title || "Household Energy Action"}
                       {action.description && (
-                        <span className="block text-xs font-normal text-[#667085] line-clamp-1 mt-0.5">
+                        <span className="block text-xs font-normal text-[#667085] dark:text-[#9CA3AF] line-clamp-1 mt-0.5">
                           {action.description}
                         </span>
                       )}
                     </td>
-                    <td className="px-5 py-3.5 text-right font-bold text-[#075E45] tabular-nums">
+                    <td className="px-5 py-3.5 text-right font-bold text-[#075E45] dark:text-[#34D399] tabular-nums">
                       {formatKwh(action.estimated_kwh_saving)} kWh / yr
                     </td>
-                    <td className="px-5 py-3.5 text-right font-semibold text-[#111827] tabular-nums">
+                    <td className="px-5 py-3.5 text-right font-semibold text-[#111827] dark:text-[#F9FAFB] tabular-nums">
                       {formatCurrency(action.estimated_money_saving || 0, preferredCurrency)} / yr
                     </td>
-                    <td className="px-5 py-3.5 text-right text-xs text-[#0B7252] font-semibold tabular-nums">
+                    <td className="px-5 py-3.5 text-right text-xs text-[#0B7252] dark:text-[#34D399] font-semibold tabular-nums">
                       {formatEmissions(action.estimated_co2_saving_kg || 0)}
                     </td>
                     <td className="px-5 py-3.5 text-center">
@@ -474,7 +474,7 @@ export default async function ProgressPage() {
                           : "Planned"}
                       </Badge>
                     </td>
-                    <td className="px-5 py-3.5 text-right text-xs text-[#667085]">
+                    <td className="px-5 py-3.5 text-right text-xs text-[#667085] dark:text-[#9CA3AF]">
                       {action.completed_at
                         ? new Date(action.completed_at).toLocaleDateString()
                         : new Date(action.created_at).toLocaleDateString()}

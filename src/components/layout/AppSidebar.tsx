@@ -49,7 +49,7 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        "w-64 bg-white border-r border-[#E3E7E3] flex flex-col justify-between h-full select-none",
+        "w-64 bg-white dark:bg-[#0D1520] border-r border-[#E3E7E3] dark:border-[#222F3E] flex flex-col justify-between h-full select-none",
         className
       )}
     >
@@ -59,9 +59,9 @@ export function AppSidebar({
         <Link
           href="/dashboard"
           onClick={onNavigate}
-          className="p-6 pb-4 flex items-center gap-3 border-b border-[#F3F8F3] hover:opacity-95 transition-opacity group"
+          className="p-6 pb-4 flex items-center gap-3 border-b border-[#F3F8F3] dark:border-[#222F3E] hover:opacity-95 transition-opacity group"
         >
-          <div className="w-10 h-10 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-1 group-hover:border-[#075E45]/40 transition-colors">
+          <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#151D2A] border border-[#E3E7E3] dark:border-[#222F3E] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-1 group-hover:border-[#075E45]/40 dark:group-hover:border-[#10B981]/40 transition-colors">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.png"
@@ -70,10 +70,10 @@ export function AppSidebar({
             />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-base text-[#075E45] tracking-tight group-hover:text-[#0B7252] transition-colors">
+            <span className="font-bold text-base text-[#075E45] dark:text-[#34D399] tracking-tight group-hover:text-[#0B7252] dark:group-hover:text-[#10B981] transition-colors">
               Carbon Coach
             </span>
-            <span className="text-[11px] text-[#667085] font-medium uppercase tracking-wider">
+            <span className="text-[11px] text-[#667085] dark:text-[#9CA3AF] font-medium uppercase tracking-wider">
               Green Energy Intelligence
             </span>
           </div>
@@ -95,14 +95,14 @@ export function AppSidebar({
                 className={cn(
                   "flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all min-h-[44px]",
                   isActive
-                    ? "bg-[#EAF5EE] text-[#075E45] shadow-xs font-bold"
-                    : "text-[#667085] hover:bg-[#F3F8F3] hover:text-[#111827]"
+                    ? "bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399] shadow-xs font-bold"
+                    : "text-[#667085] dark:text-[#9CA3AF] hover:bg-[#F3F8F3] dark:hover:bg-[#151D2A] hover:text-[#111827] dark:hover:text-[#F9FAFB]"
                 )}
               >
                 <Icon
                   className={cn(
                     "w-5 h-5 shrink-0 transition-colors",
-                    isActive ? "text-[#0B7252]" : "text-[#667085]"
+                    isActive ? "text-[#0B7252] dark:text-[#34D399]" : "text-[#667085] dark:text-[#9CA3AF]"
                   )}
                 />
                 <span>{item.name}</span>
@@ -113,7 +113,7 @@ export function AppSidebar({
       </div>
 
       {/* Sticky Bottom-Left Profile & Account Navigation */}
-      <div className="p-3 border-t border-[#E3E7E3] bg-white sticky bottom-0 z-20">
+      <div className="p-3 border-t border-[#E3E7E3] dark:border-[#222F3E] bg-white dark:bg-[#0D1520] sticky bottom-0 z-20">
         <ProfileDropdown
           userName={userName}
           userEmail={userEmail}

@@ -180,49 +180,49 @@ export function LightingSimulator({
     <div className="space-y-8">
       {/* Baseline Status Banner */}
       {baseline ? (
-        <div className="p-4 rounded-xl bg-[#EAF5EE] border border-[#0B7252]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="p-4 rounded-xl bg-[#EAF5EE] dark:bg-[#063D2E]/40 border border-[#0B7252]/20 dark:border-[#10B981]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#075E45] text-white flex items-center justify-center shrink-0">
               <Zap className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-[#075E45] uppercase tracking-wider block">
+                <span className="text-xs font-semibold text-[#075E45] dark:text-[#34D399] uppercase tracking-wider block">
                   Confirmed Utility Baseline
                 </span>
                 <Badge variant="success">Verified Statement</Badge>
               </div>
-              <span className="text-sm font-bold text-[#111827]">
+              <span className="text-sm font-bold text-[#111827] dark:text-[#F9FAFB]">
                 {formatKwh(baseline.energyConsumedKwh)} kWh ({formatCurrency(baseline.billAmount, currency)})
               </span>
-              <span className="text-xs text-[#667085] ml-2">
+              <span className="text-xs text-[#667085] dark:text-[#9CA3AF] ml-2">
                 Period: {baseline.billingPeriodStart} to {baseline.billingPeriodEnd}
               </span>
             </div>
           </div>
           {baselineMonthlyReductionPct !== null && (
             <div className="text-left sm:text-right">
-              <span className="text-xs text-[#667085] block">Modeled Monthly Reduction</span>
-              <span className="text-sm font-extrabold text-[#075E45]">
+              <span className="text-xs text-[#667085] dark:text-[#9CA3AF] block">Modeled Monthly Reduction</span>
+              <span className="text-sm font-extrabold text-[#075E45] dark:text-[#34D399]">
                 ~{baselineMonthlyReductionPct}% of baseline bill
               </span>
             </div>
           )}
         </div>
       ) : (
-        <div className="p-4 rounded-xl bg-[#FAFBF8] border border-[#E3E7E3] flex items-start gap-3">
-          <Info className="w-5 h-5 text-[#667085] shrink-0 mt-0.5" />
-          <div className="text-xs text-[#667085] leading-relaxed">
-            <strong className="text-[#111827]">No Confirmed Baseline Statement:</strong> You do not currently have a confirmed electricity bill in your profile. Simulation is running with regional standard defaults ({formatCurrency(defaultTariff, currency)}/kWh, {defaultEmissionFactor} kg CO₂e/kWh). Confirm an uploaded bill in Bills to benchmark simulations against your actual household consumption.
+        <div className="p-4 rounded-xl bg-[#FAFBF8] dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] flex items-start gap-3">
+          <Info className="w-5 h-5 text-[#667085] dark:text-[#9CA3AF] shrink-0 mt-0.5" />
+          <div className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
+            <strong className="text-[#111827] dark:text-[#F9FAFB]">No Confirmed Baseline Statement:</strong> You do not currently have a confirmed electricity bill in your profile. Simulation is running with regional standard defaults ({formatCurrency(defaultTariff, currency)}/kWh, {defaultEmissionFactor} kg CO₂e/kWh). Confirm an uploaded bill in Bills to benchmark simulations against your actual household consumption.
           </div>
         </div>
       )}
 
       {/* Simulation Disclaimer Banner */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[#FFF7E8] border border-[#9A5B00]/30 flex items-start gap-3.5">
-        <AlertTriangle className="w-5 h-5 text-[#9A5B00] shrink-0 mt-0.5" />
-        <div className="text-xs sm:text-sm text-[#9A5B00] leading-relaxed">
-          <strong>Simulation Disclaimer:</strong> Calculations represent modeled potential savings based on technical fixture ratings and operating parameters, not verified real-world savings. Realized savings are only verified when observed on subsequent utility bills.
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#FFF7E8] dark:bg-[#2E2305] border border-[#9A5B00]/30 dark:border-[#FBBF24]/30 flex items-start gap-3.5">
+        <AlertTriangle className="w-5 h-5 text-[#9A5B00] dark:text-[#FBBF24] shrink-0 mt-0.5" />
+        <div className="text-xs sm:text-sm text-[#9A5B00] dark:text-[#FDE68A] leading-relaxed">
+          <strong className="text-[#9A5B00] dark:text-[#FBBF24]">Simulation Disclaimer:</strong> Calculations represent modeled potential savings based on technical fixture ratings and operating parameters, not verified real-world savings. Realized savings are only verified when observed on subsequent utility bills.
         </div>
       </div>
 
@@ -243,10 +243,10 @@ export function LightingSimulator({
         {/* Controls Column (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           <Card elevated>
-            <CardHeader className="pb-4 border-b border-[#F3F8F3]">
+            <CardHeader className="pb-4 border-b border-[#F3F8F3] dark:border-[#222F3E]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#EAF5EE] text-[#075E45] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399] flex items-center justify-center">
                     <Sliders className="w-4 h-4" />
                   </div>
                   <div>
@@ -265,8 +265,8 @@ export function LightingSimulator({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <div className="flex justify-between items-center text-xs font-semibold mb-1">
-                    <label htmlFor="currWatts">Current Bulb Wattage</label>
-                    <span className="text-[#075E45] font-bold">{currentWatts} W</span>
+                    <label htmlFor="currWatts" className="text-[#111827] dark:text-[#F9FAFB]">Current Bulb Wattage</label>
+                    <span className="text-[#075E45] dark:text-[#34D399] font-bold">{currentWatts} W</span>
                   </div>
                   <input
                     id="currWatts"
@@ -276,17 +276,17 @@ export function LightingSimulator({
                     step="5"
                     value={currentWatts}
                     onChange={(e) => setCurrentWatts(Math.max(1, Number(e.target.value)))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
+                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
-                  <span className="text-[11px] text-[#667085] mt-1 block">
+                  <span className="text-[11px] text-[#667085] dark:text-[#9CA3AF] mt-1 block">
                     e.g. Standard Incandescent (60W)
                   </span>
                 </div>
 
                 <div>
                   <div className="flex justify-between items-center text-xs font-semibold mb-1">
-                    <label htmlFor="propWatts">Proposed Bulb Wattage</label>
-                    <span className="text-[#0B7252] font-bold">{proposedWatts} W</span>
+                    <label htmlFor="propWatts" className="text-[#111827] dark:text-[#F9FAFB]">Proposed Bulb Wattage</label>
+                    <span className="text-[#0B7252] dark:text-[#34D399] font-bold">{proposedWatts} W</span>
                   </div>
                   <input
                     id="propWatts"
@@ -296,16 +296,16 @@ export function LightingSimulator({
                     step="1"
                     value={proposedWatts}
                     onChange={(e) => setProposedWatts(Math.max(1, Number(e.target.value)))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
+                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
-                  <span className="text-[11px] text-[#667085] mt-1 block">
+                  <span className="text-[11px] text-[#667085] dark:text-[#9CA3AF] mt-1 block">
                     e.g. Energy-Saving LED (9W)
                   </span>
                 </div>
               </div>
 
               {proposedWatts >= currentWatts && (
-                <div className="text-xs text-[#9A5B00] bg-[#FFF7E8] p-2.5 rounded-lg border border-[#9A5B00]/20">
+                <div className="text-xs text-[#9A5B00] dark:text-[#FDE68A] bg-[#FFF7E8] dark:bg-[#2E2305] p-2.5 rounded-lg border border-[#9A5B00]/20 dark:border-[#FBBF24]/30">
                   Notice: Proposed bulb wattage ({proposedWatts}W) should be lower than current wattage ({currentWatts}W) to generate energy savings.
                 </div>
               )}
@@ -314,8 +314,8 @@ export function LightingSimulator({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <div className="flex justify-between items-center text-xs font-semibold mb-1">
-                    <label htmlFor="quantity">Number of Fixtures</label>
-                    <span className="text-[#111827] font-bold">{quantity} Bulbs</span>
+                    <label htmlFor="quantity" className="text-[#111827] dark:text-[#F9FAFB]">Number of Fixtures</label>
+                    <span className="text-[#111827] dark:text-[#F9FAFB] font-bold">{quantity} Bulbs</span>
                   </div>
                   <input
                     id="quantity"
@@ -325,14 +325,14 @@ export function LightingSimulator({
                     step="1"
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, Math.min(500, Number(e.target.value))))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
+                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
                 </div>
 
                 <div>
                   <div className="flex justify-between items-center text-xs font-semibold mb-1">
-                    <label htmlFor="hours">Daily Operating Hours</label>
-                    <span className="text-[#111827] font-bold">{hoursPerDay} hrs / day</span>
+                    <label htmlFor="hours" className="text-[#111827] dark:text-[#F9FAFB]">Daily Operating Hours</label>
+                    <span className="text-[#111827] dark:text-[#F9FAFB] font-bold">{hoursPerDay} hrs / day</span>
                   </div>
                   <input
                     id="hours"
@@ -342,14 +342,14 @@ export function LightingSimulator({
                     step="0.5"
                     value={hoursPerDay}
                     onChange={(e) => setHoursPerDay(Math.max(0.1, Math.min(24, Number(e.target.value))))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
+                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-[#0B7252]"
                   />
                 </div>
               </div>
 
               {/* Projection Period */}
               <div>
-                <label className="text-xs font-semibold text-[#111827] block mb-2">
+                <label className="text-xs font-semibold text-[#111827] dark:text-[#F9FAFB] block mb-2">
                   Simulation Time Horizon
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -366,7 +366,7 @@ export function LightingSimulator({
                       className={`py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
                         numberOfDays === p.days
                           ? "bg-[#075E45] text-white shadow-xs"
-                          : "bg-white border border-[#E3E7E3] text-[#667085] hover:bg-[#F3F8F3]"
+                          : "bg-white dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] text-[#667085] dark:text-[#9CA3AF] hover:bg-[#F3F8F3] dark:hover:bg-[#1A2333]"
                       }`}
                     >
                       {p.label}
@@ -376,7 +376,7 @@ export function LightingSimulator({
               </div>
 
               {/* Advanced Parameters */}
-              <div className="pt-2 border-t border-[#F3F8F3] grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="pt-2 border-t border-[#F3F8F3] dark:border-[#222F3E] grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label="Electricity Tariff Rate"
                   type="number"
@@ -402,8 +402,8 @@ export function LightingSimulator({
 
         {/* Results Column (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          <Card elevated className="border-[#0B7252]/30 bg-gradient-to-br from-white to-[#F3F8F3]">
-            <CardHeader className="pb-3 border-b border-[#E3E7E3]">
+          <Card elevated className="border-[#0B7252]/30 dark:border-[#10B981]/30 bg-gradient-to-br from-white to-[#F3F8F3] dark:from-[#151D2A] dark:to-[#0E1522]">
+            <CardHeader className="pb-3 border-b border-[#E3E7E3] dark:border-[#222F3E]">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Calculated Potential Impact</CardTitle>
                 <Badge variant="success">Deterministic</Badge>
@@ -414,53 +414,53 @@ export function LightingSimulator({
             </CardHeader>
 
             <CardContent className="pt-4 space-y-4">
-              <div className="p-4 rounded-xl bg-white border border-[#E3E7E3] flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-white dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] flex items-center justify-between">
                 <div>
-                  <span className="text-xs text-[#667085] block uppercase font-semibold">
+                  <span className="text-xs text-[#667085] dark:text-[#9CA3AF] block uppercase font-semibold">
                     Potential Energy Saved
                   </span>
-                  <span className="text-3xl font-extrabold text-[#075E45] tabular-nums mt-0.5 block">
-                    {formatKwh(results.kwhSaved)} <span className="text-sm text-[#667085]">kWh</span>
+                  <span className="text-3xl font-extrabold text-[#075E45] dark:text-[#34D399] tabular-nums mt-0.5 block">
+                    {formatKwh(results.kwhSaved)} <span className="text-sm text-[#667085] dark:text-[#9CA3AF]">kWh</span>
                   </span>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] text-[#075E45] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399] flex items-center justify-center">
                   <Zap className="w-5 h-5" />
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E3E7E3] flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-white dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] flex items-center justify-between">
                 <div>
-                  <span className="text-xs text-[#667085] block uppercase font-semibold">
+                  <span className="text-xs text-[#667085] dark:text-[#9CA3AF] block uppercase font-semibold">
                     Potential Money Saved
                   </span>
-                  <span className="text-3xl font-extrabold text-[#111827] tabular-nums mt-0.5 block">
+                  <span className="text-3xl font-extrabold text-[#111827] dark:text-[#F9FAFB] tabular-nums mt-0.5 block">
                     {formatCurrency(results.moneySaved, currency)}
                   </span>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] text-[#0B7252] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] dark:bg-[#063D2E] text-[#0B7252] dark:text-[#34D399] flex items-center justify-center">
                   <DollarSign className="w-5 h-5" />
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E3E7E3] flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-white dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] flex items-center justify-between">
                 <div>
-                  <span className="text-xs text-[#667085] block uppercase font-semibold">
+                  <span className="text-xs text-[#667085] dark:text-[#9CA3AF] block uppercase font-semibold">
                     Emissions Avoided
                   </span>
-                  <span className="text-2xl font-extrabold text-[#0B7252] tabular-nums mt-0.5 block">
+                  <span className="text-2xl font-extrabold text-[#0B7252] dark:text-[#34D399] tabular-nums mt-0.5 block">
                     {formatEmissions(results.co2SavedKg)}
                   </span>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] text-[#0B7252] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-[#EAF5EE] dark:bg-[#063D2E] text-[#0B7252] dark:text-[#34D399] flex items-center justify-center">
                   <Leaf className="w-5 h-5" />
                 </div>
               </div>
 
               {/* Formula Transparency Box */}
-              <div className="p-3 rounded-xl bg-[#FAFBF8] border border-[#E3E7E3] text-[11px] text-[#667085] leading-relaxed">
-                <span className="font-bold text-[#111827] block mb-0.5">Applied Formula:</span>
+              <div className="p-3 rounded-xl bg-[#FAFBF8] dark:bg-[#0E1522] border border-[#E3E7E3] dark:border-[#222F3E] text-[11px] text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
+                <span className="font-bold text-[#111827] dark:text-[#F9FAFB] block mb-0.5">Applied Formula:</span>
                 (({validCurrentWatts}W - {validProposedWatts}W) × {validQuantity} bulbs × {validHours}h × {validDays}d) / 1000 ={" "}
-                <strong>{results.kwhSaved} kWh</strong>
+                <strong className="text-[#111827] dark:text-[#F9FAFB]">{results.kwhSaved} kWh</strong>
               </div>
 
               <Button
@@ -479,12 +479,13 @@ export function LightingSimulator({
       </div>
 
       {/* Saved Simulations Audit Log Table */}
+      {/* Saved Simulations Audit Log Table */}
       <Card elevated>
-        <CardHeader className="pb-3 border-b border-[#F3F8F3]">
+        <CardHeader className="pb-3 border-b border-[#F3F8F3] dark:border-[#222F3E]">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-lg">Saved Simulation Scenarios</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-lg text-[#111827] dark:text-[#F9FAFB]">Saved Simulation Scenarios</CardTitle>
+              <CardDescription className="text-[#667085] dark:text-[#9CA3AF]">
                 Audit history of your calculated what-if simulations
               </CardDescription>
             </div>
@@ -493,12 +494,12 @@ export function LightingSimulator({
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
           {savedList.length === 0 ? (
-            <div className="p-8 text-center text-xs text-[#667085]">
+            <div className="p-8 text-center text-xs text-[#667085] dark:text-[#9CA3AF]">
               No saved simulations yet. Adjust variables above and click <strong>&quot;Save Simulation Run&quot;</strong> to record a scenario for comparison.
             </div>
           ) : (
             <table className="w-full text-left text-sm">
-              <thead className="bg-[#FAFBF8] border-b border-[#E3E7E3] text-[#667085] text-xs uppercase font-semibold">
+              <thead className="bg-[#FAFBF8] dark:bg-[#0E1522] border-b border-[#E3E7E3] dark:border-[#222F3E] text-[#667085] dark:text-[#9CA3AF] text-xs uppercase font-semibold">
                 <tr>
                   <th className="px-5 py-3.5">Scenario Type</th>
                   <th className="px-5 py-3.5">Parameters</th>
@@ -510,34 +511,34 @@ export function LightingSimulator({
                   <th className="px-5 py-3.5 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E3E7E3]">
+              <tbody className="divide-y divide-[#E3E7E3] dark:divide-[#222F3E]">
                 {savedList.map((sim) => {
                   const p = (sim.input_parameters as Record<string, unknown>) || {};
                   return (
-                    <tr key={sim.id} className="hover:bg-[#FAFBF8]/70">
-                      <td className="px-5 py-3.5 font-semibold text-[#111827]">
+                    <tr key={sim.id} className="hover:bg-[#FAFBF8]/70 dark:hover:bg-[#1A2436]/60 transition-colors">
+                      <td className="px-5 py-3.5 font-semibold text-[#111827] dark:text-[#F9FAFB]">
                         {sim.simulation_type === "lighting_replacement"
                           ? "Lighting Upgrade"
                           : sim.simulation_type}
                       </td>
-                      <td className="px-5 py-3.5 text-xs text-[#667085]">
+                      <td className="px-5 py-3.5 text-xs text-[#667085] dark:text-[#9CA3AF]">
                         {p.quantity ? `${p.quantity} fixtures` : ""}{" "}
                         {p.currentWatts && p.proposedWatts ? `(${p.currentWatts}W → ${p.proposedWatts}W)` : ""}{" "}
                         {p.hoursPerDay ? `@ ${p.hoursPerDay}h/d` : ""}
                       </td>
-                      <td className="px-5 py-3.5 text-center text-xs text-[#667085]">
+                      <td className="px-5 py-3.5 text-center text-xs text-[#667085] dark:text-[#9CA3AF]">
                         {sim.projection_days || 365} days
                       </td>
-                      <td className="px-5 py-3.5 text-right font-bold text-[#075E45] tabular-nums">
+                      <td className="px-5 py-3.5 text-right font-bold text-[#075E45] dark:text-[#34D399] tabular-nums">
                         {formatKwh(sim.calculated_kwh_saving)} kWh
                       </td>
-                      <td className="px-5 py-3.5 text-right font-semibold text-[#111827] tabular-nums">
+                      <td className="px-5 py-3.5 text-right font-semibold text-[#111827] dark:text-[#F9FAFB] tabular-nums">
                         {formatCurrency(sim.calculated_money_saving || 0, currency)}
                       </td>
-                      <td className="px-5 py-3.5 text-right text-xs text-[#0B7252] font-semibold tabular-nums">
+                      <td className="px-5 py-3.5 text-right text-xs text-[#0B7252] dark:text-[#34D399] font-semibold tabular-nums">
                         {formatEmissions(sim.calculated_co2_saving_kg || 0)}
                       </td>
-                      <td className="px-5 py-3.5 text-right text-xs text-[#667085]">
+                      <td className="px-5 py-3.5 text-right text-xs text-[#667085] dark:text-[#9CA3AF]">
                         {new Date(sim.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-5 py-3.5 text-center">
@@ -547,7 +548,7 @@ export function LightingSimulator({
                           disabled={deletingId === sim.id}
                           isLoading={deletingId === sim.id}
                           onClick={() => handleDeleteSimulation(sim.id)}
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/40 p-1.5"
                           title="Delete simulation"
                         >
                           <Trash2 className="w-4 h-4" />
