@@ -7,7 +7,7 @@ import {
 } from "@/components/simulator/LightingSimulator";
 
 export const metadata = {
-  title: "What-If Simulator — CarbonCoach AI",
+  title: "What-If Simulator — Carbon Coach AI",
 };
 
 export default async function SimulatorPage() {

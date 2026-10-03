@@ -141,7 +141,7 @@ export function PrivacyPolicyContent() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-base sm:text-lg text-[#667085] leading-relaxed"
             >
-              Your privacy matters to us. Learn how CarbonCoach AI collects,
+              Your privacy matters to us. Learn how Carbon Coach AI collects,
               uses, stores and protects your information.
             </motion.p>
           </header>

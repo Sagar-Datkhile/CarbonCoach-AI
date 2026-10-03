@@ -165,7 +165,7 @@ export function DeleteAccountModal({
                 className="text-base sm:text-lg font-bold text-[#111827] dark:text-[#F9FAFB]"
               >
                 {step === "choose"
-                  ? "Delete your CarbonCoach account?"
+                  ? "Delete your Carbon Coach account?"
                   : "Permanently delete account"}
               </h2>
               <p className="text-xs text-[#667085] dark:text-[#9CA3AF] mt-0.5">
@@ -238,7 +238,7 @@ export function DeleteAccountModal({
                     </span>
                   </div>
                   <p className="text-xs text-red-600/80 dark:text-red-300/80 leading-relaxed max-w-sm">
-                    Permanently delete your CarbonCoach account and associated
+                    Permanently delete your Carbon Coach account and associated
                     user data. This action cannot be undone.
                   </p>
                 </div>

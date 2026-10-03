@@ -9,7 +9,7 @@ export interface ExtractionResult {
   processingTimeMs: number;
 }
 
-const SYSTEM_INSTRUCTION = `You are a specialized utility bill information extraction assistant for CarbonCoach AI.
+const SYSTEM_INSTRUCTION = `You are a specialized utility bill information extraction assistant for Carbon Coach AI.
 Extract structured electricity bill data from the supplied document or image.
 You must return ONLY a clean, valid JSON object with the following fields:
 - provider_name: (string) The utility company name (e.g., "Pacific Gas & Electric", "Consolidated Edison", "Tata Power", "EDF").
@@ -85,7 +85,7 @@ export async function extractBillFromBuffer(
           "Authorization": `Bearer ${openRouterApiKey}`,
           "Content-Type": "application/json",
           "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-          "X-Title": "CarbonCoach AI",
+          "X-Title": "Carbon Coach AI",
         },
         body: JSON.stringify({
           model: "google/gemini-2.5-flash-lite",

@@ -5,7 +5,7 @@ import { SettingsView } from "@/components/settings/SettingsView";
 import type { UserSettingsInput } from "@/app/actions/settings";
 
 export const metadata = {
-  title: "Settings — CarbonCoach AI",
+  title: "Settings — Carbon Coach AI",
 };
 
 export default async function SettingsPage() {

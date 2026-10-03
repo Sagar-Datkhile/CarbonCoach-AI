@@ -9,7 +9,7 @@ export function LandingFooter() {
     { label: "Terms", href: "/terms" },
     {
       label: "Feedback",
-      href: "mailto:sagardatkhile.official@gmail.com?subject=CarbonCoach%20AI%20Feedback",
+      href: "mailto:sagardatkhile.official@gmail.com?subject=Carbon%20Coach%20AI%20Feedback",
     },
   ];
 

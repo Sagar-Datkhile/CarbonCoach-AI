@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PlanManager } from "@/components/plan/PlanManager";
 
 export const metadata = {
-  title: "My Plan — CarbonCoach AI",
+  title: "My Plan — Carbon Coach AI",
 };
 
 export default async function PlanPage() {

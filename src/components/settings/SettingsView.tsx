@@ -148,7 +148,7 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
             Settings
           </h1>
           <p className="text-sm text-[#667085] dark:text-[#9CA3AF] mt-1">
-            Manage your CarbonCoach preferences and account settings.
+            Manage your Carbon Coach preferences and account settings.
           </p>
         </div>
 
@@ -183,7 +183,7 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
           <div>
             <h2 className="text-sm font-bold text-[#111827] dark:text-[#F9FAFB]">Appearance</h2>
             <p className="text-xs text-[#667085] dark:text-[#9CA3AF]">
-              Choose how CarbonCoach looks on your device
+              Choose how Carbon Coach looks on your device
             </p>
           </div>
         </div>
@@ -222,7 +222,7 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
                 )}
               </div>
               <p className="text-xs text-[#667085] dark:text-[#9CA3AF] mt-0.5 leading-relaxed">
-                Use the standard CarbonCoach light appearance.
+                Use the standard Carbon Coach light appearance.
               </p>
             </div>
           </button>
@@ -259,7 +259,7 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
                 )}
               </div>
               <p className="text-xs text-[#667085] dark:text-[#9CA3AF] mt-0.5 leading-relaxed">
-                Use a minimal dark CarbonCoach appearance.
+                Use a minimal dark Carbon Coach appearance.
               </p>
             </div>
           </button>
@@ -400,38 +400,62 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
         </div>
       </section>
 
-      {/* Section 3: Privacy */}
+      {/* Section 3: Privacy & Terms */}
       <section className="bg-white dark:bg-[#151D2A] rounded-2xl border border-[#E3E7E3] dark:border-[#222F3E] p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex items-center gap-2.5 pb-3 border-b border-[#F3F8F3] dark:border-[#1F2937]">
           <div className="w-8 h-8 rounded-lg bg-[#EAF5EE] dark:bg-[#063D2E] text-[#047857] dark:text-[#34D399] flex items-center justify-center shrink-0">
             <Shield className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-[#111827] dark:text-[#F9FAFB]">Privacy</h2>
+            <h2 className="text-sm font-bold text-[#111827] dark:text-[#F9FAFB]">Privacy & Terms</h2>
             <p className="text-xs text-[#667085] dark:text-[#9CA3AF]">
-              Data ownership and transparency guidelines
+              Data ownership, terms of service, and transparency guidelines
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3">
-          <div className="space-y-0.5 max-w-lg">
-            <span className="text-sm font-semibold text-[#111827] dark:text-[#F9FAFB] block">
-              Data & Privacy
-            </span>
-            <p className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
-              Manage how your CarbonCoach data is stored and used.
-            </p>
+        <div className="divide-y divide-[#F3F8F3] dark:divide-[#1F2937]">
+          {/* Data & Privacy */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 first:pt-2 last:pb-2">
+            <div className="space-y-0.5 max-w-lg">
+              <span className="text-sm font-semibold text-[#111827] dark:text-[#F9FAFB] block">
+                Data & Privacy
+              </span>
+              <p className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
+                Manage how your Carbon Coach data is stored, processed, and used.
+              </p>
+            </div>
+            <Link href="/privacy">
+              <Button
+                variant="outline"
+                size="sm"
+                rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+              >
+                Open Privacy Policy
+              </Button>
+            </Link>
           </div>
-          <Link href="/privacy">
-            <Button
-              variant="outline"
-              size="sm"
-              rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
-            >
-              Open Privacy Policy
-            </Button>
-          </Link>
+
+          {/* Terms of Service */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 first:pt-2 last:pb-2">
+            <div className="space-y-0.5 max-w-lg">
+              <span className="text-sm font-semibold text-[#111827] dark:text-[#F9FAFB] block">
+                Terms of Service
+              </span>
+              <p className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
+                Review the terms and conditions governing your use of Carbon Coach AI.
+              </p>
+            </div>
+            <Link href="/terms">
+              <Button
+                variant="outline"
+                size="sm"
+                rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+              >
+                Open Terms of Service
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -478,7 +502,7 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
                 Report an Issue
               </span>
               <p className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
-                Tell us about a problem or issue with CarbonCoach.
+                Tell us about a problem or issue with Carbon Coach.
               </p>
             </div>
             <Button
@@ -498,7 +522,7 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
                 Delete Account
               </span>
               <p className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
-                Deactivate or permanently delete your CarbonCoach account and data.
+                Deactivate or permanently delete your Carbon Coach account and data.
               </p>
             </div>
             <Button

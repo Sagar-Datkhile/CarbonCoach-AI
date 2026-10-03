@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ProfileForms } from "@/components/profile/ProfileForms";
 
 export const metadata = {
-  title: "Profile & Household Preferences — CarbonCoach AI",
+  title: "Profile & Household Preferences — Carbon Coach AI",
 };
 
 export default async function ProfilePage() {

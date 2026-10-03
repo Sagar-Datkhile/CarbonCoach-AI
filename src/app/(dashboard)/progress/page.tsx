@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "Progress & Impact — CarbonCoach AI",
+  title: "Progress & Impact — Carbon Coach AI",
 };
 
 export default async function ProgressPage() {
