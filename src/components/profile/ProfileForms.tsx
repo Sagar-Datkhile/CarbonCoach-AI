@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, useState } from "react";
+import React, { useActionState, useState, useSyncExternalStore } from "react";
 import { updateProfileInfo, updateHouseholdInfo } from "@/app/actions/profile";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -39,12 +39,15 @@ interface ProfileFormsProps {
   };
 }
 
+const emptySubscribe = () => () => {};
+
 export function ProfileForms({ profile, household }: ProfileFormsProps) {
   const [profileState, profileAction, isProfilePending] = useActionState(updateProfileInfo, null);
   const [householdState, householdAction, isHouseholdPending] = useActionState(updateHouseholdInfo, null);
 
+  const hasMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [avatarUrl, setAvatarUrl] = useState(profile.avatarUrl || "");
-  const [avatarError, setAvatarError] = useState(false);
+  const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
   const [name, setName] = useState(profile.fullName || "");
 
   const getInitials = (n: string, e: string) => {
@@ -62,7 +65,7 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
   };
 
   const initials = getInitials(name, profile.email);
-  const showLiveAvatar = Boolean(avatarUrl && !avatarError);
+  const showLiveAvatar = Boolean(hasMounted && avatarUrl && failedAvatarUrl !== avatarUrl);
 
   return (
     <div className="space-y-8">
@@ -104,7 +107,7 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                     alt={name || "User Avatar"}
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
-                    onError={() => setAvatarError(true)}
+                    onError={() => setFailedAvatarUrl(avatarUrl)}
                   />
                 ) : (
                   <span>{initials}</span>
@@ -158,10 +161,7 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                 label="Avatar URL (Optional)"
                 name="avatarUrl"
                 value={avatarUrl}
-                onChange={(e) => {
-                  setAvatarUrl(e.target.value);
-                  setAvatarError(false);
-                }}
+                onChange={(e) => setAvatarUrl(e.target.value)}
                 placeholder="https://example.com/avatar.jpg"
                 leftIcon={<Globe className="w-4 h-4 text-[#98A2B3]" />}
                 helperText="Paste a direct image link (.jpg, .png, .webp). Leave blank for initials."

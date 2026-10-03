@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, Suspense, useState, useEffect } from "react";
+import React, { useActionState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signInWithEmail } from "@/app/actions/auth";
@@ -11,19 +11,21 @@ import { Alert } from "@/components/ui/Alert";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 import { Mail, Lock } from "lucide-react";
 
+function getHashError() {
+  if (typeof window === "undefined" || !window.location.hash) return null;
+  const hashParams = new URLSearchParams(window.location.hash.substring(1));
+  const desc = hashParams.get("error_description") || hashParams.get("error");
+  return desc ? desc.replace(/\+/g, " ") : null;
+}
+
+function subscribeHash(callback: () => void) {
+  window.addEventListener("hashchange", callback);
+  return () => window.removeEventListener("hashchange", callback);
+}
+
 function OAuthErrorMessage() {
   const searchParams = useSearchParams();
-  const [hashError, setHashError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash) {
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const desc = hashParams.get("error_description") || hashParams.get("error");
-      if (desc) {
-        setHashError(desc.replace(/\+/g, " "));
-      }
-    }
-  }, []);
+  const hashError = React.useSyncExternalStore(subscribeHash, getHashError, () => null);
 
   const error = searchParams.get("error");
   if (!error && !hashError) return null;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition, useEffect, useState } from "react";
+import React, { useTransition, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { signOut } from "@/app/actions/auth";
 import { Button } from "@/components/ui/Button";
@@ -11,13 +11,11 @@ interface LogoutConfirmDialogProps {
   onClose: () => void;
 }
 
-export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProps) {
-  const [mounted, setMounted] = useState(false);
-  const [isPending, startTransition] = useTransition();
+const emptySubscribe = () => () => {};
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+export function LogoutConfirmDialog({ isOpen, onClose }: LogoutConfirmDialogProps) {
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

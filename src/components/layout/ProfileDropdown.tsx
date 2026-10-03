@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import {
   User,
@@ -22,19 +22,20 @@ export interface ProfileDropdownProps {
   className?: string;
 }
 
+const emptySubscribe = () => () => {};
+
 export function ProfileDropdown({
   userName,
   userEmail,
   avatarUrl,
-  userRole: _userRole = "user",
-  plan: _plan,
   onNavigate,
   className = "",
 }: ProfileDropdownProps) {
+  const hasMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [avatarFailed, setAvatarFailed] = useState(false);
+  const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -80,7 +81,7 @@ export function ProfileDropdown({
   };
 
   const initials = getInitials(userName, userEmail);
-  const showLiveAvatar = Boolean(avatarUrl && !avatarFailed);
+  const showLiveAvatar = Boolean(hasMounted && avatarUrl && failedAvatarUrl !== avatarUrl);
 
   const handleMenuItemClick = () => {
     setIsOpen(false);
@@ -108,7 +109,7 @@ export function ProfileDropdown({
                     alt={userName}
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
-                    onError={() => setAvatarFailed(true)}
+                    onError={() => setFailedAvatarUrl(avatarUrl)}
                   />
                 ) : (
                   <span>{initials}</span>
@@ -202,7 +203,7 @@ export function ProfileDropdown({
               alt={userName}
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
-              onError={() => setAvatarFailed(true)}
+              onError={() => setFailedAvatarUrl(avatarUrl)}
             />
           ) : (
             <span>{initials}</span>

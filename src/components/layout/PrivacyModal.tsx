@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { X, Shield, Lock, EyeOff, Database } from "lucide-react";
@@ -10,12 +10,10 @@ interface PrivacyModalProps {
   onClose: () => void;
 }
 
-export function PrivacyModal({ isOpen, onClose }: PrivacyModalProps) {
-  const [mounted, setMounted] = useState(false);
+const emptySubscribe = () => () => {};
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+export function PrivacyModal({ isOpen, onClose }: PrivacyModalProps) {
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
