@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { X, MessageSquare, Star, CheckCircle2 } from "lucide-react";
+import { submitFeedback } from "@/app/actions/feedback";
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -11,22 +13,28 @@ interface FeedbackModalProps {
   userEmail?: string;
 }
 
+const emptySubscribe = () => () => {};
+
 export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps) {
-  const [mounted, setMounted] = useState(false);
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [category, setCategory] = useState<"General" | "Bug" | "Feature" | "Accuracy">("General");
   const [rating, setRating] = useState<number>(5);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [comments, setComments] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const handleClose = () => {
+    if (isSubmitting) return;
+    setErrorMessage(null);
+    onClose();
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen && !isSubmitting) {
+        setErrorMessage(null);
         onClose();
       }
     };
@@ -40,20 +48,55 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
     };
   }, [isOpen, isSubmitting, onClose]);
 
-  if (!isOpen || !mounted) return null;
+  if (!isOpen || !isMounted) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    const trimmedComments = comments.trim();
+    if (!trimmedComments || trimmedComments.length < 5) {
+      setErrorMessage("Please provide at least 5 characters in your feedback.");
+      return;
+    }
+
+    if (trimmedComments.length > 2000) {
+      setErrorMessage("Feedback must be under 2000 characters.");
+      return;
+    }
+
+    setErrorMessage(null);
     setIsSubmitting(true);
-    setTimeout(() => {
+
+    try {
+      const res = await submitFeedback({
+        category,
+        rating,
+        comments: trimmedComments,
+        userEmail,
+      });
+
+      if (!res.success) {
+        setErrorMessage(res.error || "Failed to deliver feedback email. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+
       setIsSubmitting(false);
       setIsSubmitted(true);
       setTimeout(() => {
         setIsSubmitted(false);
         setComments("");
+        setRating(5);
+        setCategory("General");
+        setErrorMessage(null);
         onClose();
-      }, 1500);
-    }, 600);
+      }, 1800);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unexpected error sending feedback";
+      setErrorMessage(msg);
+      setIsSubmitting(false);
+    }
   };
 
   return createPortal(
@@ -63,12 +106,12 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
       aria-modal="true"
       aria-labelledby="feedback-dialog-title"
     >
-      <div className="absolute inset-0" onClick={() => !isSubmitting && onClose()} aria-hidden="true" />
+      <div className="absolute inset-0" onClick={() => !isSubmitting && handleClose()} aria-hidden="true" />
 
       <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-[#E3E7E3] p-6 z-10 space-y-5 animate-in zoom-in-95 duration-200">
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           disabled={isSubmitting}
           className="absolute top-4 right-4 p-1.5 rounded-lg text-[#667085] hover:text-[#111827] hover:bg-[#F3F8F3] transition-colors"
           aria-label="Close dialog"
@@ -102,6 +145,12 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
               </div>
             </div>
 
+            {errorMessage && (
+              <Alert variant="error" className="text-xs">
+                {errorMessage}
+              </Alert>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="text-xs font-semibold text-[#111827] block mb-1.5">
@@ -113,11 +162,10 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                       key={cat}
                       type="button"
                       onClick={() => setCategory(cat)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                        category === cat
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${category === cat
                           ? "bg-[#075E45] text-white border-[#075E45] shadow-xs"
                           : "bg-white text-[#667085] border-[#E3E7E3] hover:bg-[#F3F8F3]"
-                      }`}
+                        }`}
                     >
                       {cat}
                     </button>
@@ -143,11 +191,10 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                         aria-label={`${star} star`}
                       >
                         <Star
-                          className={`w-6 h-6 transition-colors ${
-                            active
+                          className={`w-6 h-6 transition-colors ${active
                               ? "text-[#FDB022] fill-[#FDB022]"
                               : "text-[#D0D5DD]"
-                          }`}
+                            }`}
                         />
                       </button>
                     );
@@ -175,7 +222,7 @@ export function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackModalProps
                   type="button"
                   variant="outline"
                   size="md"
-                  onClick={onClose}
+                  onClick={handleClose}
                   disabled={isSubmitting}
                   className="rounded-xl px-4"
                 >
