@@ -212,9 +212,8 @@ export function DeleteAccountModal({
                     </span>
                   </div>
                   <p className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed max-w-sm">
-                    Sign out and deactivate access. Your account data remains
-                    stored and can be handled according to existing account
-                    recovery policies.
+                    Your account data remains stored and can be handled
+                    according to existing account recovery policies.
                   </p>
                 </div>
                 <Button
