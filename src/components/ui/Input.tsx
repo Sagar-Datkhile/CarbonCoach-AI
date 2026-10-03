@@ -50,7 +50,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               "w-full min-h-[44px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#E3E7E3] text-[#111827] placeholder:text-[#9CA3AF] transition-colors",
               "focus:outline-none focus:border-[#0B7252] focus:ring-2 focus:ring-[#0B7252]/20",
-              "disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed",
+              "disabled:bg-[#F8FAF9] disabled:text-[#667085] disabled:border-[#E3E7E3] disabled:cursor-not-allowed disabled:select-none",
               leftIcon && "pl-10",
               rightIcon && "pr-10",
               error && "border-[#B42318] focus:border-[#B42318] focus:ring-[#B42318]/20",

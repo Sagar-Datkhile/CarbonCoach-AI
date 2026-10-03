@@ -58,7 +58,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-[#FAFBF8]">
       {/* Desktop Fixed Sidebar */}
-      <div className="hidden md:flex h-screen sticky top-0 shrink-0">
+      <div className="hidden md:flex h-screen sticky top-0 shrink-0 z-30">
         <AppSidebar
           userRole={userRole}
           userName={userName}
@@ -75,7 +75,7 @@ export default async function DashboardLayout({
           userName={userName}
           avatarUrl={userAvatarUrl}
         />
-        <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+        <main className="flex-1 p-4 md:px-8 md:pt-6 md:pb-8 max-w-7xl mx-auto w-full">
           {children}
         </main>
       </div>
