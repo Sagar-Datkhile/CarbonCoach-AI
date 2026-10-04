@@ -41,20 +41,52 @@ export default async function DashboardPage() {
 
   if (user) {
     const { data: dbHousehold } = await supabase
-      .from("household_profiles")
-      .select("*")
+      .from("households")
+      .select("household_name, home_type, occupants_count, region_code")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const { data: dbPrefs } = await supabase
+      .from("user_preferences")
+      .select("preferred_currency, upfront_budget")
       .eq("user_id", user.id)
       .maybeSingle();
 
     if (dbHousehold) {
-      household = {
-        householdName: dbHousehold.household_name || household.householdName,
-        homeType: dbHousehold.home_type || household.homeType,
-        occupantsCount: dbHousehold.occupants_count || 2,
-        region: dbHousehold.region || "Global",
-        budgetTier: dbHousehold.budget_tier || "Moderate",
-        preferredCurrency: dbHousehold.preferred_currency || "USD",
-      };
+      if (dbHousehold.household_name) {
+        household.householdName = dbHousehold.household_name;
+      }
+      if (dbHousehold.home_type) {
+        const rawType = dbHousehold.home_type;
+        household.homeType = rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase();
+      }
+      if (dbHousehold.occupants_count) {
+        household.occupantsCount = dbHousehold.occupants_count;
+      }
+      if (dbHousehold.region_code) {
+        household.region = dbHousehold.region_code;
+      }
+    }
+
+    if (dbPrefs) {
+      if (dbPrefs.preferred_currency) {
+        household.preferredCurrency = dbPrefs.preferred_currency.trim();
+      }
+      if (dbPrefs.upfront_budget !== null && dbPrefs.upfront_budget !== undefined) {
+        const b = Number(dbPrefs.upfront_budget);
+        household.budgetTier =
+          b === 0 ? "Zero-Cost" : b <= 50 ? "Low" : b <= 300 ? "Moderate" : "High";
+      }
+    }
+
+    if (user.user_metadata?.household_name) {
+      household.householdName = user.user_metadata.household_name;
+    }
+    if (user.user_metadata?.budget_tier) {
+      household.budgetTier = user.user_metadata.budget_tier;
+    }
+    if (user.user_metadata?.preferred_currency) {
+      household.preferredCurrency = user.user_metadata.preferred_currency;
     }
   }
 
