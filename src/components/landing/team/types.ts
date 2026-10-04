@@ -19,7 +19,7 @@ export interface TeamMember {
   id: string;
   name: string;
   role: string;
-  tag: string;
+  tag?: string;
   bio: string;
   avatar: TeamMemberAvatar;
   socials: SocialLink[];
