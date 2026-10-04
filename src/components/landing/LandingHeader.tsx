@@ -14,7 +14,11 @@ export function LandingHeader() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  const isClickScrollingRef = React.useRef(false);
+  const scrollTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -22,6 +26,26 @@ export function LandingHeader() {
       document.documentElement.classList.contains("dark") ||
       document.documentElement.getAttribute("data-theme") === "dark";
     setTheme(isDark ? "dark" : "light");
+  }, []);
+
+  // Unlock click-scrolling immediately if user manually interacts with mouse wheel or touch
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      if (isClickScrollingRef.current) {
+        isClickScrollingRef.current = false;
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+          scrollTimeoutRef.current = null;
+        }
+      }
+    };
+
+    window.addEventListener("wheel", handleUserInteraction, { passive: true });
+    window.addEventListener("touchmove", handleUserInteraction, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", handleUserInteraction);
+      window.removeEventListener("touchmove", handleUserInteraction);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -124,9 +148,14 @@ export function LandingHeader() {
       // Only track home page scroll positions
       if (pathname !== "/") return;
 
+      // If user clicked a tab, lock activeSection until smooth scroll completes
+      if (isClickScrollingRef.current) return;
+
       if (!ticking) {
         window.requestAnimationFrame(() => {
           ticking = false;
+          if (isClickScrollingRef.current) return;
+
           const currentScroll = window.scrollY;
           const windowHeight = window.innerHeight;
           const documentHeight = document.documentElement.scrollHeight;
@@ -197,6 +226,16 @@ export function LandingHeader() {
     }
 
     e.preventDefault();
+
+    // Lock programmatic scrolling so intermediate sections don't pull active underline back and forth
+    isClickScrollingRef.current = true;
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    scrollTimeoutRef.current = setTimeout(() => {
+      isClickScrollingRef.current = false;
+    }, 850);
+
     setActiveSection(scrollTo);
     scrollToSection(scrollTo, 80);
   };
@@ -234,13 +273,15 @@ export function LandingHeader() {
           </div>
         </Link>
 
-        {/* Desktop Navigation Links with Active Green Underline */}
+        {/* Desktop Navigation Links with Smooth Active and Hover Underline */}
         <nav
           className="hidden md:flex items-center gap-7 lg:gap-8"
           aria-label="Landing Navigation"
+          onMouseLeave={() => setHoveredSection(null)}
         >
           {navLinks.map((link) => {
             const isActive = pathname === "/" && activeSection === link.scrollTo;
+            const isHovered = hoveredSection === link.scrollTo;
 
             return (
               <a
@@ -253,20 +294,40 @@ export function LandingHeader() {
                     : `/#${link.scrollTo}`
                 }
                 onClick={(e) => handleNavClick(e, link.scrollTo)}
-                className={`relative py-1 text-sm font-semibold transition-colors ${
+                onMouseEnter={() => setHoveredSection(link.scrollTo)}
+                className={`relative py-1 text-sm font-semibold transition-colors duration-200 ${
                   isActive
                     ? "text-[#075E45] dark:text-[#34D399] font-bold"
                     : "text-[#667085] dark:text-[#9CA3AF] hover:text-[#075E45] dark:hover:text-[#34D399]"
                 }`}
               >
                 {link.label}
+
+                {/* Active Indicator Underline (Smooth fluid spring) */}
                 {isActive && (
                   <motion.span
                     layoutId="activeNavUnderline"
                     className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#0B7252] dark:bg-[#10B981] rounded-full"
                     transition={{
                       type: "spring",
-                      stiffness: 380,
+                      stiffness: 300,
+                      damping: 30,
+                      mass: 0.8,
+                    }}
+                  />
+                )}
+
+                {/* Smooth Hover Underline Indicator */}
+                {!isActive && isHovered && (
+                  <motion.span
+                    layoutId="hoverNavUnderline"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#0B7252]/40 dark:bg-[#10B981]/40 rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 350,
                       damping: 30,
                     }}
                   />
