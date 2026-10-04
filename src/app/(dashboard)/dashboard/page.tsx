@@ -9,6 +9,7 @@ import { ActionSummaryCard } from "@/components/dashboard/ActionSummaryCard";
 import { BillComparisonCard } from "@/components/dashboard/BillComparisonCard";
 import { HouseholdSnapshotCard } from "@/components/dashboard/HouseholdSnapshotCard";
 import { formatCurrency, formatKwh, formatEmissions } from "@/lib/utils";
+import { deriveBudgetTier } from "@/lib/budget";
 import {
   Zap,
   DollarSign,
@@ -73,9 +74,7 @@ export default async function DashboardPage() {
         household.preferredCurrency = dbPrefs.preferred_currency.trim();
       }
       if (dbPrefs.upfront_budget !== null && dbPrefs.upfront_budget !== undefined) {
-        const b = Number(dbPrefs.upfront_budget);
-        household.budgetTier =
-          b === 0 ? "Zero-Cost" : b <= 50 ? "Low" : b <= 300 ? "Moderate" : "High";
+        household.budgetTier = deriveBudgetTier(dbPrefs.upfront_budget, household.preferredCurrency);
       }
     }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { PlanManager } from "@/components/plan/PlanManager";
+import { deriveBudgetTier } from "@/lib/budget";
 
 export const metadata = {
   title: "My Plan — Carbon Coach AI",
@@ -44,9 +45,12 @@ export default async function PlanPage() {
         household.preferredCurrency = dbPrefs.preferred_currency.trim();
       }
       if (dbPrefs.upfront_budget !== null && dbPrefs.upfront_budget !== undefined) {
-        const b = Number(dbPrefs.upfront_budget);
-        household.budgetTier = b === 0 ? "Zero-Cost" : b <= 100 ? "Low" : b <= 1000 ? "Moderate" : "High";
+        household.budgetTier = deriveBudgetTier(dbPrefs.upfront_budget, household.preferredCurrency);
       }
+    }
+
+    if (user.user_metadata?.budget_tier) {
+      household.budgetTier = user.user_metadata.budget_tier;
     }
 
     // Resolve tariff rate and currency from confirmed electricity bills

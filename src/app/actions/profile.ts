@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { profileUpdateSchema, householdUpdateSchema } from "@/lib/validations/profile";
 import { revalidatePath } from "next/cache";
+import { getUpfrontBudgetAmount } from "@/lib/budget";
 
 export interface ProfileActionResult {
   success?: boolean;
@@ -145,16 +146,8 @@ export async function updateHouseholdInfo(
   }
 
   // 3. Persist to user_preferences table
-  const upfrontBudget =
-    validation.data.budgetTier === "Zero-Cost"
-      ? 0
-      : validation.data.budgetTier === "Low"
-      ? 50
-      : validation.data.budgetTier === "Moderate"
-      ? 250
-      : 1000;
-
   const currency3 = validation.data.preferredCurrency.slice(0, 3).toUpperCase();
+  const upfrontBudget = getUpfrontBudgetAmount(validation.data.budgetTier, currency3);
 
   const { data: existingPref } = await supabase
     .from("user_preferences")

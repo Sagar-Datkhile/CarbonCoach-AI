@@ -2,6 +2,7 @@
 
 import React, { useActionState, useState, useSyncExternalStore } from "react";
 import { updateProfileInfo, updateHouseholdInfo } from "@/app/actions/profile";
+import { getBudgetTierOptions, type BudgetTier } from "@/lib/budget";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -49,6 +50,8 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
   const [avatarUrl, setAvatarUrl] = useState(profile.avatarUrl || "");
   const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
   const [name, setName] = useState(profile.fullName || "");
+  const [currency, setCurrency] = useState(household.preferredCurrency || "USD");
+  const [budgetTier, setBudgetTier] = useState<BudgetTier>(household.budgetTier || "Moderate");
 
   const getInitials = (n: string, e: string) => {
     if (n && n.trim()) {
@@ -255,13 +258,15 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                     <select
                       id="budgetTier"
                       name="budgetTier"
-                      defaultValue={household.budgetTier}
+                      value={budgetTier}
+                      onChange={(e) => setBudgetTier(e.target.value as BudgetTier)}
                       className="w-full min-h-[44px] px-3.5 pr-10 py-2 text-sm rounded-lg bg-white border border-[#E3E7E3] text-[#111827] focus:outline-none focus:border-[#0B7252] focus:ring-2 focus:ring-[#0B7252]/20 appearance-none cursor-pointer transition-colors"
                     >
-                      <option value="Zero-Cost">Zero-Cost Habits ($0)</option>
-                      <option value="Low">Low Cost (&lt; $50)</option>
-                      <option value="Moderate">Moderate (&lt; $300)</option>
-                      <option value="High">Capital Investment ($300+)</option>
+                      {getBudgetTierOptions(currency).map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
                     </select>
                     <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#667085]">
                       <ChevronDown className="w-4 h-4" />
@@ -277,7 +282,8 @@ export function ProfileForms({ profile, household }: ProfileFormsProps) {
                     <select
                       id="preferredCurrency"
                       name="preferredCurrency"
-                      defaultValue={household.preferredCurrency}
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
                       className="w-full min-h-[44px] px-3.5 pr-10 py-2 text-sm rounded-lg bg-white border border-[#E3E7E3] text-[#111827] focus:outline-none focus:border-[#0B7252] focus:ring-2 focus:ring-[#0B7252]/20 appearance-none cursor-pointer transition-colors"
                     >
                       <option value="USD">USD ($)</option>

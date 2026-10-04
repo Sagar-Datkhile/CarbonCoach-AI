@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { SettingsView } from "@/components/settings/SettingsView";
 import type { UserSettingsInput } from "@/app/actions/settings";
+import { deriveBudgetTier, type BudgetTier } from "@/lib/budget";
 
 export const metadata = {
   title: "Settings — Carbon Coach AI",
@@ -14,21 +15,27 @@ export default async function SettingsPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let preferredCurrency = "INR";
+  const meta = user?.user_metadata || {};
+  let preferredCurrency = (meta.preferred_currency as string) || "INR";
+  let budgetTier: BudgetTier = (meta.budget_tier as BudgetTier) || "Moderate";
 
   if (user) {
     const { data: dbPref } = await supabase
       .from("user_preferences")
-      .select("preferred_currency")
+      .select("preferred_currency, upfront_budget")
       .eq("user_id", user.id)
       .maybeSingle();
 
     if (dbPref?.preferred_currency) {
       preferredCurrency = dbPref.preferred_currency.trim();
     }
+    if (meta.budget_tier) {
+      budgetTier = meta.budget_tier as BudgetTier;
+    } else if (dbPref?.upfront_budget !== null && dbPref?.upfront_budget !== undefined) {
+      budgetTier = deriveBudgetTier(dbPref.upfront_budget, preferredCurrency);
+    }
   }
 
-  const meta = user?.user_metadata || {};
   const emailNotifications =
     meta.email_notifications !== undefined
       ? Boolean(meta.email_notifications)
@@ -53,6 +60,7 @@ export default async function SettingsPage() {
     currency: preferredCurrency,
     energyUnit,
     theme,
+    budgetTier,
   };
 
   return (

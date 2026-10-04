@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { getUpfrontBudgetAmount } from "@/lib/budget";
 
 export interface UserSettingsInput {
   emailNotifications: boolean;
@@ -10,6 +11,7 @@ export interface UserSettingsInput {
   currency: string;
   energyUnit: string;
   theme: "light" | "dark";
+  budgetTier?: "Zero-Cost" | "Low" | "Moderate" | "High";
 }
 
 export interface SettingsActionResult {
@@ -68,14 +70,19 @@ export async function updateUserSettings(
   });
 
   // 2. Update user metadata in Supabase Auth
+  const metadataUpdates: Record<string, unknown> = {
+    email_notifications: settings.emailNotifications,
+    energy_saving_reminders: settings.energySavingReminders,
+    energy_unit: settings.energyUnit,
+    preferred_currency: settings.currency,
+    theme: settings.theme || "light",
+  };
+  if (settings.budgetTier) {
+    metadataUpdates.budget_tier = settings.budgetTier;
+  }
+
   const { error: authErr } = await supabase.auth.updateUser({
-    data: {
-      email_notifications: settings.emailNotifications,
-      energy_saving_reminders: settings.energySavingReminders,
-      energy_unit: settings.energyUnit,
-      preferred_currency: settings.currency,
-      theme: settings.theme || "light",
-    },
+    data: metadataUpdates,
   });
 
   if (authErr) {
@@ -83,7 +90,21 @@ export async function updateUserSettings(
     return { success: false, error: authErr.message };
   }
 
-  // 2. Persist currency in user_preferences table
+  // 3. Persist currency and upfront budget in user_preferences table
+  const currency3 = settings.currency.slice(0, 3).toUpperCase();
+  const prefPayload: {
+    preferred_currency: string;
+    updated_at: string;
+    upfront_budget?: number;
+  } = {
+    preferred_currency: currency3,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (settings.budgetTier) {
+    prefPayload.upfront_budget = getUpfrontBudgetAmount(settings.budgetTier, currency3);
+  }
+
   const { data: existingPref } = await supabase
     .from("user_preferences")
     .select("id")
@@ -93,10 +114,7 @@ export async function updateUserSettings(
   if (existingPref) {
     const { error: prefErr } = await supabase
       .from("user_preferences")
-      .update({
-        preferred_currency: settings.currency,
-        updated_at: new Date().toISOString(),
-      })
+      .update(prefPayload)
       .eq("user_id", user.id);
 
     if (prefErr) {
@@ -106,7 +124,10 @@ export async function updateUserSettings(
   } else {
     const { error: insErr } = await supabase.from("user_preferences").insert({
       user_id: user.id,
-      preferred_currency: settings.currency,
+      preferred_currency: currency3,
+      upfront_budget: settings.budgetTier
+        ? getUpfrontBudgetAmount(settings.budgetTier, currency3)
+        : null,
     });
 
     if (insErr) {

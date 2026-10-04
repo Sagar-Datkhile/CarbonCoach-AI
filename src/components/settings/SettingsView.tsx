@@ -3,6 +3,7 @@
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import { updateUserSettings, type UserSettingsInput } from "@/app/actions/settings";
+import { getBudgetTierOptions } from "@/lib/budget";
 import { FeedbackModal } from "@/components/layout/FeedbackModal";
 import { DeleteAccountModal } from "./DeleteAccountModal";
 import { Alert } from "@/components/ui/Alert";
@@ -131,7 +132,7 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
     saveSettings(updated);
   };
 
-  const handleSelect = (key: "currency" | "energyUnit", value: string) => {
+  const handleSelect = (key: "currency" | "energyUnit" | "budgetTier", value: string) => {
     const updated = {
       ...settings,
       [key]: value,
@@ -367,6 +368,36 @@ export function SettingsView({ initialSettings, userEmail }: SettingsViewProps) 
                 <option value="USD">USD ($) — US Dollar</option>
                 <option value="EUR">EUR (€) — Euro</option>
                 <option value="GBP">GBP (£) — British Pound</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Budget Preference */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-4 first:pt-2 last:pb-2">
+            <div className="space-y-0.5 max-w-lg">
+              <label
+                htmlFor="select-budget-tier"
+                className="text-sm font-semibold text-[#111827] dark:text-[#F9FAFB]"
+              >
+                Budget Preference
+              </label>
+              <p className="text-xs text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
+                Calibrates recommendation ROI and capital upgrades threshold according to selected currency.
+              </p>
+            </div>
+            <div className="w-full sm:w-56 shrink-0">
+              <select
+                id="select-budget-tier"
+                value={settings.budgetTier || "Moderate"}
+                disabled={isPending}
+                onChange={(e) => handleSelect("budgetTier", e.target.value)}
+                className="w-full h-10 px-3 py-2 text-sm font-medium rounded-xl bg-white dark:bg-[#1A2333] border border-[#E3E7E3] dark:border-[#222F3E] text-[#111827] dark:text-[#F9FAFB] focus:outline-none focus:border-[#047857] focus:ring-2 focus:ring-[#047857]/20 transition-colors cursor-pointer"
+              >
+                {getBudgetTierOptions(settings.currency).map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

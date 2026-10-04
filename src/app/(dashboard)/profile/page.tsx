@@ -1,6 +1,7 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileForms } from "@/components/profile/ProfileForms";
+import { deriveBudgetTier } from "@/lib/budget";
 
 export const metadata = {
   title: "Profile & Household Preferences — Carbon Coach AI",
@@ -83,9 +84,7 @@ export default async function ProfilePage() {
         household.preferredCurrency = dbPrefs.preferred_currency.trim();
       }
       if (dbPrefs.upfront_budget !== null && dbPrefs.upfront_budget !== undefined) {
-        const b = Number(dbPrefs.upfront_budget);
-        household.budgetTier =
-          b === 0 ? "Zero-Cost" : b <= 50 ? "Low" : b <= 300 ? "Moderate" : "High";
+        household.budgetTier = deriveBudgetTier(dbPrefs.upfront_budget, household.preferredCurrency);
       }
     }
 
