@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, Sun, Moon } from "lucide-react";
 import { scrollToSection } from "./scrollUtils";
 
 export function LandingHeader() {
@@ -14,6 +14,31 @@ export function LandingHeader() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const isDark =
+      document.documentElement.classList.contains("dark") ||
+      document.documentElement.getAttribute("data-theme") === "dark";
+    setTheme(isDark ? "dark" : "light");
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+    try {
+      localStorage.setItem("carboncoach_theme", nextTheme);
+      document.cookie = `carboncoach_theme=${nextTheme}; path=/; max-age=31536000; SameSite=Lax`;
+    } catch {}
+  };
 
   const navLinks = [
     { label: "Home", scrollTo: "hero" },
@@ -180,7 +205,7 @@ export function LandingHeader() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-[#FAFBF8]/95 backdrop-blur-md border-b border-[#E3E7E3] shadow-[0_4px_20px_rgba(7,94,69,0.06)]"
+          ? "bg-[#FAFBF8]/95 dark:bg-[#0B0F17]/90 backdrop-blur-md border-b border-[#E3E7E3] dark:border-[#222F3E] shadow-[0_4px_20px_rgba(7,94,69,0.06)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
           : "bg-transparent border-b border-transparent"
       }`}
     >
@@ -191,7 +216,7 @@ export function LandingHeader() {
           onClick={(e) => handleNavClick(e, "hero")}
           className="flex items-center gap-2.5 group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-1 group-hover:border-[#075E45]/40 transition-colors">
+          <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#151D2A] border border-[#E3E7E3] dark:border-[#222F3E] overflow-hidden flex items-center justify-center shadow-xs shrink-0 p-1 group-hover:border-[#075E45]/40 dark:group-hover:border-[#10B981]/40 transition-colors">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.png"
@@ -200,10 +225,10 @@ export function LandingHeader() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="font-extrabold text-lg text-[#075E45] tracking-tight">
+            <span className="font-extrabold text-lg text-[#075E45] dark:text-[#34D399] tracking-tight">
               Carbon Coach
             </span>
-            <span className="text-[10px] text-[#667085] font-semibold uppercase tracking-widest hidden sm:inline">
+            <span className="text-[10px] text-[#667085] dark:text-[#9CA3AF] font-semibold uppercase tracking-widest hidden sm:inline">
               Green Energy Intelligence
             </span>
           </div>
@@ -230,15 +255,15 @@ export function LandingHeader() {
                 onClick={(e) => handleNavClick(e, link.scrollTo)}
                 className={`relative py-1 text-sm font-semibold transition-colors ${
                   isActive
-                    ? "text-[#075E45] font-bold"
-                    : "text-[#667085] hover:text-[#075E45]"
+                    ? "text-[#075E45] dark:text-[#34D399] font-bold"
+                    : "text-[#667085] dark:text-[#9CA3AF] hover:text-[#075E45] dark:hover:text-[#34D399]"
                 }`}
               >
                 {link.label}
                 {isActive && (
                   <motion.span
                     layoutId="activeNavUnderline"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#0B7252] rounded-full"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#0B7252] dark:bg-[#10B981] rounded-full"
                     transition={{
                       type: "spring",
                       stiffness: 380,
@@ -251,38 +276,55 @@ export function LandingHeader() {
           })}
         </nav>
 
-        {/* Action Buttons */}
-        <div className="hidden sm:flex items-center gap-3">
-          <Link href="/login">
-            <Button
-              variant="ghost"
-              size="md"
-              className="font-semibold text-[#111827] hover:text-[#075E45] hover:bg-[#EAF5EE]/60"
-            >
-              Sign In
-            </Button>
-          </Link>
-          <Link href="/signup">
-            <Button
-              variant="primary"
-              size="md"
-              className="font-bold shadow-xs bg-[#075E45] hover:bg-[#064E3B] text-white"
-            >
-              Get Started
-            </Button>
-          </Link>
-        </div>
+        {/* Action Buttons & Theme Toggle */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Theme Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+            className="w-10 h-10 flex items-center justify-center rounded-xl border border-[#E3E7E3] dark:border-[#222F3E] bg-white/80 dark:bg-[#151D2A] text-[#475467] dark:text-[#F9FAFB] hover:bg-[#F3F8F3] dark:hover:bg-[#1A2333] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
+          >
+            {theme === "dark" ? (
+              <Sun className="w-4.5 h-4.5 text-amber-400" />
+            ) : (
+              <Moon className="w-4.5 h-4.5 text-[#075E45]" />
+            )}
+          </button>
 
-        {/* Mobile Hamburger Button */}
-        <button
-          type="button"
-          onClick={() => setIsMobileOpen(!isMobileOpen)}
-          aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={isMobileOpen}
-          className="w-11 h-11 flex items-center justify-center rounded-xl border border-[#E3E7E3] bg-white/80 text-[#111827] hover:bg-[#F3F8F3] md:hidden transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
-        >
-          {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+          <div className="hidden sm:flex items-center gap-2">
+            <Link href="/login">
+              <Button
+                variant="ghost"
+                size="md"
+                className="font-semibold text-[#111827] dark:text-[#F9FAFB] hover:text-[#075E45] dark:hover:text-[#34D399] hover:bg-[#EAF5EE]/60 dark:hover:bg-[#1A2333]"
+              >
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button
+                variant="primary"
+                size="md"
+                className="font-bold shadow-xs bg-[#075E45] hover:bg-[#064E3B] text-white"
+              >
+                Get Started
+              </Button>
+            </Link>
+          </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            type="button"
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMobileOpen}
+            className="w-10 h-10 flex items-center justify-center rounded-xl border border-[#E3E7E3] dark:border-[#222F3E] bg-white/80 dark:bg-[#151D2A] text-[#111827] dark:text-[#F9FAFB] hover:bg-[#F3F8F3] dark:hover:bg-[#1A2333] md:hidden transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
+          >
+            {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer */}
@@ -293,7 +335,7 @@ export function LandingHeader() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="md:hidden overflow-hidden bg-white/98 backdrop-blur-md border-b border-[#E3E7E3] shadow-lg"
+            className="md:hidden overflow-hidden bg-white/98 dark:bg-[#0B0F17]/98 backdrop-blur-md border-b border-[#E3E7E3] dark:border-[#222F3E] shadow-lg"
           >
             <div className="px-4 pt-3 pb-6 space-y-4">
               <nav className="flex flex-col space-y-1" aria-label="Mobile Navigation">
@@ -312,26 +354,26 @@ export function LandingHeader() {
                       onClick={(e) => handleNavClick(e, link.scrollTo)}
                       className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                         isActive
-                          ? "bg-[#EAF5EE] text-[#075E45] font-bold border-l-3 border-[#0B7252]"
-                          : "text-[#111827] hover:bg-[#F3F8F3]"
+                          ? "bg-[#EAF5EE] dark:bg-[#063D2E] text-[#075E45] dark:text-[#34D399] font-bold border-l-3 border-[#0B7252]"
+                          : "text-[#111827] dark:text-[#F9FAFB] hover:bg-[#F3F8F3] dark:hover:bg-[#1A2333]"
                       }`}
                     >
                       <span>{link.label}</span>
                       {isActive && (
-                        <span className="w-2 h-2 rounded-full bg-[#0B7252]" />
+                        <span className="w-2 h-2 rounded-full bg-[#0B7252] dark:bg-[#34D399]" />
                       )}
                     </a>
                   );
                 })}
               </nav>
 
-              <div className="pt-3 border-t border-[#E3E7E3] flex flex-col gap-2.5">
+              <div className="pt-3 border-t border-[#E3E7E3] dark:border-[#222F3E] flex flex-col gap-2.5">
                 <Link
                   href="/login"
                   onClick={() => setIsMobileOpen(false)}
                   className="w-full"
                 >
-                  <Button variant="outline" size="md" className="w-full font-semibold">
+                  <Button variant="outline" size="md" className="w-full font-semibold border-[#E3E7E3] dark:border-[#222F3E] text-[#111827] dark:text-[#F9FAFB] hover:bg-[#F3F8F3] dark:hover:bg-[#1A2333]">
                     Sign In
                   </Button>
                 </Link>

@@ -11,7 +11,7 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFBF8] text-[#111827]">
+    <div className="min-h-screen flex flex-col bg-[#FAFBF8] dark:bg-[#0B0F17] text-[#111827] dark:text-[#F9FAFB] transition-colors duration-200">
       <LandingHeader />
       <main className="flex-1">
         <LandingHero />

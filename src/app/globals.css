@@ -98,8 +98,10 @@ html.dark .bg-\[\#F3F8F3\],
 }
 
 html.dark .bg-\[\#EAF5EE\],
-[data-theme="dark"] .bg-\[\#EAF5EE\] {
-  background-color: #063D2E !important;
+[data-theme="dark"] .bg-\[\#EAF5EE\],
+html.dark [class*="bg-[#EAF5EE]/"],
+[data-theme="dark"] [class*="bg-[#EAF5EE]/"] {
+  background-color: rgba(6, 61, 46, 0.45) !important;
 }
 
 html.dark .bg-\[\#FFF7E8\],

@@ -14,9 +14,9 @@ export function LandingFooter() {
   ];
 
   return (
-    <footer className="bg-white border-t border-[#E3E7E3] py-8">
+    <footer className="bg-white dark:bg-[#0B0F17] border-t border-[#E3E7E3] dark:border-[#222F3E] py-8 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-[#667085]">
+        <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-[#667085] dark:text-[#9CA3AF]">
           {/* Left: Rights reserved */}
           <div className="text-center md:text-left">
             <p>© 2026 Carbon Coach AI. All rights reserved.</p>
@@ -27,7 +27,7 @@ export function LandingFooter() {
             {bottomLinks.map((link) => {
               const isMailto = link.href.startsWith("mailto:");
               const linkClasses =
-                "hover:underline hover:text-[#111827] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45] rounded-xs";
+                "hover:underline hover:text-[#111827] dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45] rounded-xs";
 
               if (isMailto) {
                 return (
@@ -55,7 +55,7 @@ export function LandingFooter() {
 
           {/* Right: Made with love */}
           <div className="flex items-center justify-center md:justify-end text-center md:text-right">
-            <span className="inline-flex items-center gap-1 font-medium text-[#475467]">
+            <span className="inline-flex items-center gap-1 font-medium text-[#475467] dark:text-[#D1D5DB]">
               Made with <span className="text-red-500">❤️</span> in India
             </span>
           </div>

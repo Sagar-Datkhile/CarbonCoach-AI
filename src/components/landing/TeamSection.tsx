@@ -90,12 +90,12 @@ export function TeamSection({
   return (
     <section
       id={id}
-      className={`relative scroll-mt-20 py-24 bg-gradient-to-b from-[#FAFBF8] via-white to-[#FAFBF8] overflow-hidden ${className}`}
+      className={`relative scroll-mt-20 py-24 bg-gradient-to-b from-[#FAFBF8] via-white to-[#FAFBF8] dark:from-[#0B0F17] dark:via-[#0E1522] dark:to-[#0B0F17] overflow-hidden ${className}`}
     >
       {/* Background Soft Glows (Low opacity emerald glows) */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#075E45]/5 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-[#10B981]/5 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute top-12 right-10 w-[320px] h-[320px] bg-[#0B7252]/5 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#075E45]/5 dark:bg-[#10B981]/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-[#10B981]/5 dark:bg-[#10B981]/5 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-12 right-10 w-[320px] h-[320px] bg-[#0B7252]/5 dark:bg-[#075E45]/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
       {/* Subtle Floating Leaves (Eco accents) */}
       <FloatingLeaf
@@ -126,13 +126,13 @@ export function TeamSection({
         {/* Section Header */}
         <SectionReveal>
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] border border-[#0B7252]/15 shadow-xs">
+            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-[#0B7252] dark:text-[#34D399] bg-[#EAF5EE] dark:bg-[#063D2E] border border-[#0B7252]/15 dark:border-[#10B981]/25 shadow-xs">
               {badge}
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111827] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111827] dark:text-white tracking-tight">
               {title}
             </h2>
-            <p className="text-base sm:text-lg text-[#667085] leading-relaxed max-w-2xl mx-auto font-normal">
+            <p className="text-base sm:text-lg text-[#667085] dark:text-[#9CA3AF] leading-relaxed max-w-2xl mx-auto font-normal">
               {subtitle}
             </p>
           </div>

@@ -34,18 +34,18 @@ export function CoreCapabilities() {
   return (
     <section
       id="features"
-      className="scroll-mt-20 py-20 bg-[#FAFBF8]"
+      className="scroll-mt-20 py-20 bg-[#FAFBF8] dark:bg-[#0B0F17]"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionReveal>
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] dark:text-[#34D399] bg-[#EAF5EE] dark:bg-[#063D2E] border border-[#0B7252]/15 dark:border-[#10B981]/25 px-3 py-1 rounded-full">
               Engineering Precision
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] dark:text-white mt-4 tracking-tight">
               Built for Real Household Impact
             </h2>
-            <p className="text-base sm:text-lg text-[#667085] mt-3">
+            <p className="text-base sm:text-lg text-[#667085] dark:text-[#9CA3AF] mt-3">
               Every feature is engineered to provide actionable clarity rather than superficial carbon offset badges.
             </p>
           </div>
@@ -63,15 +63,15 @@ export function CoreCapabilities() {
               key={cap.title}
               variants={staggerItemVariants}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="p-7 rounded-2xl bg-white border border-[#E3E7E3] hover:border-[#0B7252]/40 transition-all hover:shadow-md"
+              className="p-7 rounded-2xl bg-white dark:bg-[#151D2A] border border-[#E3E7E3] dark:border-[#222F3E] hover:border-[#0B7252]/40 dark:hover:border-[#10B981]/40 transition-all hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#EAF5EE] flex items-center justify-center mb-5">
+              <div className="w-12 h-12 rounded-xl bg-[#EAF5EE] dark:bg-[#063D2E] flex items-center justify-center mb-5">
                 {cap.icon}
               </div>
-              <h3 className="text-lg font-bold text-[#111827] mb-2">
+              <h3 className="text-lg font-bold text-[#111827] dark:text-white mb-2">
                 {cap.title}
               </h3>
-              <p className="text-sm text-[#667085] leading-relaxed">
+              <p className="text-sm text-[#667085] dark:text-[#9CA3AF] leading-relaxed">
                 {cap.description}
               </p>
             </motion.div>

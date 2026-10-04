@@ -48,19 +48,19 @@ export function LandingFAQ() {
   return (
     <section
       id="faq"
-      className="scroll-mt-20 py-20 bg-white border-y border-[#E3E7E3]"
+      className="scroll-mt-20 py-20 bg-white dark:bg-[#0B0F17] border-y border-[#E3E7E3] dark:border-[#222F3E]"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionReveal>
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] bg-[#EAF5EE] px-3 py-1 rounded-full inline-flex items-center gap-1.5">
-              <HelpCircle className="w-3.5 h-3.5 text-[#0B7252]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#0B7252] dark:text-[#34D399] bg-[#EAF5EE] dark:bg-[#063D2E] border border-[#0B7252]/15 dark:border-[#10B981]/25 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+              <HelpCircle className="w-3.5 h-3.5 text-[#0B7252] dark:text-[#34D399]" />
               <span>Questions & Answers</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] mt-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] dark:text-white mt-4 tracking-tight">
               Frequently Asked Questions
             </h2>
-            <p className="text-base sm:text-lg text-[#667085] mt-3">
+            <p className="text-base sm:text-lg text-[#667085] dark:text-[#9CA3AF] mt-3">
               Clear, transparent details about our deterministic engine, privacy architecture, and supported utility providers.
             </p>
           </div>
@@ -76,8 +76,8 @@ export function LandingFAQ() {
                   key={faq.question}
                   className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
                     isOpen
-                      ? "border-[#0B7252]/40 bg-[#FAFBF8] shadow-xs"
-                      : "border-[#E3E7E3] bg-white hover:border-[#0B7252]/20"
+                      ? "border-[#0B7252]/40 dark:border-[#10B981]/40 bg-[#FAFBF8] dark:bg-[#151D2A] shadow-xs"
+                      : "border-[#E3E7E3] dark:border-[#222F3E] bg-white dark:bg-[#0E1522] hover:border-[#0B7252]/20 dark:hover:border-[#10B981]/30"
                   }`}
                 >
                   <button
@@ -88,14 +88,14 @@ export function LandingFAQ() {
                     id={`faq-question-${index}`}
                     className="w-full py-4.5 px-5 sm:px-6 flex items-center justify-between text-left gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45]"
                   >
-                    <span className="font-bold text-sm sm:text-base text-[#111827]">
+                    <span className="font-bold text-sm sm:text-base text-[#111827] dark:text-white">
                       {faq.question}
                     </span>
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-200 ${
                         isOpen
-                          ? "bg-[#EAF5EE] border-[#0B7252]/30 text-[#075E45] rotate-180"
-                          : "bg-[#FAFBF8] border-[#E3E7E3] text-[#667085]"
+                          ? "bg-[#EAF5EE] dark:bg-[#063D2E] border-[#0B7252]/30 dark:border-[#10B981]/30 text-[#075E45] dark:text-[#34D399] rotate-180"
+                          : "bg-[#FAFBF8] dark:bg-[#1A2333] border-[#E3E7E3] dark:border-[#222F3E] text-[#667085] dark:text-[#9CA3AF]"
                       }`}
                     >
                       <ChevronDown className="w-4 h-4" />
@@ -114,7 +114,7 @@ export function LandingFAQ() {
                         transition={{ duration: 0.25, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="px-5 sm:px-6 pb-5 pt-1 text-sm text-[#667085] leading-relaxed border-t border-[#F3F8F3]">
+                        <div className="px-5 sm:px-6 pb-5 pt-1 text-sm text-[#667085] dark:text-[#9CA3AF] leading-relaxed border-t border-[#F3F8F3] dark:border-[#222F3E]">
                           {faq.answer}
                         </div>
                       </motion.div>

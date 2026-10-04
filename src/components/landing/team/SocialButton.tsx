@@ -76,10 +76,10 @@ export function SocialButton({
       aria-label={social.ariaLabel || `${social.platform} link`}
       className={cn(
         "group inline-flex items-center justify-center gap-2 px-3.5 py-2 min-h-[40px]",
-        "rounded-xl border border-[#E3E7E3] bg-white text-[#475467]",
+        "rounded-xl border border-[#E3E7E3] dark:border-[#222F3E] bg-white dark:bg-[#1A2333] text-[#475467] dark:text-[#D1D5DB]",
         "text-xs font-semibold shadow-xs",
         "transition-all duration-200 ease-out",
-        "hover:-translate-y-1 hover:shadow-md hover:bg-[#EAF5EE] hover:text-[#075E45] hover:border-[#075E45]/30",
+        "hover:-translate-y-1 hover:shadow-md hover:bg-[#EAF5EE] dark:hover:bg-[#063D2E] hover:text-[#075E45] dark:hover:text-[#34D399] hover:border-[#075E45]/30 dark:hover:border-[#10B981]/40",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#075E45] focus-visible:ring-offset-2",
         "active:translate-y-0 active:scale-98",
         className
