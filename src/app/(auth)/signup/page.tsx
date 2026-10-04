@@ -19,7 +19,7 @@ export default function SignUpPage() {
         {/* Brand Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-3 group">
-            <div className="w-10 h-10 rounded-xl bg-white border border-[#E3E7E3] overflow-hidden flex items-center justify-center shadow-md p-1 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#151D2A] border border-[#E3E7E3] dark:border-[#222F3E] overflow-hidden flex items-center justify-center shadow-md p-1 group-hover:scale-105 transition-transform">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.png"
@@ -27,11 +27,11 @@ export default function SignUpPage() {
                 className="w-full h-full object-contain"
               />
             </div>
-            <span className="text-2xl font-bold tracking-tight text-[#075E45]">
+            <span className="text-2xl font-bold tracking-tight text-[#075E45] dark:text-[#34D399]">
               Carbon Coach
             </span>
           </Link>
-          <p className="text-sm text-[#667085]">
+          <p className="text-sm text-[#667085] dark:text-[#9CA3AF]">
             Start optimizing your household energy today
           </p>
         </div>
