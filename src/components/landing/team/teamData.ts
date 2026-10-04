@@ -5,7 +5,8 @@ export const teamMembers: TeamMember[] = [
     id: "sagar-datkhile",
     name: "Sagar Datkhile",
     role: "Full Stack Developer",
-    bio: "Focused on building AI-powered, scalable web applications that help users make smarter and more sustainable decisions.",
+    tag: "Backend • AI • Product",
+    bio: "Focused on building web applications with AI-driven features that solve real-world problems and help users make smarter decisions.",
     avatar: {
       shape: "Circle",
       size: "96px",
@@ -40,7 +41,8 @@ export const teamMembers: TeamMember[] = [
     id: "pranav-patil",
     name: "Pranav Patil",
     role: "Full Stack Developer",
-    bio: "Passionate about clean interfaces, modern web technologies and building impactful sustainability solutions.",
+    tag: "UI/UX • AI • Design",
+    bio: "Passionate about building clean, user-friendly interfaces to create practical sustainability-focused solutions.",
     avatar: {
       shape: "Circle",
       size: "96px",

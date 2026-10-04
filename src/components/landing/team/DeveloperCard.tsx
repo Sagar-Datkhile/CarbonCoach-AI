@@ -45,6 +45,33 @@ export function DeveloperCard({
       {/* Decorative gradient highlight in card top right */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#EAF5EE]/60 dark:from-[#063D2E]/30 to-transparent rounded-tr-[24px] pointer-events-none -z-10" />
 
+      {/* Subtle decorative green leaf motif in the upper-right corner (dark theme only) */}
+      <div
+        className="hidden dark:block absolute top-4 right-4 pointer-events-none select-none z-0"
+        aria-hidden="true"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="text-[#10B981]/15 transition-opacity duration-300 group-hover:opacity-100"
+        >
+          <path
+            d="M12 2C7.5 2 3.5 6 3.5 11C3.5 14.5 5.5 17.5 8.5 19.5L12 22L15.5 19.5C18.5 17.5 20.5 14.5 20.5 11C20.5 6 16.5 2 12 2Z"
+            fill="currentColor"
+          />
+          <path
+            d="M12 22V7M12 11L8.5 8M12 15L15.5 12"
+            stroke="currentColor"
+            strokeOpacity="0.4"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+
       {/* Card Header & Content */}
       <div className="space-y-6">
         {/* Top row: Avatar & Badges */}
